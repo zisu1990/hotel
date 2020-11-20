@@ -1,7 +1,7 @@
 <template>
   <div class="homeContainer">
     <vHeader></vHeader>
-    
+
     <div class="headContainer">
       <vAside></vAside>
       <div class="tagContainer">
@@ -10,7 +10,7 @@
           <div class="main">
             <router-view></router-view>
           </div>
-          <vFooter class="footer"></vFooter>
+          <!-- <vFooter class="footer"></vFooter> -->
         </div>
       </div>
     </div>
@@ -20,18 +20,16 @@
 import vHeader from "@/views/common/header";
 import vAside from "@/views/common/aside";
 import vTag from "@/views/common/tag";
-import vFooter from "@/views/common/footer";
+// import vFooter from "@/views/common/footer";
 
 export default {
   data() {
-    return {
-      
-    };
+    return {};
   },
-  components: { vHeader, vAside, vTag, vFooter }
+  components: { vHeader, vAside, vTag }
 };
 </script>
-<style lang="less" scoped>
+ <style lang="less" scoped>
 .homeContainer {
   // border: 1px solid red;
   box-sizing: border-box;
@@ -42,8 +40,8 @@ export default {
     // border: 1px solid red;
     box-sizing: border-box;
 
-     display: flex;
-  flex-flow: row nowrap;
+    display: flex;
+    flex-flow: row nowrap;
     flex: auto;
     .tagContainer {
       //  border: 1px solid blue;
@@ -66,7 +64,6 @@ export default {
         .main {
           // border:1px solid green;
           padding: 10px;
-
           display: flex;
           flex: auto;
           // overflow: auto;

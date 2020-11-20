@@ -68,27 +68,10 @@ export default {
   // font-size: 22px;
   color: #fff;
   background-color: #11c26d;
-  height: 60px;
-  line-height: 60px;
+  height: 90px;
+  line-height: 90px;
   padding: 0 20px;
   box-sizing: border-box;
-  // ul {
-  //   list-style: none;
-  //   li {
-  //     float: left;
-  //     line-height: 60px;
-  //     height: 60px;
-  //     text-align: center;
-  //     padding: 0 10px;
-  //     cursor: pointer;
-  //   }
-  //   i {
-  //     line-height: 60px;
-  //   }
-  //   li:hover {
-  //     background-color: #337ecc;
-  //   }
-  // }
   .el-dropdown-link {
     cursor: pointer;
     color: #fff;
