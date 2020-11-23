@@ -67,11 +67,7 @@ export default {
           flex: auto;
           // overflow: auto;
         }
-        // .footer {
-        //   // border: 1px solid orange;
 
-        //   flex: 0 0 60px;
-        // }
       }
     }
   }

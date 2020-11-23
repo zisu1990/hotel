@@ -1,7 +1,7 @@
 <template>
-  <div>
-    预定查询
-  </div>
+<el-container> 
+  <el-main>预订查询</el-main>
+</el-container>
 </template>
 
 
@@ -9,12 +9,17 @@
 export default {
   data() {
     return {
-      Navshow:false,
+      
     };
   }
 }
 </script>
 
+<style lang="less" scoped>
+.el-main{
+  background: #fff;
+}
+</style>
 
 
 

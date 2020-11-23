@@ -1,7 +1,8 @@
 <template>
-  <div>
-    客房预订
-  </div>
+<el-container>
+  
+  <el-main>预订</el-main>
+</el-container>
 </template>
 
 
