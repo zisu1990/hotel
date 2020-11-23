@@ -1,6 +1,7 @@
 <template>
   <div class="header">
-    <div>
+    <div class="logo">
+      <img src="@/assets/logo.png" alt="" srcset="">
       <span>轻游酒店业务管理系统</span>
     </div>
     <el-dropdown @command="handleCloseBtn" class="_dropdown">
@@ -66,15 +67,29 @@ export default {
   flex-flow: row nowrap;
   justify-content: space-between;
   // font-size: 22px;
-  color: #fff;
-  background-color: #11c26d;
+  color: #0863c3;
+  background-color: #fff;
+  border-bottom: 1px solid #f2f2f2;
   height: 90px;
   line-height: 90px;
   padding: 0 20px;
   box-sizing: border-box;
+  .logo{
+    display: flex;
+    img{
+      width: 60px;
+      height: 60px;
+      margin-top: 15px;
+      margin-right: 15px;
+    }
+    span{
+      font-size: 28px;
+      color: #0863c3;
+    }
+  }
   .el-dropdown-link {
     cursor: pointer;
-    color: #fff;
+    color: #0863c3;
   }
   .el-icon-arrow-down {
     font-size: 12px;

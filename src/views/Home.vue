@@ -33,21 +33,20 @@ export default {
 .homeContainer {
   // border: 1px solid red;
   box-sizing: border-box;
-
-  height: 100vh;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 
   .headContainer {
     // border: 1px solid red;
     box-sizing: border-box;
-
+    flex: 1;
     display: flex;
-    flex-flow: row nowrap;
-    flex: auto;
     .tagContainer {
       //  border: 1px solid blue;
       display: flex;
       flex-flow: column nowrap;
-      flex: auto;
+      flex: 1;
 
       .mainContainer {
         // border: 1px solid blue;
@@ -56,23 +55,23 @@ export default {
         box-sizing: border-box;
         display: flex;
         flex-flow: column nowrap;
-        flex: auto;
+        flex: 1;
 
         overflow: auto;
-        height: calc(100vh - 100px);
 
         .main {
           // border:1px solid green;
-          padding: 10px;
+          padding-top: 20px;
+          padding-left: 20px;
           display: flex;
           flex: auto;
           // overflow: auto;
         }
-        .footer {
-          // border: 1px solid orange;
+        // .footer {
+        //   // border: 1px solid orange;
 
-          flex: 0 0 60px;
-        }
+        //   flex: 0 0 60px;
+        // }
       }
     }
   }

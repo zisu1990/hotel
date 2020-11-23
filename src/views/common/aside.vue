@@ -83,13 +83,9 @@ export default {
 .sidebar {
   display: flex;
   flex-flow: column nowrap;
-  height: 100vh;
   text-align: left;
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 220px;
-  }
-  .menu {
-    height: 100%;
   }
 }
 </style>
