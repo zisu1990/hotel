@@ -487,7 +487,7 @@ export default {
         },
         {
           name: "补录住客",
-          path: "RoomBooking.vue"
+          path: "Replenishuser"
         },
         {
           name: "续住",

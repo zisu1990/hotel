@@ -8,7 +8,8 @@ import RoomSerive from '../views/Room/RoomSerive.vue'
 
 import Booking from '../views/Booking/Booking.vue';
 import RoomBooking from '../views/Room/RoomBooking.vue';
-import Check_in from '../views/Room/Check_in.vue'
+import Check_in from '../views/Room/Check_in.vue';
+import Replenishuser from '../views/Room/Replenishuser.vue'
 
 import Guest from '../views/Guest/Guest.vue';
 
@@ -70,6 +71,13 @@ const routes = [{
         }
       },
       {
+        path: '/Booking', //预订查询
+        component: Booking,
+        meta: {
+          title: '预订查询'
+        }
+      },
+      {
         path: '/Check_in', //入住
         component: Check_in,
         meta: {
@@ -77,10 +85,10 @@ const routes = [{
         }
       },
       {
-        path: '/Booking', //预订查询
-        component: Booking,
+        path: '/Replenishuser', //补录住客
+        component: Replenishuser,
         meta: {
-          title: '预订查询'
+          title: '补录住客'
         }
       },
       {

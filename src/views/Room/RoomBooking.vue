@@ -32,7 +32,10 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="团体名称：">
-                  <el-input v-model="formLabelAlign.groupName"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.groupName"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -51,17 +54,26 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="6">
                 <el-form-item label="会员卡号：">
-                  <el-input v-model="formLabelAlign.cardNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.cardNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预订人：" prop="userName">
-                  <el-input v-model="formLabelAlign.userName"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.userName"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="联系电话：" prop="userPhone">
-                  <el-input v-model="formLabelAlign.userPhone"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.userPhone"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -127,7 +139,12 @@
                             @click="handleReduce(scope.$index, scope.row)"
                             >-</el-button
                           >
-                          <el-input v-model="scope.row.sum"> </el-input>
+                          <el-input
+                            clearable
+                            @input="handleSum(scope.$index, scope.row)"
+                            v-model="scope.row.sum"
+                          >
+                          </el-input>
                           <el-button
                             size="mini"
                             @click="handleAdd(scope.$index, scope.row)"
@@ -227,7 +244,10 @@
             <el-row type="flex" style="margin-top: 20px" justify="center">
               <el-col :span="6">
                 <el-form-item label="房费总金额：">
-                  <el-input v-model="formLabelAlign.roomSumMoney"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.roomSumMoney"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -243,14 +263,20 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="卡扣金额：">
-                  <el-input v-model="formLabelAlign.cardKkNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.cardKkNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="center">
               <el-col :span="6">
-                <el-form-item class="txtRed" label="预订支付方式：" prop="payWay">
+                <el-form-item
+                  label="预订支付方式："
+                  prop="payWay"
+                >
                   <el-select
                     v-model="formLabelAlign.payWay"
                     style="width: 100%"
@@ -262,8 +288,14 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item class="txtRed" label="预订金额：" prop="bookMoney">
-                  <el-input v-model="formLabelAlign.bookMoney"></el-input>
+                <el-form-item
+                  label="预订金额："
+                  prop="bookMoney"
+                >
+                  <el-input
+                    clearable
+                    v-model="formLabelAlign.bookMoney"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6"> </el-col>
@@ -462,6 +494,19 @@ export default {
       //   }
       // }
     },
+    //获取input值
+    handleSum(i, t) {
+      let roomTableData = this.roomTableData[i];
+      if (roomTableData.sum < 0) {
+        this.$message({
+          message: "输入的值不能小于0",
+          type: "warning",
+        });
+        return;
+      } else {
+        roomTableData.suMoney = roomTableData.pric * roomTableData.sum;
+      }
+    },
   },
 };
 </script>
@@ -476,7 +521,7 @@ export default {
 //     }
 //   }
 // }
-.el-main{
+.el-main {
   background: #fff;
 }
 .title {
@@ -484,12 +529,12 @@ export default {
   width: 100%;
   margin-bottom: 40px;
   margin-top: 20px;
-  color: #005AB9;
+  color: #005ab9;
 }
 .roomTittle {
   font-size: 18px;
   text-align: left;
-  color: #005AB9;
+  color: #005ab9;
   margin-bottom: 20px;
 }
 
