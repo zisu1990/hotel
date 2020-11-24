@@ -8,6 +8,7 @@ import RoomSerive from '../views/Room/RoomSerive.vue'
 
 import Booking from '../views/Booking/Booking.vue';
 import RoomBooking from '../views/Room/RoomBooking.vue';
+import Check_in from '../views/Room/Check_in.vue'
 
 import Guest from '../views/Guest/Guest.vue';
 
@@ -66,6 +67,13 @@ const routes = [{
         component: RoomBooking,
         meta: {
           title: '客房预订'
+        }
+      },
+      {
+        path: '/Check_in', //入住
+        component: Check_in,
+        meta: {
+          title: '入住登记'
         }
       },
       {

@@ -2,16 +2,12 @@
   <el-container>
     <el-main>
       <el-card>
-        <span>预订</span>
-        <span>入住</span>
-        <span>补录住客</span>
-        <span>续住</span>
-        <span>换房</span>
-        <span>退房</span>
-        <span>房卡管理</span>
-        <span>损赔录入</span>
-        <span>换班结算</span>
-        <span>重新登陆</span>
+        <span
+          @click="pushPage(item)"
+          class="hv"
+          v-for="(item, index) in navList"
+          :key="index"
+        >{{ item.name }}</span>
       </el-card>
       <div class="roomTip">
         <span v-for="item in roomTip" :key="item.key">
@@ -21,7 +17,7 @@
       </div>
       <el-card class="floorItem">
         <el-collapse :value="opened">
-          <el-collapse-item v-for="(f,i) in louceng" :key="i"  :name='f.floor'>
+          <el-collapse-item v-for="(f,i) in louceng" :key="i" :name="f.floor">
             <template slot="title">
               <i class="iconBlue"></i>
               {{f.floor}}
@@ -35,7 +31,6 @@
                 </div>
                 <p>{{v.status}}</p>
               </li>
-  
             </ul>
           </el-collapse-item>
         </el-collapse>
@@ -132,6 +127,7 @@ export default {
   data() {
     return {
       activeNames: "1",
+      // 房态标识
       roomTip: [
         {
           text: "总",
@@ -203,6 +199,8 @@ export default {
           sum: 30
         }
       ],
+
+      // 楼层数据
       louceng: [
         {
           floor: "1楼",
@@ -373,7 +371,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id:30,
+              id: 30,
               floorNo: 8106,
               status: "空闲中",
               type: "五人间",
@@ -410,7 +408,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id:16,
+              id: 16,
               floorNo: 8102,
               status: "空闲中",
               type: "五人间",
@@ -475,23 +473,75 @@ export default {
             }
           ]
         }
+      ],
+
+      // 客房业务导航
+      navList: [
+        {
+          name: "预订",
+          path: "RoomBooking"
+        },
+        {
+          name: "入住",
+          path: "Check_in"
+        },
+        {
+          name: "补录住客",
+          path: "RoomBooking.vue"
+        },
+        {
+          name: "续住",
+          path: "RoomBooking.vue"
+        },
+        {
+          name: "换房",
+          path: "RoomBooking.vue"
+        },
+        {
+          name: "退房",
+          path: "RoomBooking.vue"
+        },
+        {
+          name: "房卡管理",
+          path: "./RoomBooking.vue"
+        },
+        {
+          name: "损赔录入",
+          path: "./RoomBooking.vue"
+        },
+        {
+          name: "换班结算",
+          path: "./RoomBooking.vue"
+        },
+        {
+          name: "重新登陆",
+          path: "login"
+        }
       ]
     };
   },
-        computed: {
-            opened() {
-                return this.louceng.map((i) => {
-                    return i.floor;
-                });
-            }
-        },
+  computed: {
+    opened() {
+      return this.louceng.map(i => {
+        return i.floor;
+      });
+    }
+  },
+  methods: {
+    pushPage(data) {
+      console.log(data.path)
+      this.$router.push({
+        path: data.path
+      });
+    }
+  }
 };
 </script>
 
 <style lang="less" scoped>
 .el-aside {
   // border: 1px solid #f00;
- 
+
   text-align: center;
   //
   box-sizing: border-box;
