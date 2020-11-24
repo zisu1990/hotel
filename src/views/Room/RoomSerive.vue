@@ -20,8 +20,8 @@
         </span>
       </div>
       <el-card class="floorItem">
-        <el-collapse v-model="activeNames">
-          <el-collapse-item v-for="(f,i) in louceng" :key="i" >
+        <el-collapse :value="opened">
+          <el-collapse-item v-for="(f,i) in louceng" :key="i"  :name='f.floor'>
             <template slot="title">
               <i class="iconBlue"></i>
               {{f.floor}}
@@ -38,21 +38,6 @@
   
             </ul>
           </el-collapse-item>
-          <!-- <el-collapse-item>
-            <template slot="title">
-              <i class="iconBlue"></i>2楼
-            </template>
-            <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-            <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
-          </el-collapse-item>
-          <el-collapse-item>
-            <template slot="title">
-              <i class="iconBlue"></i>3楼
-            </template>
-            <div>简化流程：设计简洁直观的操作流程；</div>
-            <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-            <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-          </el-collapse-item>-->
         </el-collapse>
       </el-card>
     </el-main>
@@ -68,7 +53,7 @@
             </div>
             <div class="roomType-choose">
               <el-check-group v-model="roomState">
-                <el-checkbox v-for="v in roomState" :key="v">{{v}}</el-checkbox>
+                <el-checkbox v-for="v in roomState" :key="v" :name="v">{{v}}</el-checkbox>
               </el-check-group>
             </div>
           </div>
@@ -85,6 +70,7 @@
                 <el-checkbox
                   v-for="(v,i) in roomType"
                   :key="i"
+                  :name="v.roomtype"
                 >{{v.roomtype}}({{v.sheng}}/{{v.sum}})</el-checkbox>
               </el-check-group>
             </div>
@@ -278,7 +264,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 1,
+              id: 8,
               floorNo: 8102,
               status: "预订中",
               type: "三人间",
@@ -286,7 +272,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 2,
+              id: 9,
               floorNo: 8103,
               status: "空闲中",
               type: "五人间",
@@ -294,7 +280,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 3,
+              id: 10,
               floorNo: 8104,
               status: "入住中",
               type: "五人间",
@@ -302,7 +288,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 4,
+              id: 11,
               floorNo: 8105,
               status: "空闲中",
               type: "五人间",
@@ -310,7 +296,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 5,
+              id: 12,
               floorNo: 8106,
               status: "空闲中",
               type: "五人间",
@@ -318,7 +304,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 6,
+              id: 13,
               floorNo: 8107,
               status: "空闲中",
               type: "五人间",
@@ -326,7 +312,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 7,
+              id: 14,
               floorNo: 8108,
               status: "空闲中",
               type: "五人间",
@@ -339,7 +325,7 @@ export default {
           floor: "2楼",
           listItem: [
             {
-              id: 3,
+              id: 24,
               floorNo: 8102,
               status: "预订中",
               type: "三人间",
@@ -347,7 +333,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 4,
+              id: 25,
               floorNo: 8102,
               status: "空闲中",
               type: "五人间",
@@ -355,7 +341,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 1,
+              id: 26,
               floorNo: 8102,
               status: "预订中",
               type: "三人间",
@@ -363,7 +349,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 2,
+              id: 27,
               floorNo: 8103,
               status: "空闲中",
               type: "五人间",
@@ -371,7 +357,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 3,
+              id: 28,
               floorNo: 8104,
               status: "入住中",
               type: "五人间",
@@ -379,7 +365,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 4,
+              id: 29,
               floorNo: 8105,
               status: "空闲中",
               type: "五人间",
@@ -387,7 +373,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 5,
+              id:30,
               floorNo: 8106,
               status: "空闲中",
               type: "五人间",
@@ -395,7 +381,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 6,
+              id: 31,
               floorNo: 8107,
               status: "空闲中",
               type: "五人间",
@@ -403,7 +389,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 7,
+              id: 32,
               floorNo: 8108,
               status: "空闲中",
               type: "五人间",
@@ -416,7 +402,7 @@ export default {
           floor: "3楼",
           listItem: [
             {
-              id: 3,
+              id: 15,
               floorNo: 8102,
               status: "预订中",
               type: "三人间",
@@ -424,7 +410,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 4,
+              id:16,
               floorNo: 8102,
               status: "空闲中",
               type: "五人间",
@@ -432,7 +418,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 1,
+              id: 17,
               floorNo: 8102,
               status: "预订中",
               type: "三人间",
@@ -440,7 +426,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 2,
+              id: 18,
               floorNo: 8103,
               status: "空闲中",
               type: "五人间",
@@ -448,7 +434,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 3,
+              id: 19,
               floorNo: 8104,
               status: "入住中",
               type: "五人间",
@@ -456,7 +442,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 4,
+              id: 20,
               floorNo: 8105,
               status: "空闲中",
               type: "五人间",
@@ -464,7 +450,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 5,
+              id: 21,
               floorNo: 8106,
               status: "空闲中",
               type: "五人间",
@@ -472,7 +458,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 6,
+              id: 22,
               floorNo: 8107,
               status: "空闲中",
               type: "五人间",
@@ -480,7 +466,7 @@ export default {
               icon: "@/assets/image/zhong.png"
             },
             {
-              id: 7,
+              id: 23,
               floorNo: 8108,
               status: "空闲中",
               type: "五人间",
@@ -491,13 +477,21 @@ export default {
         }
       ]
     };
-  }
+  },
+        computed: {
+            opened() {
+                return this.louceng.map((i) => {
+                    return i.floor;
+                });
+            }
+        },
 };
 </script>
 
 <style lang="less" scoped>
 .el-aside {
-  // background-color: #fff;
+  // border: 1px solid #f00;
+ 
   text-align: center;
   //
   box-sizing: border-box;
