@@ -510,11 +510,11 @@ export default {
         },
         {
           name: "损赔录入",
-          path: "./RoomBooking.vue",
+          path: "DamageRecad",
         },
         {
           name: "换班结算",
-          path: "./RoomBooking.vue",
+          path: "ShiftWorkPage"
         },
         {
           name: "重新登陆",

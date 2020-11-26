@@ -124,18 +124,27 @@
               </el-col>
             </el-row>
 
-            <el-row style="margin-top: 30px">
+            <el-row justify="center" style="margin-top: 30px">
               <el-form-item>
-                <el-button
-                  style="width: 100px"
-                  size="medium"
-                  type="success"
-                  @click="submitForm"
-                  >提交</el-button
-                >
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
-                >
+                <el-col :span="6">
+                  <el-button style="width: 100px" @click="resetForm"
+                    >读卡</el-button
+                  >
+                </el-col>
+                <el-col :span="6">
+                  <el-button style="width: 100px" @click="resetForm"
+                    >清卡</el-button
+                  >
+                </el-col>
+                <el-col :span="6">
+                  <el-button
+                    style="width: 100px"
+                    size="medium"
+                    type="success"
+                    @click="submitForm"
+                    >写卡</el-button
+                  >
+                </el-col>
               </el-form-item>
             </el-row>
           </el-form>
