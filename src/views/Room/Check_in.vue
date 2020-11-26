@@ -194,9 +194,9 @@
                 <el-table-column prop="sum" label="房间数">
                   <template slot-scope="scope">
                     <div class="roomSetting">
-                      <el-button size="mini" @click="handleReduce(scope.$index, scope.row)">-</el-button>
+                      <el-button size="mini" icon="el-icon-minus" type="danger" @click="handleReduce(scope.$index, scope.row)"></el-button>
                       <el-input v-model="scope.row.sum"></el-input>
-                      <el-button size="mini" @click="handleAdd(scope.$index, scope.row)">+</el-button>
+                      <el-button size="mini"    icon="el-icon-plus"  type="primary" @click="handleAdd(scope.$index, scope.row)"></el-button>
                     </div>
                   </template>
                 </el-table-column>

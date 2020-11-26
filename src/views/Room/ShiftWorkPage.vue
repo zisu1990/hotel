@@ -191,7 +191,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 .roomTittle {
