@@ -25,7 +25,9 @@ p {
 ul li {
   list-style: none;
 }
-
+[v-cloak]{
+  display: none;
+}
 
 /* 首页分页 */
 .title {

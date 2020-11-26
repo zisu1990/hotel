@@ -186,6 +186,7 @@
                 :cell-style="tableStyle"
                 :data="roomTableData"
                 style="width: 100%"
+                 max-height="500px"
               >
                 <el-table-column prop="homeName" label="房间类型" width="150px"></el-table-column>
                 <el-table-column prop="roomNum" label="房间号"></el-table-column>

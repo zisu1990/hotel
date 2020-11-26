@@ -69,13 +69,14 @@
             </el-row>
 
             <el-row type="flex" justify="center">
-              <el-col :span="19">
+              <el-col >
                 <el-table
                   stripe
                   :data="tableData"
                   :header-cell-style="{ textAlign: 'center' }"
                   :cell-style="{ textAlign: 'center' }"
                   style="width: 100%"
+                  max-height="500px"
                 >
                   <el-table-column prop="name" label="损坏物件名称">
                     <template v-slot="scope">

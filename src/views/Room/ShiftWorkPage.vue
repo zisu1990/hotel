@@ -74,6 +74,7 @@
                   :header-cell-style="{ textAlign: 'center' }"
                   :cell-style="{ textAlign: 'center' }"
                   style="width: 100%"
+                  max-height="500px"
                 >
                   <el-table-column label="房号"> </el-table-column>
                   <el-table-column label="客户名称"> </el-table-column>
@@ -103,6 +104,7 @@
                   :header-cell-style="{ textAlign: 'center' }"
                   :cell-style="{ textAlign: 'center' }"
                   style="width: 100%"
+                  max-height="500px"
                 >
                   <el-table-column label="类目"> </el-table-column>
                   <el-table-column label="收入现金金额"> </el-table-column>

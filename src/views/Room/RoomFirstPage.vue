@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main>
+    <el-main >
       <el-card>
         <span
           @click="pushPage(item)"
