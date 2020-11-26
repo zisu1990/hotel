@@ -14,7 +14,8 @@ import StayOver from '../views/Room/StayOver.vue';
 import RoomChange from '../views/Room/RoomChange.vue';
 import RoomFirstPage from '../views/Room/RoomFirstPage.vue';
 import RoomCard from '../views/Room/RoomCard.vue';
-
+import DamageRecad from '../views/Room/DamageRecad.vue';
+import ShiftWorkPage from '../views/Room/ShiftWorkPage.vue';
 
 import Guest from '../views/Guest/Guest.vue';
 
@@ -69,11 +70,25 @@ const routes = [{
       },
       children: [
         {
-          path: '/RoomFirstPage', //客房预订
+          path: '/RoomFirstPage', //首页
           component: RoomFirstPage,
           meta: {
             title: '客房业务',
             hideclose: true, //不可以关闭
+          }
+        },
+        {
+          path: '/ShiftWorkPage', //换班结算
+          component: ShiftWorkPage,
+          meta: {
+            title: '换班结算',
+          }
+        },
+        {
+          path: '/DamageRecad', //损赔录入
+          component: DamageRecad,
+          meta: {
+            title: '损赔录入',
           }
         },
         {
@@ -104,7 +119,7 @@ const routes = [{
             title: '续住登记'
           }
         },
-        
+
         {
           path: '/RoomChange', //换房登记
           component: RoomChange,
