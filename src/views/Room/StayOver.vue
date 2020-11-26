@@ -404,4 +404,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.el-main{
+  background: #fff;
+}
 </style>

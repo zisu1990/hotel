@@ -401,6 +401,9 @@ export default {
 };
 </script>
 <style  lang="less" scoped>
+.el-main{
+  background: #fff;
+}
 .title {
   font-size: 26px;
   width: 100%;
