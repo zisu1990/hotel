@@ -65,6 +65,7 @@ export default {
           display: flex;
           flex: auto;
           // overflow: auto;
+          background: #f3f3f3;
         }
       }
     }

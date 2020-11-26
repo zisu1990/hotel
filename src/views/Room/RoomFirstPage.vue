@@ -502,7 +502,7 @@ export default {
         },
         {
           name: "退房",
-          path: "RoomBooking",
+          path: "CheckOut",
         },
         {
           name: "房卡管理",

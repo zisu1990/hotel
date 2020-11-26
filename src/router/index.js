@@ -16,6 +16,7 @@ import RoomFirstPage from '../views/Room/RoomFirstPage.vue';
 import RoomCard from '../views/Room/RoomCard.vue';
 import DamageRecad from '../views/Room/DamageRecad.vue';
 import ShiftWorkPage from '../views/Room/ShiftWorkPage.vue';
+import CheckOut from '../views/Room/Check_out.vue';
 
 import Guest from '../views/Guest/Guest.vue';
 
@@ -134,6 +135,14 @@ const routes = [{
             title: '房卡管理'
           }
         },
+        {
+          
+          path: '/CheckOut', //退房
+          component: CheckOut,
+          meta: {
+            title: '退房'
+          }
+        }
       ]
     },
 
