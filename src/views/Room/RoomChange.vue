@@ -4,33 +4,19 @@
       <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
-            <p class="title">补录住客</p>
+            <p class="title">换房登记</p>
           </el-row>
-
           <el-form
-            ref="formReplenish"
+            ref="formRoomChange"
             label-width="130px"
-            :model="formReplenish"
+            :model="formRoomChange"
             :rules="rules"
           >
             <el-row type="flex" justify="space-between">
               <el-col :span="6">
-                <el-form-item label="房号：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.roomCard"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6"> </el-col>
-              <el-col :span="6"> </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
-              <el-col :span="6">
                 <el-form-item label="客户类型：">
                   <el-select
-                    v-model="formReplenish.clientType"
+                    v-model="formRoomChange.clientType"
                     style="width: 100%"
                   >
                     <el-option label="散客" value="sanke"></el-option>
@@ -42,14 +28,14 @@
                 <el-form-item label="团体名称：">
                   <el-input
                     clearable
-                    v-model="formReplenish.groupName"
+                    v-model="formRoomChange.groupName"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="国籍：">
                   <el-select
-                    v-model="formReplenish.nationality"
+                    v-model="formRoomChange.nationality"
                     style="width: 100%"
                   >
                     <el-option label="中国" value="中国"></el-option>
@@ -62,7 +48,7 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="8">
                 <el-form-item label="证件类型：" prop="IDtype">
-                  <el-select v-model="formReplenish.IDtype" style="width: 63%">
+                  <el-select v-model="formRoomChange.IDtype" style="width: 63%">
                     <el-option label="农村" value="nongcun"></el-option>
                     <el-option label="城市" value="chengshi"></el-option>
                   </el-select>
@@ -75,10 +61,10 @@
                 </el-form-item>
               </el-col>
               <el-col :pull="1" :span="6">
-                <el-form-item label="联系电话：">
+                <el-form-item label="联系电话：" prop="userPhone">
                   <el-input
                     clearable
-                    v-model="formReplenish.phoneNum"
+                    v-model="formRoomChange.phoneNum"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -86,7 +72,7 @@
                 <el-form-item label="会员卡号：">
                   <el-input
                     clearable
-                    v-model="formReplenish.cardNum"
+                    v-model="formRoomChange.cardNum"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -97,7 +83,7 @@
                 <el-form-item label="客主姓名：" prop="username">
                   <el-input
                     clearable
-                    v-model="formReplenish.username"
+                    v-model="formRoomChange.username"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -105,7 +91,7 @@
                 <el-form-item label="证件号：" prop="IDcardNum">
                   <el-input
                     clearable
-                    v-model="formReplenish.IDcardNum"
+                    v-model="formRoomChange.IDcardNum"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -116,73 +102,60 @@
               </el-col>
             </el-row>
 
-            <el-row>
-              <el-form-item label="证件地址：">
-                <el-input
-                  clearable
-                  v-model="formReplenish.IDaddress"
-                ></el-input>
-              </el-form-item>
-            </el-row>
-
             <el-row type="flex" justify="space-between">
               <el-col :span="6">
-                <el-form-item label="入住时间：" prop="goInTime">
-                  <el-date-picker
-                    style="width: 100%"
-                    v-model="formReplenish.goInTime"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                  >
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
                 <el-form-item label="离店时间：" prop="goOutTime">
                   <el-date-picker
-                    style="width: 60%"
-                    v-model="formReplenish.goOutTime"
+                    style="width: 100%"
+                    v-model="formRoomChange.goOutTime"
                     type="datetime"
                     placeholder="选择日期时间"
                   >
                   </el-date-picker>
-                  <el-select
-                    v-model="formReplenish.nationality"
-                    style="width: 40%"
-                  >
-                    <el-option label="一天" value="一天"></el-option>
-                    <el-option label="两天" value="两天"></el-option>
-                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="4"> </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
               <el-col :span="6">
-                <el-form-item class="settingImprest" label="已预付款(元)：">
+                <el-form-item label="已预付款(元)：">
                   <el-input
                     clearable
-                    v-model="formReplenish.haveImprest"
+                    v-model="formRoomChange.haveImprest"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item
-                  class="settingImprest"
-                  label="应交预付款(元)："
-                  prop="noHaveImprest"
-                >
+                <el-form-item label="原客房类型：" prop="oldRoomType">
+                  <el-select
+                    v-model="formRoomChange.oldRoomType"
+                    style="width: 100%"
+                  >
+                    <el-option label="三人间" value="three"></el-option>
+                    <el-option label="两人间" value="two"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="原房间号：">
                   <el-input
                     clearable
-                    v-model="formReplenish.noHaveImprest"
+                    v-model="formRoomChange.oldRoomNum"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="原房价(元)：">
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.oldRoomPrice"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="会员卡支付：">
                   <el-select
-                    v-model="formReplenish.isVipPay"
+                    v-model="formRoomChange.isVipPay"
                     style="width: 100%"
                   >
                     <el-option label="是" value="1"></el-option>
@@ -194,16 +167,49 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="6">
-                <el-form-item label="卡扣金额：">
+                <el-form-item label="新客房类型：" prop="newRoomType">
+                  <el-select
+                    v-model="formRoomChange.newRoomType"
+                    style="width: 100%"
+                  >
+                    <el-option label="三人间" value="three"></el-option>
+                    <el-option label="两人间" value="two"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="新房号(元)：" prop="newRoomNum">
                   <el-input
                     clearable
-                    v-model="formReplenish.payCardMoney"
+                    v-model="formRoomChange.newRoomNum"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="预付方式：" prop="payWay">
-                  <el-select v-model="formReplenish.payWay" style="width: 100%">
+                <el-form-item label="新房价(元)：" prop="newRoomPrice">
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.newRoomPrice"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="卡扣金额：">
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.cardKkNum"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="预付款方式：" prop="payWay">
+                  <el-select
+                    v-model="formRoomChange.payWay"
+                    style="width: 100%"
+                  >
                     <el-option label="现金" value="xianjin"></el-option>
                     <el-option label="支付宝" value="zhifubao"></el-option>
                     <el-option label="微信" value="weixin"></el-option>
@@ -211,12 +217,34 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item prop="bookMoney" label="预付金额：">
+                <el-form-item label="预付订金额：" prop="bookMoney">
                   <el-input
                     clearable
-                    v-model="formReplenish.bookMoney"
+                    v-model="formRoomChange.bookMoney"
                   ></el-input>
                 </el-form-item>
+              </el-col>
+            </el-row>
+
+
+            <el-row type="flex" style="margin-top: 20px" justify="start">
+              <el-col :span="22">
+                <el-form-item label="备注：" prop="remark">
+                  <el-input
+                    type="textarea"
+                    v-model="formRoomChange.remark"
+                    placeholder="填写备注"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="start">
+              <el-col :span="12">
+                <p class="handleStaff">
+                  <span>操作员：店小二</span>
+                  <span> 操作时间：2020-11-11 15:20 </span>
+                </p>
               </el-col>
             </el-row>
 
@@ -326,9 +354,9 @@ export default {
         callback();
       }
     };
-    var bookMoney = (rule, value, callback) => {
+    var newRoomNum = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("预订金额不能为空"));
+        return callback(new Error("新房号不能为空"));
       }
       setTimeout(() => {
         if (!Number.isInteger(+value)) {
@@ -338,10 +366,33 @@ export default {
         }
       }, 100);
     };
+    var newRoomPrice = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("新房价不能为空"));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(+value)) {
+          callback(new Error("请输入数字值"));
+        } else {
+          callback();
+        }
+      }, 100);
+    };
+    var bookMoney = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("预付定金额不能为空"));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(+value)) {
+          callback(new Error("请输入数字值"));
+        } else {
+          callback();
+        }
+      }, 100);
+    };
+
     return {
-      // 表单参数
-      formReplenish: {
-        roomCard: "",
+      formRoomChange: {
         clientType: "",
         groupName: "",
         nationality: "",
@@ -350,13 +401,20 @@ export default {
         cardNum: "",
         username: "",
         IDcardNum: "",
-        IDaddress: "",
-        goOutTime: "",
         goInTime: "",
-        nationality: "",
-        payCardMoney: "",
+        haveImprest: "",
+        oldRoomType: "",
+        oldRoomNum: "",
+        oldRoomPrice: "",
+        newRoomType: "",
+        newRoomNum: "",
+        newRoomPrice: "",
+        newRoomNum: "",
+        isVipPay: "",
+        cardKkNum: "",
         payWay: "",
         bookMoney: "",
+        remark: "",
       },
       //   表单规则
       rules: {
@@ -364,27 +422,46 @@ export default {
           { required: true, message: "请选择离店时间", trigger: "change" },
         ],
         goInTime: [
-          { required: true, message: "请选择入住时间", trigger: "change" },
+          { required: true, message: "请选择续住时间", trigger: "change" },
         ],
         IDtype: [
           { required: true, message: "请选择证件类型", trigger: "change" },
+        ],
+        remark: [
+          {
+            required: true,
+            message: "换房预付款为免费时必填",
+            trigger: "blue",
+          },
         ],
         username: [
           { required: true, message: "请输入客户姓名", trigger: "blur" },
           { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
         ],
-        IDcardNum: [{ validator: idCardValidity, trigger: "blur" }],
         payWay: [
           { required: true, message: "请选择预订支付方式", trigger: "change" },
+        ],
+        oldRoomType: [
+          { required: true, message: "请选择原客房类型", trigger: "change" },
+        ],
+        newRoomType: [
+          { required: true, message: "请选择新客房类型", trigger: "change" },
+        ],
+        IDcardNum: [{ validator: idCardValidity, trigger: "blur" }],
+        newRoomNum: [{ validator: newRoomNum, trigger: "blur" }],
+        newRoomPrice: [{ validator: newRoomPrice, trigger: "blur" }],
+        payWay: [
+          { required: true, message: "请选择预付款方式", trigger: "change" },
         ],
         bookMoney: [{ validator: bookMoney, trigger: "blur" }],
       },
     };
   },
+
   methods: {
     // 提交表单
     submitForm() {
-      this.$refs.formReplenish.validate((valid) => {
+      this.$refs.formRoomChange.validate((valid) => {
         if (valid) {
           alert("submit!");
         } else {
@@ -395,17 +472,10 @@ export default {
     },
     // 重置表单
     resetForm() {
-      this.$refs.formReplenish.resetFields();
+      this.$refs.formRoomChange.resetFields();
     },
   },
 };
 </script>
-<style  lang="less" scoped>
-.title {
-  font-size: 26px;
-  width: 100%;
-  margin-bottom: 40px;
-  margin-top: 20px;
-  color: #005ab9;
-}
+<style lang="less" scoped>
 </style>

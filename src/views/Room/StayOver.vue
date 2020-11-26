@@ -4,7 +4,7 @@
       <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
-            <p class="title">补录住客</p>
+            <p class="title">续住登记</p>
           </el-row>
 
           <el-form
@@ -127,7 +127,7 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="6">
-                <el-form-item label="入住时间：" prop="goInTime">
+                <el-form-item label="原离店时间：" prop="goOutTime">
                   <el-date-picker
                     style="width: 100%"
                     v-model="formReplenish.goInTime"
@@ -138,7 +138,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="离店时间：" prop="goOutTime">
+                <el-form-item label="续住日期：" prop="goInTime">
                   <el-date-picker
                     style="width: 60%"
                     v-model="formReplenish.goOutTime"
@@ -240,7 +240,10 @@
     </el-main>
   </el-container>
 </template>
+</template>
+</template>
 <script>
+// formReplenish
 export default {
   data() {
     const idCardValidity = (rule, code, callback) => {
@@ -363,9 +366,6 @@ export default {
         goOutTime: [
           { required: true, message: "请选择离店时间", trigger: "change" },
         ],
-        goInTime: [
-          { required: true, message: "请选择入住时间", trigger: "change" },
-        ],
         IDtype: [
           { required: true, message: "请选择证件类型", trigger: "change" },
         ],
@@ -373,11 +373,14 @@ export default {
           { required: true, message: "请输入客户姓名", trigger: "blur" },
           { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
         ],
+        oldRoomType: [
+          { required: true, message: "请选择客房类型", trigger: "change" },
+        ],
         IDcardNum: [{ validator: idCardValidity, trigger: "blur" }],
         payWay: [
           { required: true, message: "请选择预订支付方式", trigger: "change" },
         ],
-        bookMoney: [{ validator: bookMoney, trigger: "blur" }],
+        // bookMoney: [{ validator: bookMoney, trigger: "blur" }],
       },
     };
   },
@@ -400,12 +403,5 @@ export default {
   },
 };
 </script>
-<style  lang="less" scoped>
-.title {
-  font-size: 26px;
-  width: 100%;
-  margin-bottom: 40px;
-  margin-top: 20px;
-  color: #005ab9;
-}
+<style scoped lang="less">
 </style>

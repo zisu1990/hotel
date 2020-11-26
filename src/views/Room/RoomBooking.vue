@@ -140,7 +140,6 @@
                             >-</el-button
                           >
                           <el-input
-                            clearable
                             @input="handleSum(scope.$index, scope.row)"
                             v-model="scope.row.sum"
                           >
@@ -273,10 +272,7 @@
 
             <el-row type="flex" justify="center">
               <el-col :span="6">
-                <el-form-item
-                  label="预订支付方式："
-                  prop="payWay"
-                >
+                <el-form-item label="预订支付方式：" prop="payWay">
                   <el-select
                     v-model="formLabelAlign.payWay"
                     style="width: 100%"
@@ -288,10 +284,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item
-                  label="预订金额："
-                  prop="bookMoney"
-                >
+                <el-form-item label="预订金额：" prop="bookMoney">
                   <el-input
                     clearable
                     v-model="formLabelAlign.bookMoney"
@@ -412,38 +405,38 @@ export default {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: 0,
+          sum: "",
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: 0,
+          sum: "",
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: 0,
+          sum: "",
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: 0,
+          sum: "",
         },
 
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: 0,
+          sum: "",
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: 0,
+          sum: "",
         },
       ],
     };
@@ -468,7 +461,7 @@ export default {
     // 加，减，总
     handleAdd(i, t) {
       let roomTableData = this.roomTableData[i];
-      roomTableData.sum += 1;
+      roomTableData.sum = Number(roomTableData.sum) + 1;
       roomTableData.suMoney += roomTableData.pric;
     },
     handleReduce(i, t) {
@@ -497,6 +490,14 @@ export default {
     //获取input值
     handleSum(i, t) {
       let roomTableData = this.roomTableData[i];
+      console.log(parseInt(roomTableData.sum));
+      if (parseInt(roomTableData.sum) == "NaN") {
+        this.$message({
+          message: "请输入数字",
+          type: "warning",
+        });
+        return;
+      }
       if (roomTableData.sum < 0) {
         this.$message({
           message: "输入的值不能小于0",
@@ -583,7 +584,7 @@ export default {
   justify-content: flex-start;
   padding: 0 40px;
   .el-input {
-    width: 45px;
+    width: 50px;
   }
 }
 </style>
