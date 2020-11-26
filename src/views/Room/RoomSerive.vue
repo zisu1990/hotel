@@ -325,74 +325,47 @@ export default {
             {
               id: 24,
               floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              type: "三人间"
             },
             {
               id: 25,
               floorNo: 8102,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 26,
               floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              type: "三人间"
             },
             {
               id: 27,
               floorNo: 8103,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 28,
               floorNo: 8104,
-              status: "入住中",
-              type: "五人间",
-              background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 29,
               floorNo: 8105,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 30,
               floorNo: 8106,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 31,
               floorNo: 8107,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 32,
               floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             }
           ]
         },
@@ -402,74 +375,47 @@ export default {
             {
               id: 15,
               floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              type: "三人间"
             },
             {
               id: 16,
               floorNo: 8102,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 17,
               floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              type: "三人间"
             },
             {
               id: 18,
               floorNo: 8103,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 19,
               floorNo: 8104,
-              status: "入住中",
-              type: "五人间",
-              background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 20,
               floorNo: 8105,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 21,
               floorNo: 8106,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 22,
               floorNo: 8107,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             },
             {
               id: 23,
               floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              type: "五人间"
             }
           ]
         }
@@ -529,7 +475,7 @@ export default {
   },
   methods: {
     pushPage(data) {
-      console.log(data.path)
+      console.log(data.path);
       this.$router.push({
         path: data.path
       });
