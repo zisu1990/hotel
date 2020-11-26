@@ -191,11 +191,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-<<<<<<< HEAD
 .el-main{
-=======
-.el-main {
->>>>>>> 01587588d956fc767aaf9f5c34e04799b4cdf6b0
   background: #fff;
 }
 .roomTittle {
@@ -205,7 +201,3 @@ export default {
   margin: 20px 0 10px 0;
 }
 </style>
-<<<<<<< HEAD
-=======
-
->>>>>>> 01587588d956fc767aaf9f5c34e04799b4cdf6b0
