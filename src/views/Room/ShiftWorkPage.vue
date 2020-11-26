@@ -201,4 +201,3 @@ export default {
   margin: 20px 0 10px 0;
 }
 </style>
-
