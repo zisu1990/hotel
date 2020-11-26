@@ -309,7 +309,8 @@
                 <el-button
                   style="width: 100px"
                   size="medium"
-                  type="success"
+                  
+                  
                   @click="submitForm"
                   >提交</el-button
                 >
