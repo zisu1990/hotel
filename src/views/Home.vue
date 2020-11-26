@@ -26,7 +26,7 @@ export default {
   data() {
     return {};
   },
-  components: { vHeader, vAside, vTag }
+  components: { vHeader, vAside, vTag },
 };
 </script>
  <style lang="less" scoped>
@@ -50,7 +50,6 @@ export default {
 
       .mainContainer {
         // border: 1px solid blue;
-        background-color: #f0f0f0; //灰色背景
 
         box-sizing: border-box;
         display: flex;
@@ -67,7 +66,6 @@ export default {
           flex: auto;
           // overflow: auto;
         }
-
       }
     }
   }

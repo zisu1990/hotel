@@ -1,13 +1,17 @@
 <template>
   <div class="sidebar">
     <el-menu
+      ref="navListRef"
       :default-active="$route.path"
       class="el-menu-vertical-demo menu"
       active-text-color="#FFFF"
       unique-opened
       router
     >
-      <el-menu-item index="/room">
+      <el-menu-item
+        :class="{ 'is-active': $store.state.navIsActive }"
+        index="/RoomFirstPage"
+      >
         <span slot="title">客房业务</span>
       </el-menu-item>
 
@@ -26,7 +30,7 @@
       <el-menu-item index="/Device">
         <span>设备管理</span>
       </el-menu-item>
-      <el-menu-item index="/RoomType" >
+      <el-menu-item index="/RoomType">
         <span>房间类型管理</span>
       </el-menu-item>
       <el-menu-item index="/RoomManage">
@@ -53,8 +57,14 @@
 <script>
 // import bus from './bus';
 export default {
-  data() {
-    return {};
+  mounted() {
+    // console.log('tag', this.$store.state.navIsActive)
+  },
+  watch: {
+    "$store.state.navIsActive": function (v) {
+      //你需要执行的代码
+      console.log("tag", v);
+    },
   },
 };
 </script>
@@ -68,7 +78,7 @@ export default {
   }
   .el-menu-item.is-active {
     font-size: 18px !important;
-   
+
     background: linear-gradient(7deg, #005ab9 0%, #005ab9 27%, #1b79dd 100%);
     border-radius: 0px 10px 10px 0px;
     margin-left: 10px;
@@ -76,9 +86,10 @@ export default {
     padding: 0 !important;
     transition: 400ms ease-out;
     z-index: 1000;
+    color: #ffff;
   }
-  .el-menu-item{
-     width: 260px;
+  .el-menu-item {
+    width: 260px;
     height: 54px;
     padding-left: 82px !important;
     font-size: 16px;

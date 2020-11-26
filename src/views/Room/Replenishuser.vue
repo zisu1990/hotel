@@ -1,0 +1,411 @@
+<template>
+  <el-container>
+    <el-main>
+      <el-row>
+        <el-col :offset="3" :span="18">
+          <el-row>
+            <p class="title">补录住客</p>
+          </el-row>
+
+          <el-form
+            ref="formReplenish"
+            label-width="130px"
+            :model="formReplenish"
+            :rules="rules"
+          >
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="房号：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.roomCard"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6"> </el-col>
+              <el-col :span="6"> </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="客户类型：">
+                  <el-select
+                    v-model="formReplenish.clientType"
+                    style="width: 100%"
+                  >
+                    <el-option label="散客" value="sanke"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="团体名称：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.groupName"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="国籍：">
+                  <el-select
+                    v-model="formReplenish.nationality"
+                    style="width: 100%"
+                  >
+                    <el-option label="中国" value="中国"></el-option>
+                    <el-option label="英国" value="英国"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="8">
+                <el-form-item label="证件类型：" prop="IDtype">
+                  <el-select v-model="formReplenish.IDtype" style="width: 63%">
+                    <el-option label="农村" value="nongcun"></el-option>
+                    <el-option label="城市" value="chengshi"></el-option>
+                  </el-select>
+                  <el-button
+                    size="small "
+                    style="margin-left: 16px"
+                    type="primary"
+                    >读身份证</el-button
+                  >
+                </el-form-item>
+              </el-col>
+              <el-col :pull="1" :span="6">
+                <el-form-item label="联系电话：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.phoneNum"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="会员卡号：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.cardNum"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="客主姓名：" prop="username">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.username"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="证件号：" prop="IDcardNum">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.IDcardNum"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-button style="width: 100%" type="success"
+                  >住客登记>></el-button
+                >
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-form-item label="证件地址：">
+                <el-input
+                  clearable
+                  v-model="formReplenish.IDaddress"
+                ></el-input>
+              </el-form-item>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="入住时间：" prop="goInTime">
+                  <el-date-picker
+                    style="width: 100%"
+                    v-model="formReplenish.goInTime"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="离店时间：" prop="goOutTime">
+                  <el-date-picker
+                    style="width: 60%"
+                    v-model="formReplenish.goOutTime"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                  >
+                  </el-date-picker>
+                  <el-select
+                    v-model="formReplenish.nationality"
+                    style="width: 40%"
+                  >
+                    <el-option label="一天" value="一天"></el-option>
+                    <el-option label="两天" value="两天"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4"> </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item class="settingImprest" label="已预付款(元)：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.haveImprest"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item
+                  class="settingImprest"
+                  label="应交预付款(元)："
+                  prop="noHaveImprest"
+                >
+                  <el-input
+                    clearable
+                    v-model="formReplenish.noHaveImprest"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="会员卡支付：">
+                  <el-select
+                    v-model="formReplenish.isVipPay"
+                    style="width: 100%"
+                  >
+                    <el-option label="是" value="1"></el-option>
+                    <el-option label="否" value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="6">
+                <el-form-item label="卡扣金额：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.payCardMoney"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="预付方式：" prop="payWay">
+                  <el-select v-model="formReplenish.payWay" style="width: 100%">
+                    <el-option label="现金" value="xianjin"></el-option>
+                    <el-option label="支付宝" value="zhifubao"></el-option>
+                    <el-option label="微信" value="weixin"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item prop="bookMoney" label="预付金额：">
+                  <el-input
+                    clearable
+                    v-model="formReplenish.bookMoney"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row style="margin-top: 30px">
+              <el-form-item>
+                <el-button
+                  style="width: 100px"
+                  size="medium"
+                  type="success"
+                  @click="submitForm"
+                  >提交</el-button
+                >
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
+              </el-form-item>
+            </el-row>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-main>
+  </el-container>
+</template>
+<script>
+export default {
+  data() {
+    const idCardValidity = (rule, code, callback) => {
+      var city = {
+        11: "北京",
+        12: "天津",
+        13: "河北",
+        14: "山西",
+        15: "内蒙古",
+        21: "辽宁",
+        22: "吉林",
+        23: "黑龙江 ",
+        31: "上海",
+        32: "江苏",
+        33: "浙江",
+        34: "安徽",
+        35: "福建",
+        36: "江西",
+        37: "山东",
+        41: "河南",
+        42: "湖北 ",
+        43: "湖南",
+        44: "广东",
+        45: "广西",
+        46: "海南",
+        50: "重庆",
+        51: "四川",
+        52: "贵州",
+        53: "云南",
+        54: "西藏 ",
+        61: "陕西",
+        62: "甘肃",
+        63: "青海",
+        64: "宁夏",
+        65: "新疆",
+        71: "台湾",
+        81: "香港",
+        82: "澳门",
+        91: "国外 ",
+      };
+      var tip = "";
+      var pass = true;
+      if (
+        !code ||
+        !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
+          code
+        )
+      ) {
+        tip = "身份证号格式错误";
+        pass = false;
+      } else if (!city[code.substr(0, 2)]) {
+        // tip = "地址编码错误"
+        tip = "身份证输入错误";
+        pass = false;
+      } else {
+        // 18位身份证需要验证最后一位校验位
+        if (code.length === 18) {
+          code = code.split("");
+          // ∑(ai×Wi)(mod 11)
+          // 加权因子
+          var factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+          // 校验位
+          var parity = [1, 0, "X", 9, 8, 7, 6, 5, 4, 3, 2];
+          var sum = 0;
+          var ai = 0;
+          var wi = 0;
+          for (var i = 0; i < 17; i++) {
+            ai = code[i];
+            wi = factor[i];
+            sum += ai * wi;
+          }
+          var last = parity[sum % 11];
+          if (parity[sum % 11] != code[17]) {
+            // tip = "校验位错误"
+            tip = "身份证输入错误";
+            pass = false;
+          }
+        }
+      }
+      if (!pass) {
+        callback(new Error(tip));
+      } else {
+        callback();
+      }
+    };
+    var bookMoney = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("预订金额不能为空"));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(+value)) {
+          callback(new Error("请输入数字值"));
+        } else {
+          callback();
+        }
+      }, 100);
+    };
+    return {
+      // 表单参数
+      formReplenish: {
+        roomCard: "",
+        clientType: "",
+        groupName: "",
+        nationality: "",
+        IDtype: "",
+        phoneNum: "",
+        cardNum: "",
+        username: "",
+        IDcardNum: "",
+        IDaddress: "",
+        goOutTime: "",
+        goInTime: "",
+        nationality: "",
+        payCardMoney: "",
+        payWay: "",
+        bookMoney: "",
+      },
+      //   表单规则
+      rules: {
+        goOutTime: [
+          { required: true, message: "请选择离店时间", trigger: "change" },
+        ],
+        goInTime: [
+          { required: true, message: "请选择入住时间", trigger: "change" },
+        ],
+        IDtype: [
+          { required: true, message: "请选择证件类型", trigger: "change" },
+        ],
+        username: [
+          { required: true, message: "请输入客户姓名", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
+        ],
+        IDcardNum: [{ validator: idCardValidity, trigger: "blur" }],
+        payWay: [
+          { required: true, message: "请选择预订支付方式", trigger: "change" },
+        ],
+        bookMoney: [{ validator: bookMoney, trigger: "blur" }],
+      },
+    };
+  },
+  methods: {
+    // 提交表单
+    submitForm() {
+      this.$refs.formReplenish.validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 重置表单
+    resetForm() {
+      this.$refs.formReplenish.resetFields();
+    },
+  },
+};
+</script>
+<style  lang="less" scoped>
+.title {
+  font-size: 26px;
+  width: 100%;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  color: #005ab9;
+}
+</style>
