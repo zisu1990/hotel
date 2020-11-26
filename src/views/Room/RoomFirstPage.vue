@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main >
+    <el-main>
       <el-card>
         <span
           @click="pushPage(item)"
@@ -73,6 +73,7 @@
                   v-for="(v, i) in roomType"
                   :key="i"
                   :name="v.roomtype"
+                  
                   >{{ v.roomtype }}({{ v.sheng }}/{{ v.sum }})</el-checkbox
                 >
               </el-check-group>
@@ -514,7 +515,7 @@ export default {
         },
         {
           name: "换班结算",
-          path: "ShiftWorkPage"
+          path: "ShiftWorkPage",
         },
         {
           name: "重新登陆",
@@ -618,6 +619,7 @@ export default {
 }
 
 .el-main {
+  background: #fff;
   margin-right: 20px;
   padding: 0;
   text-align: left;

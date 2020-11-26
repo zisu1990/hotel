@@ -128,32 +128,46 @@
                     show-summary
                     :summary-method="getSumMoney"
                   >
-                    <el-table-column align="center" prop="homeName" label="房间类型">
+                    <el-table-column
+                      align="center"
+                      prop="homeName"
+                      label="房间类型"
+                    >
                     </el-table-column>
-                    <el-table-column align="center" prop="pric" label="房间单价(元)">
+                    <el-table-column
+                      align="center"
+                      prop="pric"
+                      label="房间单价(元)"
+                    >
                     </el-table-column>
                     <el-table-column align="center" prop="sum" label="房间数">
                       <template slot-scope="scope">
                         <div class="roomSetting">
                           <el-button
+                            icon="el-icon-minus"
+                            type="danger"
                             size="mini"
                             @click="handleReduce(scope.$index, scope.row)"
-                            >-</el-button
-                          >
+                          ></el-button>
                           <el-input
                             @input="handleSum(scope.$index, scope.row)"
                             v-model="scope.row.sum"
                           >
                           </el-input>
                           <el-button
+                            icon="el-icon-plus"
+                            type="primary"
                             size="mini"
                             @click="handleAdd(scope.$index, scope.row)"
-                            >+</el-button
-                          >
+                          ></el-button>
                         </div>
                       </template>
                     </el-table-column>
-                    <el-table-column align="center" prop="suMoney" label="房间费用(元)">
+                    <el-table-column
+                      align="center"
+                      prop="suMoney"
+                      label="房间费用(元)"
+                    >
                     </el-table-column>
                   </el-table>
                 </el-col>

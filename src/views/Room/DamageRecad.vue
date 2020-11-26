@@ -125,11 +125,11 @@
                   </el-table-column>
                   <el-table-column prop="money" label="操作">
                     <template v-slot="scope">
-                      <el-button @click="handleReduce(scope.$index, scope.row)"
-                        >-</el-button
+                      <el-button icon="el-icon-delete" circle  type="danger"  @click="handleReduce(scope.$index, scope.row)"
+                        ></el-button
                       >
-                      <el-button @click="handleAdd(scope.$index, scope.row)"
-                        >+</el-button
+                      <el-button type="primary" icon="el-icon-edit-outline" circle="" @click="handleAdd(scope.$index, scope.row)"
+                        ></el-button
                       >
                     </template>
                   </el-table-column>
