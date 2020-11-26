@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-row>
+      <el-row >
         <el-col :offset="3" :span="18">
           <el-row>
             <p class="title">补录住客</p>

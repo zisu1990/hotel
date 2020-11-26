@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container v-cloak>
     <el-main>
       <el-row>
         <el-col :offset="3" :span="18">
@@ -122,16 +122,17 @@
                   <el-table
                     stripe
                     :header-cell-style="tableStyle"
-                    :cell-style="tableStyle"
                     :data="roomTableData"
                     style="width: 100%"
-                    :span-method="getSumMoney"
+                    max-height="500px"
+                    show-summary
+                    :summary-method="getSumMoney"
                   >
-                    <el-table-column prop="homeName" label="房间类型">
+                    <el-table-column align="center" prop="homeName" label="房间类型">
                     </el-table-column>
-                    <el-table-column prop="pric" label="房间单价(元)">
+                    <el-table-column align="center" prop="pric" label="房间单价(元)">
                     </el-table-column>
-                    <el-table-column prop="sum" label="房间数">
+                    <el-table-column align="center" prop="sum" label="房间数">
                       <template slot-scope="scope">
                         <div class="roomSetting">
                           <el-button
@@ -152,7 +153,7 @@
                         </div>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="suMoney" label="房间费用">
+                    <el-table-column align="center" prop="suMoney" label="房间费用(元)">
                     </el-table-column>
                   </el-table>
                 </el-col>
@@ -309,8 +310,6 @@
                 <el-button
                   style="width: 100px"
                   size="medium"
-                  
-                  
                   @click="submitForm"
                   >提交</el-button
                 >
@@ -406,38 +405,38 @@ export default {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: "",
+          sum: 0,
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: "",
+          sum: 0,
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: "",
+          sum: 0,
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: "",
+          sum: 0,
         },
 
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: "",
+          sum: 0,
         },
         {
           homeName: "单人间",
           pric: 200,
           suMoney: 0,
-          sum: "",
+          sum: 0,
         },
       ],
     };
@@ -478,20 +477,34 @@ export default {
         roomTableData.suMoney -= roomTableData.pric;
       }
     },
-    getSumMoney({ row, column, rowIndex, columnIndex }) {
-      // if (columnIndex === 0) {
-      //   if (rowIndex === 0) {
-      //     return {
-      //       rowspan: 3,
-      //       colspan: 3,
-      //     };
-      //   }
-      // }
+    // 设置最后一行合计
+    getSumMoney({ columns, data }) {
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 1) {
+          return;
+        }
+        const values = data.map((item) => Number(item[column.property]));
+        if (!values.every((value) => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[index];
+        } else {
+          sums[index] = "结算";
+        }
+      });
+
+      return sums;
     },
     //获取input值
     handleSum(i, t) {
       let roomTableData = this.roomTableData[i];
-      console.log(parseInt(roomTableData.sum));
       if (parseInt(roomTableData.sum) == "NaN") {
         this.$message({
           message: "请输入数字",
