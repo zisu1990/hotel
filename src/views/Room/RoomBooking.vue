@@ -145,7 +145,6 @@
                         <div class="roomSetting">
                           <el-button
                             icon="el-icon-minus"
-                            type="danger"
                             size="mini"
                             @click="handleReduce(scope.$index, scope.row)"
                           ></el-button>
@@ -156,7 +155,6 @@
                           </el-input>
                           <el-button
                             icon="el-icon-plus"
-                            type="primary"
                             size="mini"
                             @click="handleAdd(scope.$index, scope.row)"
                           ></el-button>
