@@ -1,8 +1,8 @@
 <template>
-<!-- 住客查询 -->
+  <!-- 住客查询 -->
   <el-container>
     <el-main>
-      <el-form   :model="BookingForm" >
+      <el-form :model="BookingForm">
         <el-row>
           <el-col :span="8">
             <el-form-item label="预订时间段：">
@@ -16,7 +16,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item >
+            <el-form-item>
               <el-input
                 v-model="BookingForm.name"
                 placeholder="请输入姓名/身份证号码/房间号"
@@ -32,29 +32,25 @@
       </el-form>
 
       <el-table :data="BookingTableData" style="width: 100%" border stripe>
-        <el-table-column type="index" width="30"  align="center"></el-table-column>
-        <el-table-column prop="OddNumber" label="预订单号" width="100" align="center"></el-table-column>
-        <el-table-column prop="PersonType" label="客户类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="GroupName" label="团体名称" width="80" align="center"></el-table-column>
-        <el-table-column prop="Subscriber" label="预订人" width="80" align="center"></el-table-column>
+        <el-table-column type="index" width="30" align="center"></el-table-column>
+
+        <el-table-column prop="RoomType" label="房间类型"  align="center"></el-table-column>
+        <el-table-column prop="RoomNo" label="房间号" align="center"></el-table-column>
+        <el-table-column prop="ZhuName" label="住客姓名" align="center"></el-table-column>
+        <el-table-column prop="IdCard" label="身份证号" align="center"></el-table-column>
+        <el-table-column prop="PersonType" label="客户类型" align="center"></el-table-column>
+        <el-table-column prop="KeName" label="客主姓名"  align="center"></el-table-column>
         <el-table-column prop="Telphone" label="联系电话" align="center"></el-table-column>
-        <el-table-column prop="YuDaoTime" label="预到时间" align="center"></el-table-column>
-        <el-table-column prop="YuLiTime" label="预离时间" align="center"></el-table-column>
-        <el-table-column prop="RoomType" label="房间类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="Sum" label="数量" width="50" align="center"></el-table-column>
-        <el-table-column prop="PayFor" label="预付方式" width="80" align="center"></el-table-column>
-        <el-table-column prop="ParForPrice" label="预付金额" width="80" align="center"></el-table-column>
+        <el-table-column prop="RuTime" label="入住时间" align="center"></el-table-column>
+        <el-table-column prop="LiTime" label="离店时间" align="center"></el-table-column>
+        <el-table-column prop="Status" label="状态" align="center"></el-table-column>
+        <el-table-column prop="PayFor" label="预付方式" align="center"></el-table-column>
+        <el-table-column prop="ParForPrice" label="预付金额" align="center"></el-table-column>
         <el-table-column prop="CardNum" label="会员卡号" align="center"></el-table-column>
-        <el-table-column prop="Native" label="国籍" width="60" align="center"></el-table-column>
+        <el-table-column prop="Native" label="国籍"  align="center"></el-table-column>
         <el-table-column prop="OperationTime" label="操作时间" align="center"></el-table-column>
-        <el-table-column prop="Remarks" label="备注" align="center"></el-table-column>
-        <el-table-column prop="OperationPerson" label="操作员" width="80" align="center"></el-table-column>
-        <el-table-column label="操作" align="center" width="150">
-          <template>
-            <el-button type="danger" size="small">取消</el-button>
-            <el-button type="primary" size="small">入住</el-button>
-          </template>
-        </el-table-column>
+
+        <el-table-column prop="OperationPerson" label="操作员" align="center"></el-table-column>
       </el-table>
 
       <el-pagination
@@ -85,59 +81,126 @@ export default {
       },
       BookingTableData: [
         {
-          OddNumber: "yd123456",
-          PersonType: "散客",
-          GroupName: "无",
-          Subscriber: "张三",
-          Telphone: "18256032124",
-          YuDaoTime: "2020-04-12 13:12",
-          YuLiTime: "2020-04-13 13:12",
           RoomType: "三人间",
-          Sum: 1,
+          RoomNo: 8102,
+          ZhuName: "张三",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          KeName:"王五",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
           PayFor: "现金",
           ParForPrice: "2000",
           CardNum: "NO.123456789",
           Native: "中国",
           OperationTime: "2020-04-13 13:12",
-          Remarks: "无",
           OperationPerson: "小吴"
-        },
-        {
-          OddNumber: "yd123456",
-          PersonType: "散客",
-          GroupName: "无",
-          Subscriber: "张三",
-          Telphone: "18256032124",
-          YuDaoTime: "2020-04-12 13:12:12",
-          YuLiTime: "2020-04-13 13:12:12",
+        },{
           RoomType: "三人间",
-          Sum: 1,
+          RoomNo: 8102,
+          ZhuName: "张三",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          KeName:"王五",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
           PayFor: "现金",
           ParForPrice: "2000",
           CardNum: "NO.123456789",
           Native: "中国",
-          OperationTime: "2020-04-13 13:12:12",
-          Remarks: "无",
+          OperationTime: "2020-04-13 13:12",
           OperationPerson: "小吴"
-        },
-        {
-          OddNumber: "yd123456",
-          PersonType: "散客",
-          GroupName: "无",
-          Subscriber: "张三",
-          Telphone: "18256032124",
-          YuDaoTime: "2020-04-12 13:12:12",
-          YuLiTime: "2020-04-13 13:12:12",
+        },{
           RoomType: "三人间",
-          Sum: 1,
+          RoomNo: 8102,
+          ZhuName: "张三",
+          KeName:"王五",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
           PayFor: "现金",
           ParForPrice: "2000",
           CardNum: "NO.123456789",
           Native: "中国",
-          OperationTime: "2020-04-13 13:12:12",
-          Remarks: "无",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴"
+        },{
+          RoomType: "三人间",
+          RoomNo: 8102,
+          ZhuName: "张三",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          KeName:"王五",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
+          PayFor: "现金",
+          ParForPrice: "2000",
+          CardNum: "NO.123456789",
+          Native: "中国",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴"
+        },{
+          RoomType: "三人间",
+          RoomNo: 8102,
+          ZhuName: "张三",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          KeName:"王五",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
+          PayFor: "现金",
+          ParForPrice: "2000",
+          CardNum: "NO.123456789",
+          Native: "中国",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴"
+        },{
+          RoomType: "三人间",
+          RoomNo: 8102,
+          ZhuName: "张三",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          KeName:"王五",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
+          PayFor: "现金",
+          ParForPrice: "2000",
+          CardNum: "NO.123456789",
+          Native: "中国",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴"
+        },{
+          RoomType: "三人间",
+          RoomNo: 8102,
+          ZhuName: "张三",
+          IdCard: 34088199810024569,
+          PersonType: "散客",
+          KeName:"王五",
+          Telphone: "18256032124",
+          RuTime: "2020-04-12 13:12",
+          LiTime: "2020-04-13 13:12",
+          Status: "在店",
+          PayFor: "现金",
+          ParForPrice: "2000",
+          CardNum: "NO.123456789",
+          Native: "中国",
+          OperationTime: "2020-04-13 13:12",
           OperationPerson: "小吴"
         }
+
       ],
       currentPage4: 4
     };

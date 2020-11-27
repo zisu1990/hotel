@@ -1,18 +1,12 @@
 <template>
-  <!-- 住客查询 -->
+  <!-- 会员管理 -->
   <el-container>
     <el-main>
-      <el-form  :model="BookingForm"  >
+      <el-form :model="BookingForm" label-width="100px">
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="预订时间段：">
-              <el-date-picker
-                v-model="BookingForm.value1"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              ></el-date-picker>
+          <el-col :span="6">
+            <el-form-item label="办理时间：">
+              <el-date-picker v-model="BookingForm.value1" type="date" placeholder="选择日期"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -25,7 +19,7 @@
               ></el-input>
             </el-form-item>
           </el-col>
-        
+
           <el-col :span="2">
             <el-button type="primary">查询</el-button>
           </el-col>
@@ -35,7 +29,6 @@
       <div class="btn">
         <el-row>
           <el-button type="primary">增加</el-button>
-          <el-button type="warning">修改</el-button>
         </el-row>
       </div>
 
@@ -60,6 +53,7 @@
         <el-table-column label="操作" align="center" width="150">
           <template>
             <el-button type="primary" size="small">充值</el-button>
+            <el-button type="warning" size="small">修改</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -83,10 +77,7 @@ export default {
   data() {
     return {
       BookingForm: {
-        value1: [
-          new Date(2000, 10, 10, 10, 10),
-          new Date(2000, 10, 11, 10, 10)
-        ],
+        value1: "",
         name: "",
         tel: ""
       },
@@ -146,7 +137,7 @@ export default {
           OperationPerson: "小吴"
         }
       ],
-      currentPage4: 4,
+      currentPage4: 4
     };
   },
   methods: {
@@ -172,6 +163,11 @@ export default {
     justify-content: flex-start;
     margin-bottom: 20px;
   }
+}
+
+
+/deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 280px;
 }
 </style>
 
