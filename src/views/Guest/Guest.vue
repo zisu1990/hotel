@@ -5,7 +5,7 @@
       <el-form :model="BookingForm">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预订时间段：">
+            <el-form-item label="入住时间段：">
               <el-date-picker
                 v-model="BookingForm.value1"
                 type="datetimerange"
