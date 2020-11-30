@@ -1,18 +1,12 @@
 <template>
   <el-container>
     <el-main>
-<<<<<<< HEAD
-      <el-row>
-        <el-col :offset="15" :span="6">
-          <el-input v-model="formRoomType.roomType" placeholder="请输入房间类型"></el-input>
-=======
       <el-row style="margin-bottom: 20px">
         <el-col :span="6">
           <el-input
             v-model="formRoomType.roomType"
             placeholder="请输入房间类型"
           ></el-input>
->>>>>>> bedcccc738aa8b52fa9fc5748c8512176835aae5
         </el-col>
         <el-col :span="2">
           <el-button type="primary">查询</el-button>
@@ -32,13 +26,6 @@
             border
             stripe
           >
-<<<<<<< HEAD
-            <el-table-column prop="serialNum" label="序号"></el-table-column>
-            <el-table-column prop="roomType" label="房间类型名称"></el-table-column>
-            <el-table-column prop="roomPrice" label="房间价格"></el-table-column>
-            <el-table-column prop="settingTime" label="操作时间"></el-table-column>
-            <el-table-column prop="settingUser" label="操作员"></el-table-column>
-=======
             <el-table-column width="80" type="index"></el-table-column>
             <el-table-column
               prop="roomType"
@@ -56,7 +43,6 @@
               prop="settingUser"
               label="操作员"
             ></el-table-column>
->>>>>>> bedcccc738aa8b52fa9fc5748c8512176835aae5
             <el-table-column label="状态">
               <template v-slot="scope">
                 <el-switch v-model="scope.row.state" active-color="#13ce66" inactive-color="#999"></el-switch>
@@ -79,18 +65,12 @@
       <el-dialog title="新房间类型" :visible.sync="dialogVisible" width="28%">
         <el-row type="flex" justify="center">
           <el-col :span="18">
-<<<<<<< HEAD
-            <el-form label-width="100px">
-              <el-form-item :model="formRoomType" label="房间类型：">
-                <el-input v-model="formRoomType.addRoomType" placeholder="请输入房间类型"></el-input>
-=======
             <el-form :model="formRoomType" label-width="100px">
               <el-form-item label="房间类型：">
                 <el-input
                   v-model="formRoomType.addRoomType"
                   placeholder="请输入房间类型"
                 ></el-input>
->>>>>>> bedcccc738aa8b52fa9fc5748c8512176835aae5
               </el-form-item>
               <el-form-item :model="formRoomType" label="房间价格：">
                 <el-input v-model="formRoomType.addRoomPrice" placeholder="请输入房间价格"></el-input>

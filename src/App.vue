@@ -45,11 +45,7 @@ export default {
   margin: 0;
   padding: 0;
 }
-<<<<<<< HEAD
-
-=======
 .el-main{
   background: #fff;
 }
->>>>>>> bedcccc738aa8b52fa9fc5748c8512176835aae5
 </style>

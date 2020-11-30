@@ -1,8 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <el-container>
-    <el-main></el-main>
-=======
   <el-container v-cloak>
     <el-main>
       <el-row type="flex" justify="center">
@@ -165,7 +161,6 @@
         </el-col>
       </el-row>
     </el-main>
->>>>>>> bedcccc738aa8b52fa9fc5748c8512176835aae5
   </el-container>
 </template>
 <script>
