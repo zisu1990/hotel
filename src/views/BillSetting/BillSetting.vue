@@ -1,7 +1,7 @@
 <template>
-  <div>
-    计费设置
-  </div>
+  <el-container>
+    <el-main></el-main>
+  </el-container>
 </template>
 
 
