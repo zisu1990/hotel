@@ -69,7 +69,7 @@
             </el-row>
 
             <el-row type="flex" justify="center">
-              <el-col >
+              <el-col>
                 <el-table
                   stripe
                   :data="tableData"
@@ -125,12 +125,18 @@
                   </el-table-column>
                   <el-table-column prop="money" label="操作">
                     <template v-slot="scope">
-                      <el-button icon="el-icon-delete" circle  type="danger"  @click="handleReduce(scope.$index, scope.row)"
-                        ></el-button
-                      >
-                      <el-button type="primary" icon="el-icon-edit-outline" circle="" @click="handleAdd(scope.$index, scope.row)"
-                        ></el-button
-                      >
+                      <el-button
+                        icon="el-icon-delete"
+                        circle
+                        type="danger"
+                        @click="handleReduce(scope.$index, scope.row)"
+                      ></el-button>
+                      <el-button
+                        type="primary"
+                        icon="el-icon-edit-outline"
+                        circle=""
+                        @click="handleAdd(scope.$index, scope.row)"
+                      ></el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -256,7 +262,29 @@ export default {
         });
         return;
       }
-      tableData.push(tableData[i]);
+      tableData.push({
+        name: [
+          {
+            value: "chuifengji",
+            label: "吹风机",
+          },
+          {
+            value: "dianfengshan",
+            label: "电风扇",
+          },
+          {
+            value: "xiyiji",
+            label: "洗衣机",
+          },
+          {
+            value: "pensa",
+            label: "喷洒",
+          },
+        ],
+        num: "",
+        price: 200,
+        money: "",
+      });
     },
     handleReduce(i, v) {
       let tableData = this.tableData;
@@ -295,7 +323,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 </style>

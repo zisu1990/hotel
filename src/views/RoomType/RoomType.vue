@@ -1,8 +1,8 @@
 <template>
   <el-container>
     <el-main>
-      <el-row>
-        <el-col :offset="15" :span="6">
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="6">
           <el-input
             v-model="formRoomType.roomType"
             placeholder="请输入房间类型"
@@ -26,7 +26,7 @@
             border
             stripe
           >
-            <el-table-column prop="serialNum" label="序号"></el-table-column>
+            <el-table-column width="80" type="index"></el-table-column>
             <el-table-column
               prop="roomType"
               label="房间类型名称"
@@ -75,8 +75,8 @@
       <el-dialog title="新房间类型" :visible.sync="dialogVisible" width="28%">
         <el-row type="flex" justify="center">
           <el-col :span="18">
-            <el-form label-width="100px">
-              <el-form-item :model="formRoomType" label="房间类型：">
+            <el-form :model="formRoomType" label-width="100px">
+              <el-form-item label="房间类型：">
                 <el-input
                   v-model="formRoomType.addRoomType"
                   placeholder="请输入房间类型"
@@ -113,7 +113,6 @@ export default {
       },
       dataRoomType: [
         {
-          serialNum: "123",
           roomType: "三人间",
           roomPrice: "456",
           settingTime: "12345678912",

@@ -39,9 +39,8 @@
         :header-cell-style="{ textAlign: 'center' }"
       >
         <el-table-column
-          prop="serialNum"
+          type="index"
           width="80"
-          label="序号"
         ></el-table-column>
         <el-table-column
           prop="roomType"
@@ -113,7 +112,6 @@ export default {
       },
       guestInfoData: [
         {
-          serialNum: "123",
           roomType: "三人间",
           roomNum: "123",
           roomName: "张三",
