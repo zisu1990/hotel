@@ -30,42 +30,36 @@
           >
             <el-table-column type="index" width="80"></el-table-column>
             <el-table-column
-              width="90px"
+              width="90"
               prop="roomNum"
               label="房号"
             ></el-table-column>
             <el-table-column
               prop="roomFloor"
-              width="90px"
               label="所在楼层"
             ></el-table-column>
             <el-table-column
-              width="90px"
               prop="roomType"
               label="房间类型"
             ></el-table-column>
             <el-table-column
-              width="90px"
               prop="roomManNum"
               label="可住人数"
             ></el-table-column>
             <el-table-column
-              width="90px"
               prop="everyDayPrice"
               label="每日单价"
             ></el-table-column>
             <el-table-column
-              width="100px"
               prop="settingHourRoom "
               label="可选钟点房"
             ></el-table-column>
             <el-table-column
-              width="90px"
               prop="isHaveWIFI "
               label="房间WIFI"
             ></el-table-column>
             <el-table-column
-              width="180px"
+              width="180"
               prop="settingTime"
               label="操作时间"
             ></el-table-column>
@@ -83,7 +77,7 @@
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column  width="200" label="操作">
               <template slot-scope="scope">
                 <el-button
                   size="mini"

@@ -1,8 +1,8 @@
 <template>
   <el-container v-cloak>
     <el-main>
-      <el-row>
-        <el-col :offset="3" :span="18">
+      <el-row type="flex" justify="center">
+        <el-col :span="20">
           <el-row>
             <p class="title">系统设置</p>
           </el-row>
