@@ -28,7 +28,7 @@
 
       <div class="btn">
         <el-row>
-          <el-button type="primary">增加</el-button>
+          <el-button type="primary" @click="AddDialogVisible=true">增加</el-button>
         </el-row>
       </div>
 
@@ -67,6 +67,82 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="400"
       ></el-pagination>
+
+      <!-- 新增会员 -->
+
+      <el-dialog title="会员充值" :visible.sync="AddDialogVisible" width="30%">
+        <el-form :model="AddForm" label-width="100px">
+          <el-form-item label="会员姓名：">
+            <el-row :gutter="10">
+              <el-col :span="14">
+                <el-input v-model="AddForm.name"></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary">读身份证</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item label="手机号：">
+            <el-input v-model="AddForm.name"></el-input>
+          </el-form-item>
+
+          <el-form-item label="身份证号：">
+            <el-input v-model="AddForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="身份证地址：">
+            <el-input v-model="AddForm.name"></el-input>
+          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="5">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="AddDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="RechargeDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
 
       <!-- 充值 -->
       <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%">
@@ -185,7 +261,9 @@ export default {
         money: "4600元",
         payforType: "",
         jine: ""
-      }
+      },
+      AddDialogVisible: false,
+      AddForm: {}
     };
   },
   methods: {
@@ -221,9 +299,9 @@ export default {
   /deep/.el-select {
     width: 200px;
   }
-  .el-dialog__footer{
-    text-align: center;
-  }
+}
+/deep/.el-dialog__footer {
+  text-align: center;
 }
 </style>
 
