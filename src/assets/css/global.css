@@ -29,6 +29,11 @@ ul li {
   display: none;
 }
 
+.hv:hover{
+  color: red;
+  cursor: pointer;
+}
+
 /* 首页分页 */
 .title {
   font-size: 26px;
