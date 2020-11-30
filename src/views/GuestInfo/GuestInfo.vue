@@ -39,64 +39,57 @@
         :header-cell-style="{ textAlign: 'center' }"
       >
         <el-table-column
-          prop="serialNum"
+          type="index"
           width="80"
-          label="序号"
         ></el-table-column>
         <el-table-column
           prop="roomType"
-          width="100"
           label="房间类型"
         ></el-table-column>
         <el-table-column
           prop="roomNum"
-          width="100"
           label="房间号"
         ></el-table-column>
         <el-table-column
           prop="roomName"
-          width="100"
           label="住客姓名"
         ></el-table-column>
         <el-table-column
           prop="cardId"
-          width="150"
+         width="140"
           label="身份证号"
         ></el-table-column>
         <el-table-column
           prop="adress"
-          width="200"
+          width="140"
           label="身份证地址"
         ></el-table-column>
         <el-table-column
-          width="150"
           prop="phone"
           label="联系电话"
         ></el-table-column>
         <el-table-column
-          width="150"
+          width="140"
           prop="goInTime"
           label="入住时间"
         ></el-table-column>
         <el-table-column
-          width="150"
+         width="140"
           prop="goOutTime"
           label="离店时间"
         ></el-table-column>
         <el-table-column
-          width="150"
+          width="140"
           prop="vipNum"
           label="会员卡号"
         ></el-table-column>
         <el-table-column
           prop="nationality"
-          width="80"
           label="国籍"
         ></el-table-column>
-        <el-table-column prop="settingTime" label="操作时间"></el-table-column>
+        <el-table-column prop="settingTime"  width="140" label="操作时间"></el-table-column>
         <el-table-column
           prop="settingUser"
-          width="80"
           label="操作员"
         ></el-table-column>
       </el-table>
@@ -113,7 +106,6 @@ export default {
       },
       guestInfoData: [
         {
-          serialNum: "123",
           roomType: "三人间",
           roomNum: "123",
           roomName: "张三",
