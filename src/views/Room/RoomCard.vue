@@ -126,33 +126,25 @@
 
             <el-row type="flex" justify="center" style="margin-top: 30px">
               <el-col :span="3">
-                <el-form-item>
-                  <el-button style="width: 100px" @click="resetForm"
-                    >清卡</el-button
-                  >
-                </el-form-item>
+                <el-button style="width: 100px" @click="resetForm"
+                  >清卡</el-button
+                >
               </el-col>
               <el-col :span="3">
-                <el-form-item>
-                  <el-button
-                    type="success"
-                    style="width: 100px"
-                    @click="resetForm"
-                    >读卡</el-button
-                  >
-                </el-form-item>
+                <el-button
+                  type="success"
+                  style="width: 100px"
+                  @click="resetForm"
+                  >读卡</el-button>
               </el-col>
               <el-col :span="3">
-                <el-form-item>
-                  <el-button
-                    style="width: 100px"
-                    size="medium"
-                    type="primary"
-                    @click="submitForm"
-                    >写卡</el-button
-                  >
-                </el-form-item></el-col
-              >
+                <el-button
+                  style="width: 100px"
+                  size="medium"
+                  type="primary"
+                  @click="submitForm"
+                  >写卡</el-button>
+              </el-col>
             </el-row>
           </el-form>
         </el-col>
