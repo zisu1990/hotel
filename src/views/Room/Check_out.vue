@@ -334,6 +334,12 @@ export default {
     text-align: right;
     margin: 40px 200px 40px 0;
   }
+      .btn {
+      margin-top: 30px;
+      .el-button {
+        width: 100px;
+      }
+    }
 }
 </style>
 

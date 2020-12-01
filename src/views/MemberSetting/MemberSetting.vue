@@ -100,6 +100,7 @@
             <el-input v-model="AddForm.time"></el-input>
           </el-form-item>
         </el-form>
+
         <span slot="footer" class="dialog-footer">
           <el-button @click="editdialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="editdialogVisible = false">确 定</el-button>
@@ -191,7 +192,11 @@ export default {
         width: 415px;
       }
     }
+
   }
+      /deep/.el-dialog__footer {
+      text-align: center;
+    }
 }
 </style>
 
