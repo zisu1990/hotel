@@ -28,7 +28,7 @@
 
       <div class="btn">
         <el-row>
-          <el-button type="primary">增加</el-button>
+          <el-button type="primary" @click="AddDialogVisible=true">增加</el-button>
         </el-row>
       </div>
 
@@ -52,7 +52,7 @@
         <el-table-column prop="OperationPerson" label="操作员" width="80" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template>
-            <el-button type="primary" size="small">充值</el-button>
+            <el-button type="primary" size="small" @click="RechargeDialogVisible=true">充值</el-button>
             <el-button type="warning" size="small">修改</el-button>
           </template>
         </el-table-column>
@@ -67,6 +67,122 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="400"
       ></el-pagination>
+
+      <!-- 新增会员 -->
+
+      <el-dialog title="会员充值" :visible.sync="AddDialogVisible" width="30%">
+        <el-form :model="AddForm" label-width="100px">
+          <el-form-item label="会员姓名：">
+            <el-row :gutter="10">
+              <el-col :span="14">
+                <el-input v-model="AddForm.name"></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary">读身份证</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item label="手机号：">
+            <el-input v-model="AddForm.name"></el-input>
+          </el-form-item>
+
+          <el-form-item label="身份证号：">
+            <el-input v-model="AddForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="身份证地址：">
+            <el-input v-model="AddForm.name"></el-input>
+          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="5">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.name" placeholder="请选择">
+                  <el-option label="所有" value="1"></el-option>
+                  <el-option label="客房每日营收统计表" value="2"></el-option>
+                  <el-option label="在店客人费用统计表" value="3"></el-option>
+                  <el-option label="结账客人费用报表" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="AddDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="RechargeDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <!-- 充值 -->
+      <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%">
+        <el-form :model="RechargeForm" label-width="100px">
+          <el-form-item label="会员姓名：">
+            <el-input v-model="RechargeForm.name" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="会员等级：">
+            <el-input v-model="RechargeForm.level" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="现有金额：">
+            <el-input v-model="RechargeForm.money" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="支付方式：">
+            <el-row>
+              <el-col :span="7">
+                <el-select v-model="RechargeForm.payforType" placeholder="请选择">
+                  <el-option label="现金" value="1"></el-option>
+                  <el-option label="支付宝" value="2"></el-option>
+                  <el-option label="微信" value="3"></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item label="充值金额：">
+            <el-row>
+              <el-col :span="7">
+                <el-input v-model="RechargeForm.jine"></el-input>
+              </el-col>
+              <el-col :span="1">元</el-col>
+              <el-col :span="4">赠 50 元</el-col>
+            </el-row>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="RechargeDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="RechargeDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
     </el-main>
   </el-container>
 </template>
@@ -137,7 +253,17 @@ export default {
           OperationPerson: "小吴"
         }
       ],
-      currentPage4: 4
+      currentPage4: 4,
+      RechargeDialogVisible: false,
+      RechargeForm: {
+        name: "张丹",
+        level: "黑钻会员",
+        money: "4600元",
+        payforType: "",
+        jine: ""
+      },
+      AddDialogVisible: false,
+      AddForm: {}
     };
   },
   methods: {
@@ -165,9 +291,17 @@ export default {
   }
 }
 
-
-/deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{
+/deep/.el-date-editor.el-input,
+.el-date-editor.el-input__inner {
   width: 280px;
+}
+.el-form {
+  /deep/.el-select {
+    width: 200px;
+  }
+}
+/deep/.el-dialog__footer {
+  text-align: center;
 }
 </style>
 
