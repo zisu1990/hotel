@@ -32,28 +32,28 @@
         </el-row>
       </div>
 
-      <el-table :data="BookingTableData" style="width: 100%" border stripe>
+      <el-table :data="MemberTableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="30" align="center"></el-table-column>
-        <el-table-column prop="OddNumber" label="预订单号" width="100" align="center"></el-table-column>
-        <el-table-column prop="PersonType" label="客户类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="GroupName" label="团体名称" width="80" align="center"></el-table-column>
-        <el-table-column prop="Subscriber" label="预订人" width="80" align="center"></el-table-column>
-        <el-table-column prop="Telphone" label="联系电话" align="center"></el-table-column>
-        <el-table-column prop="YuDaoTime" label="预到时间" align="center"></el-table-column>
-        <el-table-column prop="YuLiTime" label="预离时间" align="center"></el-table-column>
-        <el-table-column prop="RoomType" label="房间类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="Sum" label="数量" width="50" align="center"></el-table-column>
-        <el-table-column prop="PayFor" label="预付方式" width="80" align="center"></el-table-column>
-        <el-table-column prop="ParForPrice" label="预付金额" width="80" align="center"></el-table-column>
-        <el-table-column prop="CardNum" label="会员卡号" align="center"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="100" align="center"></el-table-column>
+        <el-table-column prop="sex" label="性别" width="50" align="center"></el-table-column>
+        <el-table-column prop="telphone" label="手机号" width="100" align="center"></el-table-column>
+        <el-table-column prop="idCard" label="身份证号" width="120" align="center"></el-table-column>
+        <el-table-column prop="address" label="地址" align="center"></el-table-column>
+        <el-table-column prop="yue" label="卡余额" width="80" align="center"></el-table-column>
         <el-table-column prop="Native" label="国籍" width="60" align="center"></el-table-column>
+        <el-table-column prop="integral" label="积分" align="center"></el-table-column>
+        <el-table-column prop="store" label="办理门店" width="120" align="center"></el-table-column>
         <el-table-column prop="OperationTime" label="操作时间" align="center"></el-table-column>
-        <el-table-column prop="Remarks" label="备注" align="center"></el-table-column>
         <el-table-column prop="OperationPerson" label="操作员" width="80" align="center"></el-table-column>
+        <el-table-column label="状态">
+          <template v-slot="scope">
+            <el-switch v-model="scope.row.state" active-color="#13ce66" inactive-color="#999"></el-switch>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template>
             <el-button type="primary" size="small" @click="RechargeDialogVisible=true">充值</el-button>
-            <el-button type="warning" size="small">修改</el-button>
+            <el-button type="warning" size="small" @click="EditDialogVisible=true">修改</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -69,7 +69,6 @@
       ></el-pagination>
 
       <!-- 新增会员 -->
-
       <el-dialog title="会员充值" :visible.sync="AddDialogVisible" width="30%">
         <el-form :model="AddForm" label-width="100px">
           <el-form-item label="会员姓名：">
@@ -84,55 +83,49 @@
           </el-form-item>
 
           <el-form-item label="手机号：">
-            <el-input v-model="AddForm.name"></el-input>
+            <el-input v-model="AddForm.tel"></el-input>
           </el-form-item>
 
           <el-form-item label="身份证号：">
-            <el-input v-model="AddForm.name"></el-input>
+            <el-input v-model="AddForm.idcard"></el-input>
           </el-form-item>
           <el-form-item label="身份证地址：">
-            <el-input v-model="AddForm.name"></el-input>
+            <el-input v-model="AddForm.address"></el-input>
           </el-form-item>
-          <el-row :gutter="20">
-            <el-col :span="5">
+          <el-row :gutter="20" type="flex"  class="select">
+            <el-col :span="12">
               <el-form-item label="会员等级：">
-                <el-select v-model="AddForm.name" placeholder="请选择">
-                  <el-option label="所有" value="1"></el-option>
-                  <el-option label="客房每日营收统计表" value="2"></el-option>
-                  <el-option label="在店客人费用统计表" value="3"></el-option>
-                  <el-option label="结账客人费用报表" value="4"></el-option>
+                <el-select v-model="AddForm.level" placeholder="请选择">
+                  <el-option label="钻石会员" value="1"></el-option>
+                  <el-option label="白金会员" value="2"></el-option>
+                  <el-option label="普通会员" value="3"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
-              <el-form-item label="会员等级：">
-                <el-select v-model="AddForm.name" placeholder="请选择">
-                  <el-option label="所有" value="1"></el-option>
-                  <el-option label="客房每日营收统计表" value="2"></el-option>
-                  <el-option label="在店客人费用统计表" value="3"></el-option>
-                  <el-option label="结账客人费用报表" value="4"></el-option>
+            <el-col :span="12">
+              <el-form-item label="国籍：">
+                <el-select v-model="AddForm.native" placeholder="请选择">
+                  <el-option label="中国" value="1"></el-option>
+                  <el-option label="美国" value="2"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item label="会员等级：">
-                <el-select v-model="AddForm.name" placeholder="请选择">
-                  <el-option label="所有" value="1"></el-option>
-                  <el-option label="客房每日营收统计表" value="2"></el-option>
-                  <el-option label="在店客人费用统计表" value="3"></el-option>
-                  <el-option label="结账客人费用报表" value="4"></el-option>
+          <el-row :gutter="20"  class="select">
+            <el-col :span="12">
+              <el-form-item label="性别：">
+                <el-select v-model="AddForm.sex" placeholder="请选择">
+                  <el-option label="男" value="1"></el-option>
+                  <el-option label="女" value="2"></el-option>
+ 
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="会员等级：">
-                <el-select v-model="AddForm.name" placeholder="请选择">
-                  <el-option label="所有" value="1"></el-option>
-                  <el-option label="客房每日营收统计表" value="2"></el-option>
-                  <el-option label="在店客人费用统计表" value="3"></el-option>
-                  <el-option label="结账客人费用报表" value="4"></el-option>
+            <el-col :span="12">
+              <el-form-item label="办理门店：">
+                <el-select v-model="AddForm.store" placeholder="请选择">
+                  <el-option label="宿松路滨湖分店" value="1"></el-option>
+                  <el-option label="大学城店" value="2"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -140,9 +133,79 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="AddDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="RechargeDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="AddDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
+
+      <!-- 修改会员 -->
+      <el-dialog title="修改" :visible.sync="EditDialogVisible" width="30%">
+        <el-form :model="EditForm" label-width="100px">
+          <el-form-item label="会员姓名：">
+            <el-row :gutter="10">
+              <el-col :span="14">
+                <el-input v-model="EditForm.name"></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary">读身份证</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item label="手机号：">
+            <el-input v-model="EditForm.tel"></el-input>
+          </el-form-item>
+
+          <el-form-item label="身份证号：">
+            <el-input v-model="EditForm.idcard"></el-input>
+          </el-form-item>
+          <el-form-item label="身份证地址：">
+            <el-input v-model="EditForm.address"></el-input>
+          </el-form-item>
+          <el-row :gutter="20" type="flex"  class="select">
+            <el-col :span="12">
+              <el-form-item label="会员等级：">
+                <el-select v-model="EditForm.level" placeholder="请选择">
+                  <el-option label="钻石会员" value="1"></el-option>
+                  <el-option label="白金会员" value="2"></el-option>
+                  <el-option label="普通会员" value="3"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="国籍：">
+                <el-select v-model="EditForm.native" placeholder="请选择">
+                  <el-option label="中国" value="1"></el-option>
+                  <el-option label="美国" value="2"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20"  class="select">
+            <el-col :span="12">
+              <el-form-item label="性别：">
+                <el-select v-model="EditForm.sex" placeholder="请选择">
+                  <el-option label="男" value="1"></el-option>
+                  <el-option label="女" value="2"></el-option>
+ 
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="办理门店：">
+                <el-select v-model="EditForm.store" placeholder="请选择">
+                  <el-option label="宿松路滨湖分店" value="1"></el-option>
+                  <el-option label="大学城店" value="2"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="EditDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="EditDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
 
       <!-- 充值 -->
       <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%">
@@ -197,60 +260,48 @@ export default {
         name: "",
         tel: ""
       },
-      BookingTableData: [
+      MemberTableData: [
         {
-          OddNumber: "yd123456",
-          PersonType: "散客",
-          GroupName: "无",
-          Subscriber: "张三",
-          Telphone: "18256032124",
-          YuDaoTime: "2020-04-12 13:12",
-          YuLiTime: "2020-04-13 13:12",
-          RoomType: "三人间",
-          Sum: 1,
-          PayFor: "现金",
-          ParForPrice: "2000",
-          CardNum: "NO.123456789",
+          name: "张三",
+          sex: "男",
+          idCard: "340881199910265489",
+          address: "安徽省合肥市西藏路1110号",
+          telphone: "18256032124",
+          yue: 1000,
           Native: "中国",
+          integral: 3000,
+          store: "宿松路店",
           OperationTime: "2020-04-13 13:12",
-          Remarks: "无",
-          OperationPerson: "小吴"
+          OperationPerson: "小吴",
+          state: 1
         },
         {
-          OddNumber: "yd123456",
-          PersonType: "散客",
-          GroupName: "无",
-          Subscriber: "张三",
-          Telphone: "18256032124",
-          YuDaoTime: "2020-04-12 13:12:12",
-          YuLiTime: "2020-04-13 13:12:12",
-          RoomType: "三人间",
-          Sum: 1,
-          PayFor: "现金",
-          ParForPrice: "2000",
-          CardNum: "NO.123456789",
+          name: "张三",
+          sex: "男",
+          idCard: "340881199910265489",
+          address: "安徽省合肥市西藏路1110号",
+          telphone: "18256032124",
+          yue: 1000,
           Native: "中国",
-          OperationTime: "2020-04-13 13:12:12",
-          Remarks: "无",
-          OperationPerson: "小吴"
+          integral: 3000,
+          store: "宿松路店",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴",
+          state: 1
         },
         {
-          OddNumber: "yd123456",
-          PersonType: "散客",
-          GroupName: "无",
-          Subscriber: "张三",
-          Telphone: "18256032124",
-          YuDaoTime: "2020-04-12 13:12:12",
-          YuLiTime: "2020-04-13 13:12:12",
-          RoomType: "三人间",
-          Sum: 1,
-          PayFor: "现金",
-          ParForPrice: "2000",
-          CardNum: "NO.123456789",
+          name: "张三",
+          sex: "男",
+          idCard: "340881199910265489",
+          address: "安徽省合肥市西藏路1110号",
+          telphone: "18256032124",
+          yue: 1000,
           Native: "中国",
-          OperationTime: "2020-04-13 13:12:12",
-          Remarks: "无",
-          OperationPerson: "小吴"
+          integral: 3000,
+          store: "宿松路店",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴",
+          state: 1
         }
       ],
       currentPage4: 4,
@@ -263,7 +314,28 @@ export default {
         jine: ""
       },
       AddDialogVisible: false,
-      AddForm: {}
+      AddForm: {
+        name:'',
+        tel:'',
+        idcard:'',
+        address:'',
+        level:'',
+        native:'',
+        sex:'',
+        store:''
+
+      },
+      EditDialogVisible:false,
+      EditForm: {
+        name:'',
+        tel:'',
+        idcard:'',
+        address:'',
+        level:'',
+        native:'',
+        sex:'',
+        store:''
+      },
     };
   },
   methods: {
@@ -295,9 +367,11 @@ export default {
 .el-date-editor.el-input__inner {
   width: 280px;
 }
-.el-form {
-  /deep/.el-select {
-    width: 200px;
+.select {
+  .el-form {
+    /deep/.el-select {
+      width:100%;
+    }
   }
 }
 /deep/.el-dialog__footer {
