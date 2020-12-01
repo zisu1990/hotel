@@ -15,26 +15,17 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="6">
                 <el-form-item label="房号：" prop="inputRules">
-                  <el-input
-                    clearable
-                    v-model="formDamageRecad.roomCardNum"
-                  ></el-input>
+                  <el-input clearable v-model="formDamageRecad.roomCardNum"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="客户名称：">
-                  <el-input
-                    clearable
-                    v-model="formDamageRecad.userName"
-                  ></el-input>
+                  <el-input clearable v-model="formDamageRecad.userName"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="客户类型：">
-                  <el-select
-                    v-model="formDamageRecad.clientType"
-                    style="width: 100%"
-                  >
+                  <el-select v-model="formDamageRecad.clientType" style="width: 100%">
                     <el-option label="散客" value="sanke"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                   </el-select>
@@ -50,8 +41,7 @@
                     v-model="formDamageRecad.goInTime"
                     type="datetime"
                     placeholder="选择日期时间"
-                  >
-                  </el-date-picker>
+                  ></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -61,11 +51,10 @@
                     v-model="formDamageRecad.goOutTime"
                     type="datetime"
                     placeholder="选择日期时间"
-                  >
-                  </el-date-picker>
+                  ></el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="6"></el-col>
             </el-row>
 
             <el-row type="flex" justify="center">
@@ -91,36 +80,23 @@
                           :key="item.value"
                           :label="item.label"
                           :value="item.value"
-                        >
-                        </el-option>
+                        ></el-option>
                       </el-select>
                     </template>
                   </el-table-column>
                   <el-table-column prop="num" label="数量">
                     <template v-slot="scope">
-                      <el-input
-                        placeholder="请输入数量"
-                        clearable
-                        v-model="scope.row.num"
-                      ></el-input>
+                      <el-input placeholder="请输入数量" clearable v-model="scope.row.num"></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column prop="price" label="单价">
                     <template slot-scope="scope">
-                      <el-input
-                        v-model="scope.row.price"
-                        placeholder="请输入单价"
-                        clearable
-                      ></el-input>
+                      <el-input v-model="scope.row.price" placeholder="请输入单价" clearable></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column prop="money" label="损赔金额">
                     <template v-slot="scope">
-                      <el-input
-                        v-model="scope.row.money"
-                        placeholder="请输入损赔金额"
-                        clearable
-                      ></el-input>
+                      <el-input v-model="scope.row.money" placeholder="请输入损赔金额" clearable></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column prop="money" label="操作">
@@ -134,7 +110,7 @@
                       <el-button
                         type="primary"
                         icon="el-icon-edit-outline"
-                        circle=""
+                        circle
                         @click="handleAdd(scope.$index, scope.row)"
                       ></el-button>
                     </template>
@@ -143,17 +119,10 @@
               </el-col>
             </el-row>
 
-            <el-row
-              type="flex"
-              style="margin-top: 20px"
-              justify="space-between"
-            >
+            <el-row type="flex" style="margin-top: 20px" justify="space-between">
               <el-col :span="6">
                 <el-form-item label="结算方式" prop="payWay">
-                  <el-select
-                    v-model="formDamageRecad.payWay"
-                    style="width: 100%"
-                  >
+                  <el-select v-model="formDamageRecad.payWay" style="width: 100%">
                     <el-option label="现金" value="xianjin"></el-option>
                     <el-option label="支付宝" value="zhifubao"></el-option>
                     <el-option label="微信" value="weixin"></el-option>
@@ -162,28 +131,21 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="结算金额" prop="clooseMoney">
-                  <el-input
-                    placeholder="请输入结算金额"
-                    v-model="formDamageRecad.clooseMoney"
-                  >
-                  </el-input>
+                  <el-input placeholder="请输入结算金额" v-model="formDamageRecad.clooseMoney"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="6"></el-col>
             </el-row>
 
             <el-row style="margin-top: 30px">
               <el-form-item>
-                <el-button style="width: 100px" @click="resetForm"
-                  >取消</el-button
-                >
+                <el-button style="width: 100px" @click="resetForm">取消</el-button>
                 <el-button
                   style="width: 100px"
                   size="medium"
                   type="primary"
                   @click="submitForm"
-                  >确认录入</el-button
-                >
+                >确认录入</el-button>
               </el-form-item>
             </el-row>
           </el-form>
@@ -212,15 +174,15 @@ export default {
         clientType: "",
         goOutTime: "",
         goInTime: "",
-        damageName: "",
+        damageName: ""
       },
       //   表单规则
       rules: {
         inputRules: [{ validator: inputRules, trigger: "blur" }],
 
         payWay: [
-          { required: true, message: "请选择预订支付方式", trigger: "change" },
-        ],
+          { required: true, message: "请选择预订支付方式", trigger: "change" }
+        ]
       },
       //   表格
       tableData: [
@@ -228,26 +190,26 @@ export default {
           name: [
             {
               value: "chuifengji",
-              label: "吹风机",
+              label: "吹风机"
             },
             {
               value: "dianfengshan",
-              label: "电风扇",
+              label: "电风扇"
             },
             {
               value: "xiyiji",
-              label: "洗衣机",
+              label: "洗衣机"
             },
             {
               value: "pensa",
-              label: "喷洒",
-            },
+              label: "喷洒"
+            }
           ],
           num: "",
           price: 200,
-          money: "",
-        },
-      ],
+          money: ""
+        }
+      ]
     };
   },
   methods: {
@@ -258,7 +220,7 @@ export default {
       if (tableData.length >= 10) {
         this.$message({
           message: "最多添十个物品",
-          type: "error",
+          type: "error"
         });
         return;
       }
@@ -266,24 +228,24 @@ export default {
         name: [
           {
             value: "chuifengji",
-            label: "吹风机",
+            label: "吹风机"
           },
           {
             value: "dianfengshan",
-            label: "电风扇",
+            label: "电风扇"
           },
           {
             value: "xiyiji",
-            label: "洗衣机",
+            label: "洗衣机"
           },
           {
             value: "pensa",
-            label: "喷洒",
-          },
+            label: "喷洒"
+          }
         ],
         num: "",
         price: 200,
-        money: "",
+        money: ""
       });
     },
     handleReduce(i, v) {
@@ -291,7 +253,7 @@ export default {
       if (tableData.length == 1) {
         this.$message({
           message: "不可删除",
-          type: "error",
+          type: "error"
         });
         return;
       }
@@ -305,7 +267,7 @@ export default {
     // },
     // 提交表单
     submitForm() {
-      this.$refs.formDamageRecad.validate((valid) => {
+      this.$refs.formDamageRecad.validate(valid => {
         if (valid) {
           alert("submit!");
         } else {
@@ -317,8 +279,8 @@ export default {
     // 重置表单
     resetForm() {
       this.$router.back(-1);
-    },
-  },
+    }
+  }
 };
 </script>
 
