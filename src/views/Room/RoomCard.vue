@@ -14,7 +14,7 @@
             label-width="130px"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房号：">
                   <el-input
                     clearable
@@ -22,7 +22,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户名称：">
                   <el-input
                     clearable
@@ -30,7 +30,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select
                     v-model="formRoomCard.clientType"
@@ -44,7 +44,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房卡编号：">
                   <el-input
                     clearable
@@ -52,7 +52,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房卡状态：">
                   <el-input
                     clearable
@@ -60,7 +60,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
@@ -86,7 +86,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
@@ -112,7 +112,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="start">
@@ -124,19 +124,26 @@
               </el-col>
             </el-row>
 
-            <el-row justify="center" style="margin-top: 30px">
-              <el-form-item>
-                <el-col :span="6">
+            <el-row type="flex" justify="center" style="margin-top: 30px">
+              <el-col :span="3">
+                <el-form-item>
                   <el-button style="width: 100px" @click="resetForm"
                     >清卡</el-button
                   >
-                </el-col>
-                <el-col :span="6">
-                  <el-button type="success" style="width: 100px" @click="resetForm"
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-form-item>
+                  <el-button
+                    type="success"
+                    style="width: 100px"
+                    @click="resetForm"
                     >读卡</el-button
                   >
-                </el-col>
-                <el-col :span="6">
+                </el-form-item>
+              </el-col>
+              <el-col :span="3">
+                <el-form-item>
                   <el-button
                     style="width: 100px"
                     size="medium"
@@ -144,8 +151,8 @@
                     @click="submitForm"
                     >写卡</el-button
                   >
-                </el-col>
-              </el-form-item>
+                </el-form-item></el-col
+              >
             </el-row>
           </el-form>
         </el-col>

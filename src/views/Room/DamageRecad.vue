@@ -13,7 +13,7 @@
             label-width="130px"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房号：" prop="inputRules">
                   <el-input
                     clearable
@@ -21,7 +21,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户名称：">
                   <el-input
                     clearable
@@ -29,7 +29,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select
                     v-model="formDamageRecad.clientType"
@@ -65,7 +65,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="center">
@@ -148,7 +148,7 @@
               style="margin-top: 20px"
               justify="space-between"
             >
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="结算方式" prop="payWay">
                   <el-select
                     v-model="formDamageRecad.payWay"
@@ -160,7 +160,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="结算金额" prop="clooseMoney">
                   <el-input
                     placeholder="请输入结算金额"
@@ -169,7 +169,7 @@
                   </el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row style="margin-top: 30px">
