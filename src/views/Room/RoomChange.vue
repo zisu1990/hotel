@@ -205,8 +205,8 @@
 
             <el-row style="margin-top: 30px">
               <el-form-item>
-                <el-button style="width: 100px" size="medium" type="success" @click="submitForm">提交</el-button>
                 <el-button style="width: 100px" @click="resetForm">重置</el-button>
+                <el-button style="width: 100px" size="medium" type="primary" @click="submitForm">确认</el-button>
               </el-form-item>
             </el-row>
           </el-form>
@@ -815,19 +815,19 @@ export default {
 .el-date-editor.el-input__inner {
   width: 256px;
 }
-/deep/.el-checkbox {
+div /deep/.el-checkbox {
   font-size: 18px;
 }
-/deep/.el-checkbox__inner {
+div /deep/.el-checkbox__inner {
   width: 20px;
   height: 20px;
 }
-/deep/.el-checkbox__inner::after {
+div /deep/.el-checkbox__inner::after {
   height: 11px;
   left: 8px;
   top: 2px;
 }
-/deep/.el-checkbox__label {
+div /deep/.el-checkbox__label {
   font-size: 18px;
   line-height: 20px;
 }

@@ -158,7 +158,7 @@
             <el-row style="margin-top: 30px">
               <el-form-item>
                 <el-button style="width: 100px">暂不打印</el-button>
-                <el-button style="width: 100px" size="medium" type="success"
+                <el-button style="width: 100px" size="medium" type="primary"
                   >打印</el-button
                 >
               </el-form-item>

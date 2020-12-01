@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-row >
+      <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
             <p class="title">房卡管理</p>
@@ -128,19 +128,19 @@
               <el-form-item>
                 <el-col :span="6">
                   <el-button style="width: 100px" @click="resetForm"
-                    >读卡</el-button
+                    >清卡</el-button
                   >
                 </el-col>
                 <el-col :span="6">
-                  <el-button style="width: 100px" @click="resetForm"
-                    >清卡</el-button
+                  <el-button type="success" style="width: 100px" @click="resetForm"
+                    >读卡</el-button
                   >
                 </el-col>
                 <el-col :span="6">
                   <el-button
                     style="width: 100px"
                     size="medium"
-                    type="success"
+                    type="primary"
                     @click="submitForm"
                     >写卡</el-button
                   >
@@ -196,7 +196,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 </style>

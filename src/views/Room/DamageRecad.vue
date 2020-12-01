@@ -180,7 +180,7 @@
                 <el-button
                   style="width: 100px"
                   size="medium"
-                  type="success"
+                  type="primary"
                   @click="submitForm"
                   >确认录入</el-button
                 >

@@ -319,15 +319,15 @@
             </el-row>
             <el-row style="margin-top: 30px">
               <el-form-item>
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
                 <el-button
                   style="width: 100px"
                   size="medium"
                   @click="submitForm"
-                  >提交</el-button
-                >
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
-                >
+                  type="primary"
+                  >确认</el-button>
               </el-form-item>
             </el-row>
           </el-form>

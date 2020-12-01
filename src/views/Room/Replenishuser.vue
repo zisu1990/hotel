@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-row >
+      <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
             <p class="title">补录住客</p>
@@ -67,7 +67,6 @@
                     <el-option label="城市" value="chengshi"></el-option>
                   </el-select>
                   <el-button
-                    size="small "
                     style="margin-left: 16px"
                     type="primary"
                     >读身份证</el-button
@@ -222,15 +221,15 @@
 
             <el-row style="margin-top: 30px">
               <el-form-item>
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
                 <el-button
                   style="width: 100px"
                   size="medium"
-                  type="success"
+                  type="primary"
                   @click="submitForm"
-                  >提交</el-button
-                >
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
+                  >确认</el-button
                 >
               </el-form-item>
             </el-row>
@@ -401,7 +400,7 @@ export default {
 };
 </script>
 <style  lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 .title {

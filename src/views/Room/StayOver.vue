@@ -222,15 +222,15 @@
 
             <el-row style="margin-top: 30px">
               <el-form-item>
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
                 <el-button
                   style="width: 100px"
                   size="medium"
-                  type="success"
+                  type="primary"
                   @click="submitForm"
-                  >提交</el-button
-                >
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
+                  >确认</el-button
                 >
               </el-form-item>
             </el-row>
@@ -404,7 +404,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.el-main{
+.el-main {
   background: #fff;
 }
 </style>
