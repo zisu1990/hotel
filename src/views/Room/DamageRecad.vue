@@ -13,17 +13,17 @@
             label-width="130px"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房号：" prop="inputRules">
                   <el-input clearable v-model="formDamageRecad.roomCardNum"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户名称：">
                   <el-input clearable v-model="formDamageRecad.userName"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select v-model="formDamageRecad.clientType" style="width: 100%">
                     <el-option label="散客" value="sanke"></el-option>
@@ -54,7 +54,7 @@
                   ></el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"></el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="center">
@@ -119,8 +119,12 @@
               </el-col>
             </el-row>
 
-            <el-row type="flex" style="margin-top: 20px" justify="space-between">
-              <el-col :span="6">
+            <el-row
+              type="flex"
+              style="margin-top: 20px"
+              justify="space-between"
+            >
+              <el-col :span="7">
                 <el-form-item label="结算方式" prop="payWay">
                   <el-select v-model="formDamageRecad.payWay" style="width: 100%">
                     <el-option label="现金" value="xianjin"></el-option>
@@ -129,12 +133,12 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="结算金额" prop="clooseMoney">
                   <el-input placeholder="请输入结算金额" v-model="formDamageRecad.clooseMoney"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"></el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row style="margin-top: 30px">

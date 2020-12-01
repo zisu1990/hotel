@@ -1139,19 +1139,19 @@ export default {
 .el-date-editor.el-input__inner {
   width: 256px;
 }
-/deep/.el-checkbox {
+div /deep/.el-checkbox {
   font-size: 18px;
 }
-/deep/.el-checkbox__inner {
+div /deep/.el-checkbox__inner {
   width: 20px;
   height: 20px;
 }
-/deep/.el-checkbox__inner::after {
+div /deep/.el-checkbox__inner::after {
   height: 11px;
   left: 8px;
   top: 2px;
 }
-/deep/.el-checkbox__label {
+div /deep/.el-checkbox__label {
   font-size: 18px;
   line-height: 20px;
 }
