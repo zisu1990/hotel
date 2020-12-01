@@ -16,7 +16,17 @@
       <el-row type="flex" justify="start">
         <el-button @click="dialogVisible = true" type="primary">新增</el-button>
         <el-button type="primary">下载客房导入模板</el-button>
-        <el-button>导入客房信息</el-button>
+        <!-- <el-button>导入客房信息</el-button> -->
+        <el-upload
+          style="margin-left: 10px"
+          action=""
+          :auto-upload="false"
+          accept=".xlsx, .xls"
+          :show-file-list="false"
+          :on-change="handleChange"
+        >
+          <el-button>导入客房信息</el-button>
+        </el-upload>
       </el-row>
 
       <el-row type="flex" justify="start" style="margin-top: 20px">
@@ -38,10 +48,7 @@
               prop="roomFloor"
               label="所在楼层"
             ></el-table-column>
-            <el-table-column
-              prop="roomType"
-              label="房间类型"
-            ></el-table-column>
+            <el-table-column prop="roomType" label="房间类型"></el-table-column>
             <el-table-column
               prop="roomManNum"
               label="可住人数"
@@ -77,7 +84,7 @@
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column  width="200" label="操作">
+            <el-table-column width="200" label="操作">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -96,31 +103,92 @@
         </el-col>
       </el-row>
 
-      <el-dialog title="新房间类型" :visible.sync="dialogVisible" width="28%">
-        <el-row type="flex" justify="between">
-          <el-col :span="20">
-            <el-form :model="formRoomManage" label-width="100px">
-              <el-row type="flex" justify="between">
-                <el-col :span="10">
-                  <el-form-item label="序号：">
-                    <el-input
-                      v-model="formRoomManage.addRoomNum"
-                      placeholder="请输入序号"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                  <el-form-item label="所在楼层(层)：">
-                    <el-input
-                      v-model="formRoomManage.onRoomFloor"
-                      placeholder="请输入楼层"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </el-col>
-        </el-row>
+      <el-dialog title="新房间类型" :visible.sync="dialogVisible" width="30%">
+        <el-form :model="formRoomManage" label-width="90px">
+          <el-row type="flex" justify="space-between">
+            <el-col :span="11">
+              <el-form-item label="房号：">
+                <el-input
+                  v-model="formRoomManage.addRoomNum"
+                  placeholder="请输入序号"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="所在楼层：">
+                <el-input
+                  v-model="formRoomManage.onRoomFloor"
+                  placeholder="请输入楼层"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row type="flex" justify="space-between">
+            <el-col :span="11">
+              <el-form-item label="房间类型：">
+                <el-select
+                  v-model="formRoomManage.addRoomType"
+                  placeholder="请选择"
+                  clearable
+                >
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="可住人数：">
+                <el-input
+                  v-model="formRoomManage.liveUserName"
+                  placeholder="请输入可住人数"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row type="flex" justify="space-between">
+            <el-col :span="11">
+              <el-form-item label="房间价格：">
+                <el-input
+                  v-model="formRoomManage.addRoomPrice"
+                  placeholder="请输入房间价格"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="可住人数：">
+                <el-select
+                  v-model="formRoomManage.isHourRoom"
+                  placeholder="请选择"
+                >
+                  <el-option value="1" label="是"> </el-option>
+                  <el-option value="0" label="否"> </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row type="flex" justify="space-between">
+            <el-col :span="11">
+              <el-form-item label="房间WIFI：">
+                <el-select
+                  v-model="formRoomManage.isHaveWIFI"
+                  placeholder="请选择"
+                >
+                  <el-option value="1" label="是"> </el-option>
+                  <el-option value="0" label="否"> </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11"> </el-col>
+          </el-row>
+        </el-form>
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -162,6 +230,10 @@ export default {
         addRoomNum: "",
         onRoomFloor: "",
         addRoomType: "",
+        liveUserName: "",
+        addRoomPrice: "",
+        isHourRoom: "",
+        isHaveWIFI: "",
       },
       dataRoomType: [
         {
@@ -183,6 +255,8 @@ export default {
   methods: {
     handleEdit(i, v) {},
     handleDelete(i, v) {},
+    // 上传exsel
+    handleChange(file, fileList) {},
   },
 };
 </script>
