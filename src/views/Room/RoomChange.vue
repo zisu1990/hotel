@@ -48,19 +48,19 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7" style="display: flex; align-content: center">
                 <el-form-item label="证件类型：">
-                  <el-select v-model="formRoomChange.IDtype" style="width: 65%">
+                  <el-select v-model="formRoomChange.IDtype" style="width: 62%">
                     <el-option label="农村" value="nongcun"></el-option>
                     <el-option label="城市" value="chengshi"></el-option>
                   </el-select>
                   <el-button
                     size="small"
-                    style="width: 35%; height: 40px"
+                    style="width: 35%; height: 40px;margin-left: 3%"
                     type="primary"
                     >读身份证</el-button
                   >
                 </el-form-item>
               </el-col>
-              <el-col :pull="1" :span="7">
+              <el-col :span="7">
                 <el-form-item label="联系电话：" prop="userPhone">
                   <el-input
                     clearable
