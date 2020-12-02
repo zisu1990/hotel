@@ -45,17 +45,26 @@
             ></el-table-column>
             <el-table-column label="状态">
               <template v-slot="scope">
-                <el-switch v-model="scope.row.state" active-color="#13ce66" inactive-color="#999"></el-switch>
+                <el-switch
+                  v-model="scope.row.state"
+                  active-color="#13ce66"
+                  inactive-color="#999"
+                ></el-switch>
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button
+                  size="mini"
+                  @click="handleEdit(scope.$index, scope.row)"
+                  >编辑</el-button
+                >
                 <el-button
                   size="mini"
                   type="danger"
                   @click="handleDelete(scope.$index, scope.row)"
-                >删除</el-button>
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -73,7 +82,10 @@
                 ></el-input>
               </el-form-item>
               <el-form-item :model="formRoomType" label="房间价格：">
-                <el-input v-model="formRoomType.addRoomPrice" placeholder="请输入房间价格"></el-input>
+                <el-input
+                  v-model="formRoomType.addRoomPrice"
+                  placeholder="请输入房间价格"
+                ></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -81,9 +93,21 @@
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="dialogVisible = false"
+            >确 定</el-button
+          >
         </span>
       </el-dialog>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      ></el-pagination>
     </el-main>
   </el-container>
 </template>
@@ -94,7 +118,7 @@ export default {
       formRoomType: {
         roomType: "",
         addRoomType: "",
-        addRoomPrice: ""
+        addRoomPrice: "",
       },
       dataRoomType: [
         {
@@ -102,20 +126,32 @@ export default {
           roomPrice: "456",
           settingTime: "12345678912",
           settingUser: "张三",
-          state: 1
-        }
+          state: 1,
+        },
       ],
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
   methods: {
     handleEdit(i, v) {},
-    handleDelete(i, v) {}
-  }
+    handleDelete(i, v) {},
+    // 分页器
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+  },
 };
 </script>
 
-
+<style lang="less" scoped>
+.el-pagination {
+  margin-top: 30px;
+  float: right;
+}
+</style>
 
 
 

@@ -197,6 +197,16 @@
           >
         </span>
       </el-dialog>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      ></el-pagination>
     </el-main>
   </el-container>
 </template>
@@ -257,9 +267,24 @@ export default {
     handleDelete(i, v) {},
     // 上传exsel
     handleChange(file, fileList) {},
+
+    // 分页器
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
   },
 };
 </script>
+
+<style lang="less" scoped>
+.el-pagination {
+  margin-top: 30px;
+  float: right;
+}
+</style>
 
 
 

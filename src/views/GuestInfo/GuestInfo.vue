@@ -38,25 +38,13 @@
         :cell-style="{ textAlign: 'center' }"
         :header-cell-style="{ textAlign: 'center' }"
       >
-        <el-table-column
-          type="index"
-          width="80"
-        ></el-table-column>
-        <el-table-column
-          prop="roomType"
-          label="房间类型"
-        ></el-table-column>
-        <el-table-column
-          prop="roomNum"
-          label="房间号"
-        ></el-table-column>
-        <el-table-column
-          prop="roomName"
-          label="住客姓名"
-        ></el-table-column>
+        <el-table-column type="index" width="80"></el-table-column>
+        <el-table-column prop="roomType" label="房间类型"></el-table-column>
+        <el-table-column prop="roomNum" label="房间号"></el-table-column>
+        <el-table-column prop="roomName" label="住客姓名"></el-table-column>
         <el-table-column
           prop="cardId"
-         width="140"
+          width="140"
           label="身份证号"
         ></el-table-column>
         <el-table-column
@@ -64,17 +52,14 @@
           width="140"
           label="身份证地址"
         ></el-table-column>
-        <el-table-column
-          prop="phone"
-          label="联系电话"
-        ></el-table-column>
+        <el-table-column prop="phone" label="联系电话"></el-table-column>
         <el-table-column
           width="140"
           prop="goInTime"
           label="入住时间"
         ></el-table-column>
         <el-table-column
-         width="140"
+          width="140"
           prop="goOutTime"
           label="离店时间"
         ></el-table-column>
@@ -83,16 +68,24 @@
           prop="vipNum"
           label="会员卡号"
         ></el-table-column>
+        <el-table-column prop="nationality" label="国籍"></el-table-column>
         <el-table-column
-          prop="nationality"
-          label="国籍"
+          prop="settingTime"
+          width="140"
+          label="操作时间"
         ></el-table-column>
-        <el-table-column prop="settingTime"  width="140" label="操作时间"></el-table-column>
-        <el-table-column
-          prop="settingUser"
-          label="操作员"
-        ></el-table-column>
+        <el-table-column prop="settingUser" label="操作员"></el-table-column>
       </el-table>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      ></el-pagination>
     </el-main>
   </el-container>
 </template>
@@ -122,8 +115,25 @@ export default {
       ],
     };
   },
+  methods: {
+    // 分页器
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+  },
 };
 </script>
+
+<style lang="less" scoped>
+.el-pagination {
+  margin-top: 30px;
+  float: right;
+}
+</style>
+
 
 
 

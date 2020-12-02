@@ -30,13 +30,18 @@
             prefix-icon="el-icon-s-goods"
             placeholder="请输入密码"
             show-password
-          >></el-input>
+            >></el-input
+          >
         </el-form-item>
 
         <el-form-item class="codewarp">
-          <el-input v-model="loginForm.code" placeholder="请输入验证码" class="code"></el-input>
+          <el-input
+            v-model="loginForm.code"
+            placeholder="请输入验证码"
+            class="code"
+          ></el-input>
           <div class="codeImg">
-            <img src="../assets/image/code.jpg" alt srcset>
+            <img src="../assets/image/code.jpg" alt srcset />
           </div>
           <span>换一组</span>
         </el-form-item>
@@ -54,6 +59,7 @@
 
 
 <script>
+import { loginVerify } from "@/api/Login";
 export default {
   name: "login",
   data() {
@@ -62,34 +68,43 @@ export default {
       loginForm: {
         username: "admin",
         password: "123456",
-        code: "FFBB"
+        code: "FFBB",
       },
 
       // 表单验证规则
       loginFormRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ]
-      }
+          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" },
+        ],
+      },
     };
+  },
+  mounted() {
   },
   methods: {
     //登录
     login() {
-      this.$router.push("/room");
-    }
+      let params = {
+        app_type: 3,
+        username: this.username,
+        password: this.password,
+        yzm_code: "12443",
+      };
+      loginVerify(params);
+      // this.$router.push("/room");
+    },
 
     //重置
     // resetLoginForm() {
     //   //console.log(this)
     //   this.$refs.loginFormRef.resetFields();
     // }
-  }
+  },
 };
 </script>
 
@@ -159,19 +174,19 @@ export default {
     display: flex;
     justify-content: space-bettew;
     align-items: center;
-    
-    .codeImg{
-      width:144px;
-      height: 50px; 
+
+    .codeImg {
+      width: 144px;
+      height: 50px;
       position: absolute;
       top: 0;
       left: 170px;
     }
     .code {
-      position:relative;
+      position: relative;
       width: 150px;
     }
-    span{
+    span {
       cursor: pointer;
       position: absolute;
       right: -250px;

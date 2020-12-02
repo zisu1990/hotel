@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import ElementUI from 'element-ui' 
+import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'//导入全局css样式
 Vue.config.productionTip = false;
@@ -18,19 +18,21 @@ import 'nprogress/nprogress.css'
 
 // 安装axios请求
 import axios from 'axios'
-axios.defaults.baseURL='###'
-
+if (process.env.NODE_ENV == 'development') {
+  axios.defaults.baseURL = 'http://www.api.vip/api/'
+}
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 //在request拦截器在展示进度条NProgress.start()
-axios.interceptors.request.use(config =>{
+axios.interceptors.request.use(config => {
   NProgress.start()
   // console.log(config)
-  config.headers.Authorization = window.sessionStorage.getItem('token')  //为请求头对象，添加token验证的Authorization字段
+  config.headers.Authorization = store.state.token //为请求头对象，添加token验证的Authorization字段
   return config;
 })
 
 //在response拦截器在隐藏进度条NProgress.done()
 
-axios.interceptors.response.use(config =>{
+axios.interceptors.response.use(config => {
   NProgress.done()
   return config
 })

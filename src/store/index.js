@@ -5,10 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    navIsActive:false
+    navIsActive: false,
+    token: ""
   },
   mutations: {
-    updateNavIsActive(state,blooen){
+    updateNavIsActive(state, blooen) {
       state.navIsActive = blooen
     }
   },
