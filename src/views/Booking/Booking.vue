@@ -1137,8 +1137,8 @@ export default {
 /* .el-form-item {
   margin-bottom: 35px !important;
 } */
-.el-date-editor.el-input,
-.el-date-editor.el-input__inner {
+.el-input,
+.el-input__inner {
   width: 256px;
 }
 div /deep/.el-checkbox {
