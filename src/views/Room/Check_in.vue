@@ -785,39 +785,8 @@ export default {
           homeName: "单人间",
           roomNum: 8102,
           pric: 200,
-          suMoney: 0,
-          sum: 0
         },
 
-        {
-          homeName: "标间",
-          roomNum: 8104,
-          pric: 200,
-          suMoney: 0,
-          sum: 0
-        },
-        {
-          homeName: "三人间",
-          roomNum: 8105,
-          pric: 200,
-          suMoney: 0,
-          sum: 0
-        },
-
-        {
-          homeName: "五人间",
-          roomNum: 8106,
-          pric: 200,
-          suMoney: 0,
-          sum: 0
-        },
-        {
-          homeName: "十人间",
-          roomNum: 8108,
-          pric: 200,
-          suMoney: 0,
-          sum: 0
-        }
       ],
       // 表格样式
       tableStyle: {
