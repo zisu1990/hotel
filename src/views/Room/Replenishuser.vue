@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-row >
+      <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
             <p class="title">补录住客</p>
@@ -14,7 +14,7 @@
             :rules="rules"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房号：">
                   <el-input
                     clearable
@@ -22,12 +22,12 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select
                     v-model="formReplenish.clientType"
@@ -38,7 +38,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="团体名称：">
                   <el-input
                     clearable
@@ -46,7 +46,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="国籍：">
                   <el-select
                     v-model="formReplenish.nationality"
@@ -60,21 +60,22 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="8">
-                <el-form-item label="证件类型：" prop="IDtype">
-                  <el-select v-model="formReplenish.IDtype" style="width: 63%">
+              <el-col :span="7">
+                <el-form-item label="证件类型：">
+                  <el-select v-model="formReplenish.IDtype" style="width: 62%">
                     <el-option label="农村" value="nongcun"></el-option>
                     <el-option label="城市" value="chengshi"></el-option>
                   </el-select>
                   <el-button
-                    size="small "
-                    style="margin-left: 16px"
                     type="primary"
+                    size="small"
+                    style="width: 35%; height: 40px; margin-left: 3%"
                     >读身份证</el-button
                   >
                 </el-form-item>
               </el-col>
-              <el-col :pull="1" :span="6">
+
+              <el-col :span="7">
                 <el-form-item label="联系电话：">
                   <el-input
                     clearable
@@ -82,7 +83,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="会员卡号：">
                   <el-input
                     clearable
@@ -93,7 +94,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客主姓名：" prop="username">
                   <el-input
                     clearable
@@ -101,7 +102,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="证件号：" prop="IDcardNum">
                   <el-input
                     clearable
@@ -109,9 +110,12 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <el-button style="width: 100%" type="success"
-                  >住客登记>></el-button
+              <el-col :span="7">
+                <el-button
+                  style="width: 40%; margin-left: -150px"
+                  type="success"
+                  round
+                  >住客登记查询</el-button
                 >
               </el-col>
             </el-row>
@@ -126,7 +130,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="入住时间：" prop="goInTime">
                   <el-date-picker
                     style="width: 100%"
@@ -137,7 +141,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="10">
                 <el-form-item label="离店时间：" prop="goOutTime">
                   <el-date-picker
                     style="width: 60%"
@@ -146,20 +150,18 @@
                     placeholder="选择日期时间"
                   >
                   </el-date-picker>
-                  <el-select
-                    v-model="formReplenish.nationality"
+                  <el-input
                     style="width: 40%"
-                  >
-                    <el-option label="一天" value="一天"></el-option>
-                    <el-option label="两天" value="两天"></el-option>
-                  </el-select>
+                    v-model="formReplenish.nationality"
+                    placeholder="请输入天数"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item class="settingImprest" label="已预付款(元)：">
                   <el-input
                     clearable
@@ -167,7 +169,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item
                   class="settingImprest"
                   label="应交预付款(元)："
@@ -179,7 +181,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="会员卡支付：">
                   <el-select
                     v-model="formReplenish.isVipPay"
@@ -193,7 +195,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="卡扣金额：">
                   <el-input
                     clearable
@@ -201,7 +203,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="预付方式：" prop="payWay">
                   <el-select v-model="formReplenish.payWay" style="width: 100%">
                     <el-option label="现金" value="xianjin"></el-option>
@@ -210,7 +212,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item prop="bookMoney" label="预付金额：">
                   <el-input
                     clearable
@@ -222,15 +224,15 @@
 
             <el-row style="margin-top: 30px">
               <el-form-item>
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
                 <el-button
                   style="width: 100px"
                   size="medium"
-                  type="success"
+                  type="primary"
                   @click="submitForm"
-                  >提交</el-button
-                >
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
+                  >确认</el-button
                 >
               </el-form-item>
             </el-row>
@@ -401,7 +403,7 @@ export default {
 };
 </script>
 <style  lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 .title {

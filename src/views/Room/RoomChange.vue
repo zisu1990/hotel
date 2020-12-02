@@ -1,29 +1,43 @@
 <template>
   <el-container>
     <el-main>
-      <el-row >
+      <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
             <p class="title">换房登记</p>
           </el-row>
-          <el-form ref="formRoomChange" label-width="130px" :model="formRoomChange" :rules="rules">
+          <el-form
+            ref="formRoomChange"
+            label-width="130px"
+            :model="formRoomChange"
+            :rules="rules"
+          >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
-                  <el-select v-model="formRoomChange.clientType" style="width: 100%">
+                  <el-select
+                    v-model="formRoomChange.clientType"
+                    style="width: 100%"
+                  >
                     <el-option label="散客" value="sanke"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="团体名称：">
-                  <el-input clearable v-model="formRoomChange.groupName"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.groupName"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="国籍：">
-                  <el-select v-model="formRoomChange.nationality" style="width: 100%">
+                  <el-select
+                    v-model="formRoomChange.nationality"
+                    style="width: 100%"
+                  >
                     <el-option label="中国" value="中国"></el-option>
                     <el-option label="英国" value="英国"></el-option>
                   </el-select>
@@ -32,45 +46,67 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="8">
-                <el-form-item label="证件类型：" prop="IDtype">
-                  <el-select v-model="formRoomChange.IDtype" style="width: 63%">
+              <el-col :span="7" style="display: flex; align-content: center">
+                <el-form-item label="证件类型：">
+                  <el-select v-model="formRoomChange.IDtype" style="width: 62%">
                     <el-option label="农村" value="nongcun"></el-option>
                     <el-option label="城市" value="chengshi"></el-option>
                   </el-select>
-                  <el-button size="small " style="margin-left: 16px" type="primary">读身份证</el-button>
+                  <el-button
+                    size="small"
+                    style="width: 35%; height: 40px;margin-left: 3%"
+                    type="primary"
+                    >读身份证</el-button
+                  >
                 </el-form-item>
               </el-col>
-              <el-col :pull="1" :span="6">
+              <el-col :span="7">
                 <el-form-item label="联系电话：" prop="userPhone">
-                  <el-input clearable v-model="formRoomChange.phoneNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.phoneNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input clearable v-model="formRoomChange.cardNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.cardNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客主姓名：" prop="username">
-                  <el-input clearable v-model="formRoomChange.username"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.username"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="证件号：" prop="IDcardNum">
-                  <el-input clearable v-model="formRoomChange.IDcardNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.IDcardNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <el-button style="width: 100%" type="success">住客登记>></el-button>
+              <el-col :span="7">
+                <el-button
+                  style="width: 40%; margin-left: -150px"
+                  type="success"
+                  round
+                  >住客登记查询</el-button
+                >
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="离店时间：" prop="goOutTime">
                   <el-date-picker
                     style="width: 100%"
@@ -80,14 +116,20 @@
                   ></el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="已预付款(元)：">
-                  <el-input clearable v-model="formRoomChange.haveImprest"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.haveImprest"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="原客房类型：" prop="oldRoomType">
-                  <el-select v-model="formRoomChange.oldRoomType" style="width: 100%">
+                  <el-select
+                    v-model="formRoomChange.oldRoomType"
+                    style="width: 100%"
+                  >
                     <el-option label="三人间" value="three"></el-option>
                     <el-option label="两人间" value="two"></el-option>
                   </el-select>
@@ -96,19 +138,28 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="原房间号：">
-                  <el-input clearable v-model="formRoomChange.oldRoomNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.oldRoomNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="原房价(元)：">
-                  <el-input clearable v-model="formRoomChange.oldRoomPrice"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.oldRoomPrice"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="会员卡支付：">
-                  <el-select v-model="formRoomChange.isVipPay" style="width: 100%">
+                  <el-select
+                    v-model="formRoomChange.isVipPay"
+                    style="width: 100%"
+                  >
                     <el-option label="是" value="1"></el-option>
                     <el-option label="否" value="0"></el-option>
                   </el-select>
@@ -117,71 +168,90 @@
             </el-row>
 
             <p class="chooseTitle">可选房型：</p>
-          <div class="chooseRoom">
-            <el-row :gutter="20" type="flex" justify="left">
-              <el-col :span="8">
-                <el-check-group v-model="roomType">
-                  <el-checkbox
-                    v-for="(v,i) in roomType"
-                    :key="i"
-                    :name="v.roomtype"
-                  >{{v.roomtype}}({{v.sheng}}/{{v.sum}})</el-checkbox>
-                </el-check-group>
-              </el-col>
+            <div class="chooseRoom">
+              <el-row :gutter="20" type="flex" justify="left">
+                <el-col :span="8">
+                  <el-check-group v-model="roomType">
+                    <el-checkbox
+                      v-for="(v, i) in roomType"
+                      :key="i"
+                      :name="v.roomtype"
+                      >{{ v.roomtype }}({{ v.sheng }}/{{ v.sum }})</el-checkbox
+                    >
+                  </el-check-group>
+                </el-col>
 
-              <el-col :span="16" class="chooseRoomRight">
-                <div class="floorItem" v-for="(v,i) in louceng" :key="i">
-                  <p>{{v.floor}}：</p>
-                  <ul>
-                    <li v-for="(f,id) in v.listItem" :key="id">
-                      <span>{{f.floorNo}}</span>
-                      <span>{{f.type}}</span>
-                    </li>
-                  </ul>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
+                <el-col :span="16" class="chooseRoomRight">
+                  <div class="floorItem" v-for="(v, i) in louceng" :key="i">
+                    <p>{{ v.floor }}：</p>
+                    <ul>
+                      <li v-for="(f, id) in v.listItem" :key="id">
+                        <span>{{ f.floorNo }}</span>
+                        <span>{{ f.type }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="新客房类型：" prop="newRoomType">
-                  <el-select v-model="formRoomChange.newRoomType" style="width: 100%">
+                  <el-select
+                    v-model="formRoomChange.newRoomType"
+                    style="width: 100%"
+                  >
                     <el-option label="三人间" value="three"></el-option>
                     <el-option label="两人间" value="two"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="新房号(元)：" prop="newRoomNum">
-                  <el-input clearable v-model="formRoomChange.newRoomNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.newRoomNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="新房价(元)：" prop="newRoomPrice">
-                  <el-input clearable v-model="formRoomChange.newRoomPrice"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.newRoomPrice"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="卡扣金额：">
-                  <el-input clearable v-model="formRoomChange.cardKkNum"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.cardKkNum"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="预付款方式：" prop="payWay">
-                  <el-select v-model="formRoomChange.payWay" style="width: 100%">
+                  <el-select
+                    v-model="formRoomChange.payWay"
+                    style="width: 100%"
+                  >
                     <el-option label="现金" value="xianjin"></el-option>
                     <el-option label="支付宝" value="zhifubao"></el-option>
                     <el-option label="微信" value="weixin"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="预付订金额：" prop="bookMoney">
-                  <el-input clearable v-model="formRoomChange.bookMoney"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formRoomChange.bookMoney"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -189,7 +259,11 @@
             <el-row type="flex" style="margin-top: 20px" justify="start">
               <el-col :span="22">
                 <el-form-item label="备注：" prop="remark">
-                  <el-input type="textarea" v-model="formRoomChange.remark" placeholder="填写备注"></el-input>
+                  <el-input
+                    type="textarea"
+                    v-model="formRoomChange.remark"
+                    placeholder="填写备注"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -205,8 +279,16 @@
 
             <el-row style="margin-top: 30px">
               <el-form-item>
-                <el-button style="width: 100px" size="medium" type="success" @click="submitForm">提交</el-button>
-                <el-button style="width: 100px" @click="resetForm">重置</el-button>
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
+                <el-button
+                  style="width: 100px"
+                  size="medium"
+                  type="primary"
+                  @click="submitForm"
+                  >确认</el-button
+                >
               </el-form-item>
             </el-row>
           </el-form>
@@ -254,7 +336,7 @@ export default {
         71: "台湾",
         81: "香港",
         82: "澳门",
-        91: "国外 "
+        91: "国外 ",
       };
       var tip = "";
       var pass = true;
@@ -361,78 +443,78 @@ export default {
         cardKkNum: "",
         payWay: "",
         bookMoney: "",
-        remark: ""
+        remark: "",
       },
       //   表单规则
       rules: {
         goOutTime: [
-          { required: true, message: "请选择离店时间", trigger: "change" }
+          { required: true, message: "请选择离店时间", trigger: "change" },
         ],
         goInTime: [
-          { required: true, message: "请选择续住时间", trigger: "change" }
+          { required: true, message: "请选择续住时间", trigger: "change" },
         ],
         IDtype: [
-          { required: true, message: "请选择证件类型", trigger: "change" }
+          { required: true, message: "请选择证件类型", trigger: "change" },
         ],
         remark: [
           {
             required: true,
             message: "换房预付款为免费时必填",
-            trigger: "blue"
-          }
+            trigger: "blue",
+          },
         ],
         username: [
           { required: true, message: "请输入客户姓名", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
         ],
         payWay: [
-          { required: true, message: "请选择预订支付方式", trigger: "change" }
+          { required: true, message: "请选择预订支付方式", trigger: "change" },
         ],
         oldRoomType: [
-          { required: true, message: "请选择原客房类型", trigger: "change" }
+          { required: true, message: "请选择原客房类型", trigger: "change" },
         ],
         newRoomType: [
-          { required: true, message: "请选择新客房类型", trigger: "change" }
+          { required: true, message: "请选择新客房类型", trigger: "change" },
         ],
         IDcardNum: [{ validator: idCardValidity, trigger: "blur" }],
         newRoomNum: [{ validator: newRoomNum, trigger: "blur" }],
         newRoomPrice: [{ validator: newRoomPrice, trigger: "blur" }],
         payWay: [
-          { required: true, message: "请选择预付款方式", trigger: "change" }
+          { required: true, message: "请选择预付款方式", trigger: "change" },
         ],
-        bookMoney: [{ validator: bookMoney, trigger: "blur" }]
+        bookMoney: [{ validator: bookMoney, trigger: "blur" }],
       },
-            roomType: [
+      roomType: [
         {
           roomtype: "单人间",
           sheng: 10,
-          sum: 30
+          sum: 30,
         },
         {
           roomtype: "标间",
           sheng: 10,
-          sum: 30
+          sum: 30,
         },
         {
           roomtype: "三人间",
           sheng: 10,
-          sum: 30
+          sum: 30,
         },
         {
           roomtype: "五人间",
           sheng: 10,
-          sum: 30
+          sum: 30,
         },
         {
           roomtype: "十人间",
           sheng: 10,
-          sum: 30
+          sum: 30,
         },
         {
           roomtype: "钟点房",
           sheng: 10,
-          sum: 30
-        }
+          sum: 30,
+        },
       ],
       louceng: [
         {
@@ -444,7 +526,7 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 2,
@@ -452,7 +534,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 3,
@@ -460,7 +542,7 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 4,
@@ -468,7 +550,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 5,
@@ -476,7 +558,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 6,
@@ -484,7 +566,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 7,
@@ -492,7 +574,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 8,
@@ -500,7 +582,7 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 9,
@@ -508,7 +590,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 10,
@@ -516,7 +598,7 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 11,
@@ -524,7 +606,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 12,
@@ -532,7 +614,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 13,
@@ -540,7 +622,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 14,
@@ -548,9 +630,9 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
-            }
-          ]
+              icon: "@/assets/image/zhong.png",
+            },
+          ],
         },
         {
           floor: "2楼",
@@ -561,7 +643,7 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 25,
@@ -569,7 +651,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 26,
@@ -577,7 +659,7 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 27,
@@ -585,7 +667,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 28,
@@ -593,7 +675,7 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 29,
@@ -601,7 +683,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 30,
@@ -609,7 +691,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 31,
@@ -617,7 +699,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 32,
@@ -625,7 +707,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 33,
@@ -633,9 +715,9 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
-            }
-          ]
+              icon: "@/assets/image/zhong.png",
+            },
+          ],
         },
         {
           floor: "3楼",
@@ -646,7 +728,7 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 16,
@@ -654,7 +736,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 17,
@@ -662,7 +744,7 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 18,
@@ -670,7 +752,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 19,
@@ -678,7 +760,7 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 20,
@@ -686,7 +768,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 21,
@@ -694,7 +776,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 22,
@@ -702,7 +784,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 23,
@@ -710,7 +792,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 34,
@@ -718,7 +800,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 35,
@@ -726,7 +808,7 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
             },
             {
               id: 36,
@@ -734,10 +816,10 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
-            }
-          ]
-        }
+              icon: "@/assets/image/zhong.png",
+            },
+          ],
+        },
       ],
     };
   },
@@ -745,7 +827,7 @@ export default {
   methods: {
     // 提交表单
     submitForm() {
-      this.$refs.formRoomChange.validate(valid => {
+      this.$refs.formRoomChange.validate((valid) => {
         if (valid) {
           alert("submit!");
         } else {
@@ -757,54 +839,54 @@ export default {
     // 重置表单
     resetForm() {
       this.$refs.formRoomChange.resetFields();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 .chooseTitle {
-      text-align: left;
+  text-align: left;
+}
+.chooseRoom {
+  background: #f9f9f9;
+  padding: 20px 20px 0;
+  margin: 10px 0 20px;
+
+  /deep/.el-checkbox {
+    text-align: left;
+    display: block;
+    margin-bottom: 20px;
+  }
+  .chooseRoomRight {
+    height: 280px;
+    overflow-y: auto;
+  }
+  .floorItem {
+    text-align: left;
+    p {
+      margin-bottom: 10px;
     }
-        .chooseRoom {
-      background: #f9f9f9;
-      padding: 20px 20px 0;
-      margin: 10px 0 20px;
+    ul {
+      display: flex;
 
-      /deep/.el-checkbox {
-        text-align: left;
-        display: block;
-        margin-bottom: 20px;
-      }
-      .chooseRoomRight {
-        height: 280px;
-        overflow-y: auto;
-      }
-      .floorItem {
-        text-align: left;
-        p {
-          margin-bottom: 10px;
-        }
-        ul {
-          display: flex;
-
-          flex-wrap: wrap;
-          li {
-            padding: 5px 10px;
-            border: 1px solid #333;
-            margin: 0 10px 10px 0;
-            span {
-              display: block;
-              color: #333;
-              font-size: 14px;
-              cursor: pointer;
-            }
-          }
+      flex-wrap: wrap;
+      li {
+        padding: 5px 10px;
+        border: 1px solid #333;
+        margin: 0 10px 10px 0;
+        span {
+          display: block;
+          color: #333;
+          font-size: 14px;
+          cursor: pointer;
         }
       }
     }
+  }
+}
 </style>
 
 <style scoped>
@@ -815,20 +897,26 @@ export default {
 .el-date-editor.el-input__inner {
   width: 256px;
 }
-/deep/.el-checkbox {
+div /deep/.el-checkbox {
   font-size: 18px;
 }
-/deep/.el-checkbox__inner {
+div /deep/.el-checkbox__inner {
   width: 20px;
   height: 20px;
 }
-/deep/.el-checkbox__inner::after {
+div /deep/.el-checkbox__inner::after {
   height: 11px;
   left: 8px;
   top: 2px;
 }
-/deep/.el-checkbox__label {
+div /deep/.el-checkbox__label {
   font-size: 18px;
   line-height: 20px;
+}
+.duCard {
+  height: 40px;
+  line-height: 40px;
+  margin-left: 5px;
+  padding: 0 5px;
 }
 </style>

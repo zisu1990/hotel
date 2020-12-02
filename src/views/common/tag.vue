@@ -1,6 +1,6 @@
 <template>
   <div class="_tag">
-    <el-scrollbar style="margin-right: 6px;">
+    <el-scrollbar style="margin-right: 6px">
       <div class="left">
         <el-tag
           v-for="tag in tagsList"
@@ -9,7 +9,9 @@
           :type="isActive(tag)"
           @close="handleCloseTag(tag)"
         >
-          <router-link :to="tag.path" class="tag-title">{{ tag.title }}</router-link>
+          <router-link :to="tag.path" class="tag-title">{{
+            tag.title
+          }}</router-link>
         </el-tag>
       </div>
     </el-scrollbar>
@@ -63,7 +65,14 @@
 export default {
   data() {
     return {
-      tagsList: []
+      tagsList: [
+        {
+          title: "客房业务",
+          name: "undefined",
+          path: "/RoomFirstPage",
+          hideclose: true,
+        },
+      ],
     };
   },
   mounted() {
@@ -73,7 +82,7 @@ export default {
   methods: {
     //设置标签
     setTags(route) {
-      const isExsit = this.tagsList.some(item => {
+      const isExsit = this.tagsList.some((item) => {
         return item.path === route.fullPath;
       });
       if (isExsit == false) {
@@ -81,8 +90,16 @@ export default {
           title: route.meta.title, //标签名
           name: route.name, //路由里的name对应vue页的name,标签列表里的name可以做vue页面缓存
           path: route.fullPath, //路由
-          hideclose: route.meta.hideclose ? route.meta.hideclose : false //是否隐藏关闭
+          hideclose: route.meta.hideclose ? route.meta.hideclose : false, //是否隐藏关闭
         });
+        if (this.tagsList.length > 14) {
+          for (let i = 0; i < this.tagsList.length; i++) {
+            if (this.tagsList[i].title != "客房业务") {
+              this.tagsList.splice(i, 1);
+              break;
+            }
+          }
+        }
       }
     },
     //关闭标签
@@ -100,12 +117,12 @@ export default {
     handleCloseBtn(command) {
       if (command == "closeOther") {
         //关闭其它,保留没有删除的标签。find() 方法返回通过测试（函数内判断）的数组的第一个元素的值。
-        var activeTag = this.tagsList.find(item => {
+        var activeTag = this.tagsList.find((item) => {
           return item.path == this.$route.fullPath;
         }); //查找第一个满足的
         var noCloseTags = this.getNoCloseTabs();
         if (
-          noCloseTags.some(item => {
+          noCloseTags.some((item) => {
             return item.path == activeTag.path && item.title == activeTag.title;
           }) == false
         ) {
@@ -121,7 +138,7 @@ export default {
     },
     getNoCloseTabs() {
       //获取没有删除的标签
-      var noCloseList = this.tagsList.filter(item => {
+      var noCloseList = this.tagsList.filter((item) => {
         return item.hideclose == true;
       });
       return noCloseList;
@@ -133,13 +150,13 @@ export default {
       } else {
         return "info";
       }
-    }
+    },
   },
   watch: {
     //路由变化,设置标签
     $route(newValue) {
       this.setTags(newValue);
-    }
-  }
+    },
+  },
 };
 </script>

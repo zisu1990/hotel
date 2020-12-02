@@ -13,7 +13,7 @@
             label-width="130px"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="交班人：">
                   <el-select
                     v-model="formShifWorkPage.shifUserName"
@@ -30,7 +30,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="接班现金额(元)：">
                   <el-input
                     clearable
@@ -38,7 +38,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="原接班时间：">
                   <el-date-picker
                     v-model="formShifWorkPage.oldOnStartTime"
@@ -50,7 +50,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="交班时间：">
                   <el-date-picker
                     v-model="formShifWorkPage.newOnStartTime"
@@ -59,8 +59,8 @@
                   ></el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row>
@@ -120,7 +120,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="接班人：">
                   <el-select
                     v-model="formShifWorkPage.userOnName"
@@ -136,7 +136,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="接班现金额(元)：">
                   <el-input
                     clearable
@@ -144,7 +144,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="原接班时间：">
                   <el-date-picker
                     v-model="formShifWorkPage.settingTime"
@@ -158,7 +158,7 @@
             <el-row style="margin-top: 30px">
               <el-form-item>
                 <el-button style="width: 100px">暂不打印</el-button>
-                <el-button style="width: 100px" size="medium" type="success"
+                <el-button style="width: 100px" size="medium" type="primary"
                   >打印</el-button
                 >
               </el-form-item>

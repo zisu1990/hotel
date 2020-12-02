@@ -39,6 +39,7 @@
         :header-cell-style="{ textAlign: 'center' }"
       >
         <el-table-column
+<<<<<<< HEAD
           prop="serialNum"
           width="80"
           label="序号"
@@ -46,50 +47,87 @@
         <el-table-column
           prop="roomType"
           width="100"
+=======
+          type="index"
+          width="80"
+        ></el-table-column>
+        <el-table-column
+          prop="roomType"
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           label="房间类型"
         ></el-table-column>
         <el-table-column
           prop="roomNum"
+<<<<<<< HEAD
           width="100"
+=======
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           label="房间号"
         ></el-table-column>
         <el-table-column
           prop="roomName"
+<<<<<<< HEAD
           width="100"
+=======
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           label="住客姓名"
         ></el-table-column>
         <el-table-column
           prop="cardId"
+<<<<<<< HEAD
           width="150"
+=======
+         width="140"
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           label="身份证号"
         ></el-table-column>
         <el-table-column
           prop="adress"
+<<<<<<< HEAD
           width="200"
           label="身份证地址"
         ></el-table-column>
         <el-table-column
           width="150"
+=======
+          width="140"
+          label="身份证地址"
+        ></el-table-column>
+        <el-table-column
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           prop="phone"
           label="联系电话"
         ></el-table-column>
         <el-table-column
+<<<<<<< HEAD
           width="150"
+=======
+          width="140"
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           prop="goInTime"
           label="入住时间"
         ></el-table-column>
         <el-table-column
+<<<<<<< HEAD
           width="150"
+=======
+         width="140"
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           prop="goOutTime"
           label="离店时间"
         ></el-table-column>
         <el-table-column
+<<<<<<< HEAD
           width="150"
+=======
+          width="140"
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           prop="vipNum"
           label="会员卡号"
         ></el-table-column>
         <el-table-column
           prop="nationality"
+<<<<<<< HEAD
           width="80"
           label="国籍"
         ></el-table-column>
@@ -97,6 +135,13 @@
         <el-table-column
           prop="settingUser"
           width="80"
+=======
+          label="国籍"
+        ></el-table-column>
+        <el-table-column prop="settingTime"  width="140" label="操作时间"></el-table-column>
+        <el-table-column
+          prop="settingUser"
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           label="操作员"
         ></el-table-column>
       </el-table>
@@ -113,7 +158,10 @@ export default {
       },
       guestInfoData: [
         {
+<<<<<<< HEAD
           serialNum: "123",
+=======
+>>>>>>> 41f5b7f36c7700e94ed92823025209f14eb36d2a
           roomType: "三人间",
           roomNum: "123",
           roomName: "张三",

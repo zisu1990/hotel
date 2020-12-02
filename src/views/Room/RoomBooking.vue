@@ -19,7 +19,7 @@
             :rules="rules"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select
                     v-model="formLabelAlign.clientType"
@@ -30,7 +30,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="团体名称：">
                   <el-input
                     clearable
@@ -38,7 +38,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="国籍：">
                   <el-select
                     v-model="formLabelAlign.nationality"
@@ -52,7 +52,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="会员卡号：">
                   <el-input
                     clearable
@@ -60,7 +60,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="预订人：" prop="userName">
                   <el-input
                     clearable
@@ -68,7 +68,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="联系电话：" prop="userPhone">
                   <el-input
                     clearable
@@ -79,7 +79,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="预到时间：" prop="timeStart">
                   <el-date-picker
                     style="width: 100%"
@@ -90,7 +90,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col class="setEndDay" :offset="1" :span="8">
+              <el-col class="setEndDay" :span="10">
                 <el-form-item label="预离时间：" prop="timeEnd">
                   <el-date-picker
                     style="width: 60%"
@@ -99,21 +99,21 @@
                     placeholder="选择日期时间"
                   >
                   </el-date-picker>
-                  <el-select
+                  <el-input
+                  style="width: 40%"
                     v-model="formLabelAlign.nationality"
-                    style="width: 40%"
-                  >
-                    <el-option label="一天" value="一天"></el-option>
-                    <el-option label="两天" value="两天"></el-option>
-                  </el-select>
+                    placeholder="请输入天数"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="4"> </el-col>
+              <el-col class="lastDate" :span="4">
+                <el-form-item> </el-form-item>
+              </el-col>
             </el-row>
 
             <el-row>
               <el-row>
-                <el-col :push="2" :span="6">
+                <el-col :push="2" :span="7">
                   <p class="roomTittle">房间选择：</p>
                 </el-col>
               </el-row>
@@ -319,14 +319,15 @@
             </el-row>
             <el-row style="margin-top: 30px">
               <el-form-item>
+                <el-button style="width: 100px" @click="resetForm"
+                  >重置</el-button
+                >
                 <el-button
                   style="width: 100px"
                   size="medium"
                   @click="submitForm"
-                  >提交</el-button
-                >
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
+                  type="primary"
+                  >确认</el-button
                 >
               </el-form-item>
             </el-row>
@@ -613,6 +614,17 @@ export default {
     width: 50px;
   }
 }
+// .lastDate {
+//   .el-form-item {
+//     /deep/.el-form-item__content {
+//       margin-left: 0 !important;
+//       .el-select {
+//         width: 40%;
+//         margin-right: 300px !important;
+//       }
+//     }
+//   }
+// }
 </style>
 
 

@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-row >
+      <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
             <p class="title">房卡管理</p>
@@ -14,7 +14,7 @@
             label-width="130px"
           >
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房号：">
                   <el-input
                     clearable
@@ -22,7 +22,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户名称：">
                   <el-input
                     clearable
@@ -30,7 +30,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select
                     v-model="formRoomCard.clientType"
@@ -44,7 +44,7 @@
             </el-row>
 
             <el-row type="flex" justify="space-between">
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房卡编号：">
                   <el-input
                     clearable
@@ -52,7 +52,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <el-form-item label="房卡状态：">
                   <el-input
                     clearable
@@ -60,7 +60,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
@@ -86,7 +86,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
@@ -112,7 +112,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="start">
@@ -124,28 +124,27 @@
               </el-col>
             </el-row>
 
-            <el-row justify="center" style="margin-top: 30px">
-              <el-form-item>
-                <el-col :span="6">
-                  <el-button style="width: 100px" @click="resetForm"
-                    >读卡</el-button
-                  >
-                </el-col>
-                <el-col :span="6">
-                  <el-button style="width: 100px" @click="resetForm"
-                    >清卡</el-button
-                  >
-                </el-col>
-                <el-col :span="6">
-                  <el-button
-                    style="width: 100px"
-                    size="medium"
-                    type="success"
-                    @click="submitForm"
-                    >写卡</el-button
-                  >
-                </el-col>
-              </el-form-item>
+            <el-row type="flex" justify="center" style="margin-top: 30px">
+              <el-col :span="3">
+                <el-button style="width: 100px" @click="resetForm"
+                  >清卡</el-button
+                >
+              </el-col>
+              <el-col :span="3">
+                <el-button
+                  type="success"
+                  style="width: 100px"
+                  @click="resetForm"
+                  >读卡</el-button>
+              </el-col>
+              <el-col :span="3">
+                <el-button
+                  style="width: 100px"
+                  size="medium"
+                  type="primary"
+                  @click="submitForm"
+                  >写卡</el-button>
+              </el-col>
             </el-row>
           </el-form>
         </el-col>
@@ -196,7 +195,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.el-main{
+.el-main {
   background: #fff;
 }
 </style>

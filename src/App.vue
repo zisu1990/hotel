@@ -1,6 +1,6 @@
 
 <template>
-  <div id="app">
+  <div id="app"  style="min-width:1600px">
     <router-view />
   </div>
 </template>
@@ -44,5 +44,8 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+.el-main{
+  background: #fff;
 }
 </style>

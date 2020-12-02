@@ -32,7 +32,7 @@
         <el-table-column prop="Time" label="录入时间" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template>
-            <el-button type="primary" size="small">修改</el-button>
+            <el-button type="primary" size="small" @click="EditDialogVisible=true">修改</el-button>
             <el-button type="danger" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -48,8 +48,11 @@
         :total="400"
       ></el-pagination>
 
-      <el-dialog title="增加物件" :model="AddForm"  :visible.sync="AddDialogVisible" width="40%" label-width="80px">
-        <el-form v-model="AddForm">
+
+
+      <!-- 增加物件 -->
+      <el-dialog title="增加物件" :model="AddForm"  :visible.sync="AddDialogVisible" width="30%" >
+        <el-form v-model="AddForm" label-width="120px">
           <el-form-item  label="物件名称：">
             <el-input v-model="AddForm.name"></el-input>
           </el-form-item>
@@ -59,12 +62,36 @@
           </el-form-item>
                   
           <el-form-item label="录入时间：">
-            <el-date-picker type="date" placeholder="选择日期" v-model="AddForm.time" style="width: 100%;"></el-date-picker>
+             <el-input v-model="AddForm.time"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="AddDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="AddDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
+
+
+
+      <!-- 修改物件 -->
+      <el-dialog title="修改" :model="EditForm"  :visible.sync="EditDialogVisible" width="30%" >
+        <el-form v-model="AddForm" label-width="120px">
+          <el-form-item  label="物件名称：">
+            <el-input v-model="EditForm.name"></el-input>
+          </el-form-item>
+                  
+          <el-form-item label="物件价格：">
+            <el-input v-model="EditForm.price"></el-input>
+          </el-form-item>
+                  
+          <el-form-item label="录入时间：">
+            <el-input v-model="EditForm.time"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="EditDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="EditDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
     </el-main>
@@ -84,28 +111,36 @@ export default {
           Name: "吹风机",
           Price: 60,
           IPAddress: "192.168.1.1",
-          Time: "2020-04-13 13：13"
+          Time: "2020-04-13 13:13"
         },
         {
           Name: "电视机",
           Price: 3900,
           IPAddress: "192.168.1.1",
-          Time: "2020-04-13 13：13"
+          Time: "2020-04-13 13:13"
         },
         {
           Name: "茶杯",
           Price: 120,
           IPAddress: "192.168.1.1",
-          Time: "2020-04-13 13：13"
+          Time: "2020-04-13 13:13"
         }
       ],
       currentPage4: 4,
       AddForm:{
         name:'',
         price:'',
-        time:''
+        time:'2020-04-13 13:13'
       },
       AddDialogVisible:false,
+
+      //修改
+      EditDialogVisible:false,
+       EditForm:{
+        name:'电吹风',
+        price:'60',
+        time:'2020-04-13 15:13'
+      },
     };
   },
   methods: {
