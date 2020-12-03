@@ -54,7 +54,7 @@
                   ></el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="7"> </el-col>
+              <el-col :span="7"></el-col>
             </el-row>
 
             <el-row type="flex" justify="center">
@@ -119,11 +119,7 @@
               </el-col>
             </el-row>
 
-            <el-row
-              type="flex"
-              style="margin-top: 20px"
-              justify="space-between"
-            >
+            <el-row type="flex" style="margin-top: 20px" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="结算方式" prop="payWay">
                   <el-select v-model="formDamageRecad.payWay" style="width: 100%">
@@ -138,7 +134,7 @@
                   <el-input placeholder="请输入结算金额" v-model="formDamageRecad.clooseMoney"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="7"> </el-col>
+              <el-col :span="7"></el-col>
             </el-row>
 
             <el-row style="margin-top: 30px">
@@ -219,8 +215,6 @@ export default {
   methods: {
     //   表单增减
     handleAdd(i, v) {
-            console.log(i,"11111111111")
-      console.log(v,"3333333333")
       let tableData = this.tableData;
 
       if (tableData.length >= 10) {
@@ -255,7 +249,6 @@ export default {
       });
     },
     handleReduce(i, v) {
-
       let tableData = this.tableData;
       if (tableData.length == 1) {
         this.$message({

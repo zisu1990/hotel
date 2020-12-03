@@ -175,8 +175,8 @@
                     <li
                       v-for="(f, index) in v.listItem"
                       :key="index"
-                      :class="index==isActive?'activeBlue':'fangjian'"
-                      @click="chooseRoom(index)">
+                      :class="isActive?'activeBlue':'fangjian'"
+                      @click="chooseRoom">
                       <span>{{ f.floorNo }}</span>
                       <span>{{ f.type }}</span>
                     </li>
@@ -861,8 +861,8 @@ export default {
       this.payforDialogVisible = false;
       this.GateCardDialogVisible = false;
     },
-    chooseRoom(index) {
-      this.isActive = index;
+    chooseRoom() {
+      this.isActive = !this.active;
     }
   }
 };
