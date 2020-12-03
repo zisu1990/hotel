@@ -41,7 +41,11 @@
             class="code"
           ></el-input>
           <div class="codeImg">
-            <img src="../assets/image/code.jpg" alt srcset />
+            <img
+              src=" https://api.anhuiqingyou.com/api/login/captcha"
+              alt
+              srcset
+            />
           </div>
           <span>换一组</span>
         </el-form-item>
@@ -59,16 +63,17 @@
 
 
 <script>
-import { loginVerify } from "@/api/Login";
+import { loginVerify, loginCaptcha } from "@/api/Login";
+import axios from "axios";
 export default {
   name: "login",
   data() {
     return {
       //登录表单
       loginForm: {
-        username: "admin",
-        password: "123456",
-        code: "FFBB",
+        username: "zhuliu",
+        password: "qy12345",
+        code: "",
       },
 
       // 表单验证规则
@@ -82,21 +87,27 @@ export default {
           { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
       },
+
+      // 验证码
+      authCodeImg: "",
     };
   },
-  mounted() {
-  },
+
   methods: {
     //登录
     login() {
+      // this.$router.push("/room");
       let params = {
         app_type: 3,
-        username: this.username,
-        password: this.password,
-        yzm_code: "12443",
+        username: this.loginForm.username,
+        password: this.loginForm.password,
+        yzm_code: this.loginForm.code,
       };
-      loginVerify(params);
-      // this.$router.push("/room");
+      loginVerify(params).then((res) => {
+        console.log(res);
+        // if (res.code === 200) {
+        // }
+      });
     },
 
     //重置
