@@ -173,12 +173,13 @@
                   <p>{{ v.floor }}：</p>
                   <ul>
                     <li
-                      v-for="(f, id) in v.listItem"
-                      :key="id"
-                      :class="isActive?'fangjian':'activeBlue'"
-                      @click="chooseRoom">
+                      v-for="(f, index) in v.listItem"
+                      :key="index"
+                      :class="index==isActive?'activeBlue':'fangjian'"
+                      @click="chooseRoom(index)">
                       <span>{{ f.floorNo }}</span>
                       <span>{{ f.type }}</span>
+                      
                     </li>
                   </ul>
                 </div>
@@ -779,7 +780,7 @@ export default {
         }
       ],
       // 选中房间
-      isActive: true,
+      isActive: 0,
 
       // 表格对应的数据
       roomTableData: [
@@ -861,8 +862,9 @@ export default {
       this.payforDialogVisible = false;
       this.GateCardDialogVisible = false;
     },
-    chooseRoom() {
-      this.isActive = !this.isActive;
+    chooseRoom(index) {
+      
+      this.isActive = index;
     }
   }
 };
@@ -970,8 +972,8 @@ export default {
     margin: 40px 200px 40px 0;
   }
   .activeBlue {
-    border: 1px solid #005ab9;
-    color: #005ab9;
+    border: 1px solid #f00;
+    color: #f00;
     padding: 5px 10px;
     margin: 0 10px 10px 0;
     span {
