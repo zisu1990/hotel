@@ -3,7 +3,7 @@
     <el-main>
       <h2>入住登记</h2>
       <div class="checkWarp">
-        <el-form   :model="checkInForm"   label-width="140px">
+        <el-form :model="checkInForm" label-width="140px">
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="客户类型：">
@@ -172,9 +172,14 @@
                 <div class="floorItem" v-for="(v, i) in louceng" :key="i">
                   <p>{{ v.floor }}：</p>
                   <ul>
-                    <li v-for="(f, id) in v.listItem" :key="id">
+                    <li
+                      v-for="(f, index) in v.listItem"
+                      :key="index"
+                      :class="index==isActive?'activeBlue':'fangjian'"
+                      @click="chooseRoom(index)">
                       <span>{{ f.floorNo }}</span>
                       <span>{{ f.type }}</span>
+                      
                     </li>
                   </ul>
                 </div>
@@ -189,7 +194,7 @@
                 :header-cell-style="tableStyle"
                 :cell-style="tableStyle"
                 :data="roomTableData"
-                style="width: 100%"
+                style="width: 100%;margin-top:10px;"
                 max-height="500px"
               >
                 <el-table-column prop="homeName" label="房间类型" width="150px"></el-table-column>
@@ -197,7 +202,14 @@
                 <el-table-column prop="pric" label="房间单价(元)"></el-table-column>
 
                 <el-table-column label="操作">
-                  <el-button icon="el-icon-delete" circle type="danger"></el-button>
+                  <template v-slot="scope">
+                    <el-button
+                      icon="el-icon-delete"
+                      circle
+                      type="danger"
+                      @click="handleReduce(scope.$index, scope.row)"
+                    ></el-button>
+                  </template>
                 </el-table-column>
               </el-table>
             </el-col>
@@ -371,18 +383,6 @@
 <script>
 export default {
   data() {
-    var bookMoney = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("预订金额不能为空"));
-      }
-      setTimeout(() => {
-        if (!Number.isInteger(+value)) {
-          callback(new Error("请输入数字值"));
-        } else {
-          callback();
-        }
-      }, 100);
-    };
     return {
       checkInForm: {
         personType: "",
@@ -779,14 +779,16 @@ export default {
           ]
         }
       ],
+      // 选中房间
+      isActive: 0,
+
       // 表格对应的数据
       roomTableData: [
         {
           homeName: "单人间",
           roomNum: 8102,
-          pric: 200,
-        },
-
+          pric: 200
+        }
       ],
       // 表格样式
       tableStyle: {
@@ -837,24 +839,21 @@ export default {
   },
   methods: {
     // // 加，减，总
-    handleAdd(i, t) {
-      let roomTableData = this.roomTableData[i];
-      roomTableData.sum += 1;
-      roomTableData.suMoney += roomTableData.pric;
-    },
-    handleReduce(i, t) {
-      let roomTableData = this.roomTableData[i];
-      if (roomTableData.sum - 1 < 0) {
-        this.$message({
-          message: "输入的值不能小于0",
-          type: "warning"
-        });
+    // handleAdd(i, t) {
+    //   let roomTableData = this.roomTableData[i];
+    //   roomTableData.sum += 1;
+    //   roomTableData.suMoney += roomTableData.pric;
+    // },
+    handleReduce(i, v) {
+      let roomTableData = this.roomTableData;
+      if (roomTableData.length == 1) {
+        this.$message.error("不可删除");
         return;
-      } else {
-        roomTableData.sum -= 1;
-        roomTableData.suMoney -= roomTableData.pric;
       }
+      roomTableData.splice(i, 1);
     },
+
+    //打印
     dayin() {
       this.payforDialogVisible = false;
       this.GateCardDialogVisible = false;
@@ -862,6 +861,10 @@ export default {
     budayin() {
       this.payforDialogVisible = false;
       this.GateCardDialogVisible = false;
+    },
+    chooseRoom(index) {
+      
+      this.isActive = index;
     }
   }
 };
@@ -919,7 +922,7 @@ export default {
           display: flex;
 
           flex-wrap: wrap;
-          li {
+          .fangjian {
             padding: 5px 10px;
             border: 1px solid #333;
             margin: 0 10px 10px 0;
@@ -967,6 +970,17 @@ export default {
   .qianzi {
     text-align: right;
     margin: 40px 200px 40px 0;
+  }
+  .activeBlue {
+    border: 1px solid #f00;
+    color: #f00;
+    padding: 5px 10px;
+    margin: 0 10px 10px 0;
+    span {
+      display: block;
+      font-size: 14px;
+      cursor: pointer;
+    }
   }
 }
 </style>
