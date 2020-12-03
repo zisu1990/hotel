@@ -3,7 +3,9 @@ module.exports = {
     publicPath: './',
     productionSourceMap: false,
     devServer: {
-        open:true,
+        open: true,
         port: 8000,
+        proxy: process.env.VUE_APP_BASE_URL + process.env.VUE_APP_BASE_API
     },
+
 }

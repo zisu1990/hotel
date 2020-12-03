@@ -18,10 +18,7 @@ import 'nprogress/nprogress.css'
 
 // 安装axios请求
 import axios from 'axios'
-if (process.env.NODE_ENV == 'development') {
-  axios.defaults.baseURL = 'http://www.api.vip/api/'
-}
-axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+// axios.defaults.headers.post["Content-Type"] = "multipart/form-data";
 //在request拦截器在展示进度条NProgress.start()
 axios.interceptors.request.use(config => {
   NProgress.start()
