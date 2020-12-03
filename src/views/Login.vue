@@ -30,22 +30,13 @@
             prefix-icon="el-icon-s-goods"
             placeholder="请输入密码"
             show-password
-            >></el-input
-          >
+          >></el-input>
         </el-form-item>
 
         <el-form-item class="codewarp">
-          <el-input
-            v-model="loginForm.code"
-            placeholder="请输入验证码"
-            class="code"
-          ></el-input>
+          <el-input v-model="loginForm.code" placeholder="请输入验证码" class="code"></el-input>
           <div class="codeImg">
-            <img
-              src=" https://api.anhuiqingyou.com/api/login/captcha"
-              alt
-              srcset
-            />
+            <img src=" https://api.anhuiqingyou.com/api/login/captcha" alt srcset>
           </div>
           <span>换一组</span>
         </el-form-item>
@@ -73,23 +64,23 @@ export default {
       loginForm: {
         username: "zhuliu",
         password: "qy12345",
-        code: "",
+        code: ""
       },
 
       // 表单验证规则
       loginFormRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" },
+          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
+          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" }
+        ]
       },
 
       // 验证码
-      authCodeImg: "",
+      authCodeImg: ""
     };
   },
 
@@ -101,21 +92,21 @@ export default {
         app_type: 3,
         username: this.loginForm.username,
         password: this.loginForm.password,
-        yzm_code: this.loginForm.code,
+        yzm_code: this.loginForm.code
       };
-      loginVerify(params).then((res) => {
+      loginVerify(params).then(res => {
         console.log(res);
         // if (res.code === 200) {
         // }
       });
-    },
+    }
 
     //重置
     // resetLoginForm() {
     //   //console.log(this)
     //   this.$refs.loginFormRef.resetFields();
     // }
-  },
+  }
 };
 </script>
 
@@ -188,10 +179,14 @@ export default {
 
     .codeImg {
       width: 144px;
-      height: 50px;
+      height: 53px;
       position: absolute;
       top: 0;
       left: 170px;
+      img {
+        width: 144px;
+        height: 53px;
+      }
     }
     .code {
       position: relative;
