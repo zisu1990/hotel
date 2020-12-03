@@ -175,8 +175,9 @@
                     <li
                       v-for="(f, index) in v.listItem"
                       :key="index"
-                      :class="isActive?'activeBlue':'fangjian'"
-                      @click="chooseRoom">
+                      :class="f.className"
+                      @click="chooseRoom(i, index, f)"
+                    >
                       <span>{{ f.floorNo }}</span>
                       <span>{{ f.type }}</span>
                     </li>
@@ -193,7 +194,7 @@
                 :header-cell-style="tableStyle"
                 :cell-style="tableStyle"
                 :data="roomTableData"
-                style="width: 100%;margin-top:10px;"
+                style="width: 100%; margin-top: 10px"
                 max-height="500px"
               >
                 <el-table-column prop="homeName" label="房间类型" width="150px"></el-table-column>
@@ -483,7 +484,8 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 2,
@@ -491,7 +493,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 3,
@@ -499,7 +502,8 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 4,
@@ -507,7 +511,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 5,
@@ -515,7 +520,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 6,
@@ -523,7 +529,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 7,
@@ -531,7 +538,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 8,
@@ -539,7 +547,8 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 9,
@@ -547,7 +556,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 10,
@@ -555,7 +565,8 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 11,
@@ -563,7 +574,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 12,
@@ -571,7 +583,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 13,
@@ -579,7 +592,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 14,
@@ -587,7 +601,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             }
           ]
         },
@@ -600,7 +615,8 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 25,
@@ -608,7 +624,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 26,
@@ -616,7 +633,8 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 27,
@@ -624,7 +642,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 28,
@@ -632,7 +651,8 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 29,
@@ -640,7 +660,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 30,
@@ -648,7 +669,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 31,
@@ -656,7 +678,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 32,
@@ -664,7 +687,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 33,
@@ -672,7 +696,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             }
           ]
         },
@@ -685,7 +710,8 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 16,
@@ -693,7 +719,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 17,
@@ -701,7 +728,8 @@ export default {
               status: "预订中",
               type: "三人间",
               background: "#FCB634",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 18,
@@ -709,7 +737,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 19,
@@ -717,7 +746,8 @@ export default {
               status: "入住中",
               type: "五人间",
               background: "#FE775E",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 20,
@@ -725,7 +755,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 21,
@@ -733,7 +764,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 22,
@@ -741,7 +773,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 23,
@@ -749,7 +782,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 34,
@@ -757,7 +791,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 35,
@@ -765,7 +800,8 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             },
             {
               id: 36,
@@ -773,13 +809,14 @@ export default {
               status: "空闲中",
               type: "五人间",
               background: "#005AB9",
-              icon: "@/assets/image/zhong.png"
+              icon: "@/assets/image/zhong.png",
+              className: "fangjian"
             }
           ]
         }
       ],
       // 选中房间
-      isActive: 0,
+      isActiveArr: [],
 
       // 表格对应的数据
       roomTableData: [
@@ -861,8 +898,22 @@ export default {
       this.payforDialogVisible = false;
       this.GateCardDialogVisible = false;
     },
-    chooseRoom() {
-      this.isActive = !this.active;
+    chooseRoom(id, i, item) {
+      // activeBlue
+      item.className = "activeBlue";
+      this.isActiveArr.push(item);
+      // {
+      //   homeName: "单人间",
+      //   roomNum: 8102,
+      //   pric: 200,
+      // }
+      let data = {
+        homeName: item.type,
+        roomNum: item.floorNo,
+        pric: 200
+      };
+      this.roomTableData.push(data);
+      console.log(this.isActiveArr);
     }
   }
 };

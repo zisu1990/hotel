@@ -49,12 +49,15 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="400"
       ></el-pagination>
+
+      
     </el-main>
   </el-container>
 </template>
 
 
 <script>
+import LogList from '@/api/Log';
 export default {
   data() {
     return {
@@ -95,6 +98,16 @@ export default {
     };
   },
   methods: {
+    getLogList() {
+      let params = {
+        page: this.pagination.currentPage,
+        page_size: this.pagination.pageSize,
+      };
+      // roomtypeLists
+      roomtypeIndex(params).then((res) => {
+        console.log(res);
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
