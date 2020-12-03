@@ -112,7 +112,7 @@
   </el-container>
 </template>
 <script>
-import { roomtypeAdd, roomtypeLists,roomtypeIndex } from "@/api/RoomType.js";
+import { roomtypeAdd, roomtypeLists, roomtypeIndex } from "@/api/RoomType.js";
 export default {
   data() {
     return {
@@ -147,9 +147,8 @@ export default {
         page: this.pagination.currentPage,
         page_size: this.pagination.pageSize,
       };
-      // roomtypeLists
       roomtypeIndex(params).then((res) => {
-        console.log(res);
+        console.log(JSON.parse(res));
       });
     },
     handleEdit(i, v) {},
