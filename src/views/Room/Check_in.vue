@@ -837,32 +837,32 @@ export default {
   },
   methods: {
     // // 加，减，总
-    // handleAdd(i, t) {
-    //   let roomTableData = this.roomTableData[i];
-    //   roomTableData.sum += 1;
-    //   roomTableData.suMoney += roomTableData.pric;
-    // },
-    // handleReduce(i, t) {
-    //   let roomTableData = this.roomTableData[i];
-    //   if (roomTableData.sum - 1 < 0) {
-    //     this.$message({
-    //       message: "输入的值不能小于0",
-    //       type: "warning"
-    //     });
-    //     return;
-    //   } else {
-    //     roomTableData.sum -= 1;
-    //     roomTableData.suMoney -= roomTableData.pric;
-    //   }
-    // },
-    // dayin() {
-    //   this.payforDialogVisible = false;
-    //   this.GateCardDialogVisible = false;
-    // },
-    // budayin() {
-    //   this.payforDialogVisible = false;
-    //   this.GateCardDialogVisible = false;
-    // }
+    handleAdd(i, t) {
+      let roomTableData = this.roomTableData[i];
+      roomTableData.sum += 1;
+      roomTableData.suMoney += roomTableData.pric;
+    },
+    handleReduce(i, t) {
+      let roomTableData = this.roomTableData[i];
+      if (roomTableData.sum - 1 < 0) {
+        this.$message({
+          message: "输入的值不能小于0",
+          type: "warning"
+        });
+        return;
+      } else {
+        roomTableData.sum -= 1;
+        roomTableData.suMoney -= roomTableData.pric;
+      }
+    },
+    dayin() {
+      this.payforDialogVisible = false;
+      this.GateCardDialogVisible = false;
+    },
+    budayin() {
+      this.payforDialogVisible = false;
+      this.GateCardDialogVisible = false;
+    }
   }
 };
 </script>

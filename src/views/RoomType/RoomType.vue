@@ -102,16 +102,17 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="pagination.currentPage"
+        :page-sizes="[10, 20, 30, 40, 50]"
+        :page-size="pagination.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="pagination.total"
       ></el-pagination>
     </el-main>
   </el-container>
 </template>
 <script>
+import { roomtypeAdd, roomtypeLists,roomtypeIndex } from "@/api/RoomType.js";
 export default {
   data() {
     return {
@@ -130,17 +131,39 @@ export default {
         },
       ],
       dialogVisible: false,
+      pagination: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+      },
     };
   },
+  created() {
+    this.getRows();
+  },
   methods: {
+    getRows() {
+      let params = {
+        page: this.pagination.currentPage,
+        page_size: this.pagination.pageSize,
+      };
+      // roomtypeLists
+      roomtypeIndex(params).then((res) => {
+        console.log(res);
+      });
+    },
     handleEdit(i, v) {},
     handleDelete(i, v) {},
     // 分页器
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pagination.pageSize = val;
+      // console.log(`每页 ${val} 条`);
+      this.getRows();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.pagination.currentPage = val;
+      // console.log(`当前页: ${val}`);
+      this.getRows();
     },
   },
 };

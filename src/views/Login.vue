@@ -96,7 +96,7 @@ export default {
   methods: {
     //登录
     login() {
-      // this.$router.push("/room");
+      this.$router.push("/room");
       let params = {
         app_type: 3,
         username: this.loginForm.username,
@@ -104,7 +104,6 @@ export default {
         yzm_code: this.loginForm.code,
       };
       loginVerify(params).then((res) => {
-        console.log(res);
         // if (res.code === 200) {
         // }
       });
