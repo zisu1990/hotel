@@ -179,7 +179,6 @@
                       @click="chooseRoom(index)">
                       <span>{{ f.floorNo }}</span>
                       <span>{{ f.type }}</span>
-                      
                     </li>
                   </ul>
                 </div>
