@@ -1,8 +1,8 @@
 import {  post } from './http.js'
 
 // 登录接口
-const loginVerify = data => post('login/index', data)
+export const loginVerify = params => post('/login/index', params)
 
-export default {
-    loginVerify,
-}
+
+// 验证码
+export const loginCaptcha = params => post('/login/captcha', params)

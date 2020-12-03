@@ -13,37 +13,34 @@ Vue.use(ElementUI)
 // Vue.component('tree-table', TreeTable)
 
 //导入NProgress包对应的js和css  -------网页上方加载的进度条
-// import NProgress from 'nprogress'
-// import 'nprogress/nprogress.css'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
-// // 安装axios请求
-// import axios from 'axios'
-// if (process.env.NODE_ENV == 'development') {
-//   axios.defaults.baseURL = 'http://www.api.vip/api/'
-// }
-// axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
-// //在request拦截器在展示进度条NProgress.start()
-// axios.interceptors.request.use(config => {
-//   NProgress.start()
-//   // console.log(config)
-//   config.headers.Authorization = store.state.token //为请求头对象，添加token验证的Authorization字段
-//   return config;
-// })
+// 安装axios请求
+import axios from 'axios'
+// axios.defaults.headers.post["Content-Type"] = "multipart/form-data";
+//在request拦截器在展示进度条NProgress.start()
+axios.interceptors.request.use(config => {
+  NProgress.start()
+  // console.log(config)
+  config.headers.Authorization = store.state.token //为请求头对象，添加token验证的Authorization字段
+  return config;
+})
 
-// //在response拦截器在隐藏进度条NProgress.done()
+//在response拦截器在隐藏进度条NProgress.done()
 
-// axios.interceptors.response.use(config => {
-//   NProgress.done()
-//   return config
-// })
+axios.interceptors.response.use(config => {
+  NProgress.done()
+  return config
+})
 
 
 
-// Vue.prototype.$http = axios;
+Vue.prototype.$http = axios;
 
 
-// import { Message } from 'element-ui'
-// Vue.prototype.$message = Message  //提示弹框
+import { Message } from 'element-ui'
+Vue.prototype.$message = Message  //提示弹框
 
 
 new Vue({

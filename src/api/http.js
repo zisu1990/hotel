@@ -1,13 +1,11 @@
 import axios from 'axios'
-const ENV = process.env
-const BASE_URL = ENV.VUE_APP_BASE_URL
-const BASE_API = ENV.VUE_APP_BASE_API
+import qs from 'qs'
 
-const get = function (url, params = "") {
+export const get = function (url, params = "") {
     return new Promise((resolve, reject) => {
-        axios.get(BASE_URL+BASE_API+url, {
+        axios.get(url, qs.stringify({
             params: params
-        }).then(res => {
+        })).then(res => {
             resolve(res.data)
         }).catch(err => {
             reject(err.data)
@@ -15,16 +13,12 @@ const get = function (url, params = "") {
     })
 }
 
-const post = function (url, params) {
+export const post = function (url, params) {
     return new Promise((resolve, reject) => {
-        axios.post(BASE_URL+BASE_API+url, params).then(res => {
-            resolve(res.data);
+        axios.post(url, qs.stringify(params)).then(res => {
+            resolve(qs.parse(res.data));
         }).catch(err => {
-            reject(err.data)
+            reject(qs.parse(err.data))
         })
     });
-}
-export default {
-    get,
-    post
 }
