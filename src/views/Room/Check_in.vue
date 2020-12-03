@@ -863,7 +863,6 @@ export default {
       this.GateCardDialogVisible = false;
     },
     chooseRoom(index) {
-      
       this.isActive = index;
     }
   }
