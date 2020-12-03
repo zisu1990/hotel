@@ -219,6 +219,8 @@ export default {
   methods: {
     //   表单增减
     handleAdd(i, v) {
+            console.log(i,"11111111111")
+      console.log(v,"3333333333")
       let tableData = this.tableData;
 
       if (tableData.length >= 10) {
@@ -253,6 +255,7 @@ export default {
       });
     },
     handleReduce(i, v) {
+
       let tableData = this.tableData;
       if (tableData.length == 1) {
         this.$message({
