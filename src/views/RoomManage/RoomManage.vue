@@ -4,17 +4,19 @@
       <el-row style="margin-bottom: 20px">
         <el-col :span="6">
           <el-input
+            clearable
+            @change="handleInput"
             v-model="formRoomManage.roomType"
             placeholder="请输入房间号/房间类型"
           ></el-input>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
         </el-col>
       </el-row>
 
       <el-row type="flex" justify="start">
-        <el-button @click="dialogVisible = true" type="primary">新增</el-button>
+        <el-button @click="showAddialog(true)" type="primary">新增</el-button>
         <el-button type="primary">下载客房导入模板</el-button>
         <!-- <el-button>导入客房信息</el-button> -->
         <el-upload
@@ -52,10 +54,10 @@
             ></el-table-column>
             <el-table-column prop="price" label="每日单价"></el-table-column>
             <el-table-column
-              prop="hour_room "
+              prop="hour_room"
               label="可选钟点房"
             ></el-table-column>
-            <el-table-column prop="wifi " label="房间WIFI"></el-table-column>
+            <el-table-column prop="wifi" label="房间WIFI"></el-table-column>
             <el-table-column
               width="180"
               prop="create_time"
@@ -76,15 +78,13 @@
             </el-table-column>
             <el-table-column width="200" label="操作">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  @click="handleEdit(scope.$index, scope.row)"
+                <el-button size="mini" @click="handleEdit(scope.row)"
                   >编辑</el-button
                 >
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
+                  @click="handleDelete(scope.row.id)"
                   >删除</el-button
                 >
               </template>
@@ -94,7 +94,7 @@
       </el-row>
 
       <el-dialog
-        title="新房间"
+        :title="dialogTittle"
         @close="formRoomManage = {}"
         :visible.sync="dialogVisible"
         width="35%"
@@ -211,7 +211,6 @@
 </template>
 <script>
 import {
-  roomLists,
   roomAdd,
   roomDel,
   roomEdit,
@@ -300,12 +299,15 @@ export default {
         roomWIFI: "",
       },
       dataRoomType: [],
+      roomInfo: {},
+      roomInfoStatus: true,
       dialogVisible: false,
       pagination: {
         currentPage: 1,
         pageSize: 10,
         total: 0,
       },
+      dialogTittle: "新房间",
     };
   },
   created() {
@@ -314,39 +316,59 @@ export default {
   methods: {
     getRows() {
       this.getRoomType();
-      roomLists().then((res) => {
+      let params = {
+        page: this.pagination.currentPage,
+        page_size: this.pagination.pageSize,
+      };
+      roomIndex(params).then((res) => {
         res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res);
+        // console.log(res);
         if (res.code == 0) {
-          this.dataRoomType = res.data;
+          // console.log("tag", typeof res.data);
+          this.dataRoomType = res.data.list;
+          this.pagination.total = res.data.count;
         } else {
           this.message("error", res.message);
         }
       });
     },
-    // 添加房间
+    // 添加或者编辑房间
     handleAddroom() {
       let formRoomManage = this.formRoomManage;
+      let params = {
+        room_no: formRoomManage.addRoomNum,
+        floor: formRoomManage.onRoomFloor,
+        roomtype: formRoomManage.addRoomType,
+        people_num: formRoomManage.liveUserName,
+        price: formRoomManage.addRoomPrice,
+        hour_room: formRoomManage.isHourRoom,
+        wifi: formRoomManage.roomWIFI,
+      };
       this.$refs.adddialogVisible.validate((valid) => {
         if (valid) {
-          let params = {
-            room_no: formRoomManage.addRoomNum,
-            floor: formRoomManage.onRoomFloor,
-            roomtype: formRoomManage.addRoomType,
-            people_num: formRoomManage.liveUserName,
-            price: formRoomManage.addRoomPrice,
-            hour_room: formRoomManage.isHourRoom,
-            wifi: formRoomManage.roomWIFI,
-          };
-          roomAdd(params).then((res) => {
-            res = typeof res == "string" ? JSON.parse(res) : res;
-            if (res.code == 0) {
-              this.getRows();
-              this.message("success", res.message);
-            } else {
-              this.message("error", res.message);
-            }
-          });
+          if (this.roomInfoStatus) {
+            roomAdd(params).then((res) => {
+              res = typeof res == "string" ? JSON.parse(res) : res;
+              if (res.code == 0) {
+                this.getRows();
+                this.message("success", res.message);
+                this.dialogVisible = false;
+              } else {
+                this.message("error", res.message);
+              }
+            });
+          } else {
+            roomEdit({ ...params, ...{ id: this.roomInfo.id } }).then((res) => {
+              res = typeof res == "string" ? JSON.parse(res) : res;
+              if (res.code == 0) {
+                this.getRows();
+                this.message("success", res.message);
+                this.dialogVisible = false;
+              } else {
+                this.message("error", res.message);
+              }
+            });
+          }
         } else {
           return false;
         }
@@ -363,8 +385,67 @@ export default {
         }
       });
     },
-    handleEdit(i, v) {},
-    handleDelete(i, v) {},
+    // 编辑
+    handleEdit(v) {
+      let formRoomManage = this.formRoomManage;
+      this.roomInfo = v;
+      formRoomManage.addRoomNum = v.room_no;
+      formRoomManage.onRoomFloor = v.floor;
+      formRoomManage.addRoomType = v.roomtype;
+      formRoomManage.liveUserName = v.people_num;
+      formRoomManage.addRoomPrice = v.price;
+      formRoomManage.isHourRoom = v.hour_room;
+      formRoomManage.roomWIFI = v.wifi;
+      this.showAddialog(false);
+    },
+    // 删除
+    handleDelete(id) {
+      this.confirm()
+        .then(() => {
+          roomDel({ id }).then((res) => {
+            res = JSON.parse(res);
+            if (res.code === 0) {
+              this.getRows();
+              this.message("success", "删除成功");
+            } else {
+              this.message("error", res.message);
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    // 显示对话框
+    showAddialog(v) {
+      this.dialogVisible = true;
+      if (v) {
+        this.roomInfoStatus = true;
+        this.dialogTittle = "新房间";
+      } else {
+        this.roomInfoStatus = false;
+        this.dialogTittle = "编辑房间";
+      }
+    },
+    // 查询
+    handleSearch() {
+      let params = {
+        page: this.pagination.currentPage,
+        page_size: this.pagination.pageSize,
+        keys: this.formRoomManage.roomType,
+      };
+      roomIndex(params).then((res) => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.dataRoomType = res.data.list;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    handleInput() {
+      if (!this.roomType) {
+        this.handleSearch();
+      }
+    },
     // 上传exsel
     handleChange(file, fileList) {},
 
