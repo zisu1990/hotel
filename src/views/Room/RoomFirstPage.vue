@@ -128,6 +128,7 @@
   </el-container>
 </template>
 <script>
+import { saveToken, getToken, removeToken } from "@/utils/token.js";
 export default {
   data() {
     return {
@@ -524,6 +525,8 @@ export default {
       ],
     };
   },
+  created(){
+  },
   computed: {
     opened() {
       return this.louceng.map((i) => {
@@ -532,6 +535,7 @@ export default {
     },
   },
   methods: {
+
     pushPage(data) {
       this.isShowRoute = true;
       console.log(data.path);

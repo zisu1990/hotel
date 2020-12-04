@@ -38,12 +38,27 @@ axios.interceptors.response.use(config => {
 
 
 Vue.prototype.$http = axios;
-
-
 import { Message } from 'element-ui'
+
+// 路由守卫
+// router.beforeEach((to, from, next) => {
+//   if (from.path == '/login') {
+//     next()
+//   } else {
+//     let token = sessionStorage.getItem('token')
+//     if (!token) {
+//       Message({ type: "error", message: "登录超时" })
+//     } else {
+//       next()
+//     }
+//   }
+// })
+
 Vue.prototype.$message = Message  //提示弹框
-
-
+Vue.prototype.message = (type, str) => Message({
+  message: str,
+  type: type,
+})
 new Vue({
   router,
   store,

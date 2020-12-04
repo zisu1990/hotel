@@ -30,15 +30,20 @@
             prefix-icon="el-icon-s-goods"
             placeholder="请输入密码"
             show-password
-          >></el-input>
+            >></el-input
+          >
         </el-form-item>
 
         <el-form-item class="codewarp">
-          <el-input v-model="loginForm.code" placeholder="请输入验证码" class="code"></el-input>
+          <el-input
+            v-model="loginForm.code"
+            placeholder="请输入验证码"
+            class="code"
+          ></el-input>
           <div class="codeImg">
-            <img src=" https://api.anhuiqingyou.com/api/login/captcha" alt srcset>
+            <img :src="authCodeImg.img" alt srcset />
           </div>
-          <span>换一组</span>
+          <span @click="updateAuthCodeImg">换一组</span>
         </el-form-item>
 
         <el-form-item class="bts">
@@ -55,7 +60,7 @@
 
 <script>
 import { loginVerify, loginCaptcha } from "@/api/Login";
-import axios from "axios";
+import { saveToken, getToken, removeToken } from "@/utils/token.js";
 export default {
   name: "login",
   data() {
@@ -64,49 +69,77 @@ export default {
       loginForm: {
         username: "zhuliu",
         password: "qy12345",
-        code: ""
+        code: "",
       },
 
       // 表单验证规则
       loginFormRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" },
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ]
+          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" },
+        ],
       },
 
       // 验证码
-      authCodeImg: ""
+      authCodeImg: {},
     };
   },
-
+  created() {
+    this.getRows();
+  },
   methods: {
+    getRows() {
+      if (getToken()) {
+        removeToken();
+      }
+      loginCaptcha({}).then((res) => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.authCodeImg = res.data;
+        } else {
+          this.Message("error", res.message);
+        }
+      });
+    },
     //登录
     login() {
-      this.$router.push("/room");
-      // let params = {
-      //   app_type: 3,
-      //   username: this.loginForm.username,
-      //   password: this.loginForm.password,
-      //   yzm_code: this.loginForm.code
-      // };
-      // loginVerify(params).then(res => {
-      //   console.log(res);
-      //   // if (res.code === 200) {
-      //   // }
-      // });
-    }
-
+      let params = {
+        app_type: 3,
+        username: this.loginForm.username,
+        password: this.loginForm.password,
+        captcha_code: this.loginForm.code,
+        captcha_id: this.authCodeImg.id,
+      };
+      loginVerify(params, 1).then((res) => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.message("success", res.message);
+          this.$router.replace("/room");
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    updateAuthCodeImg() {
+      loginCaptcha({}).then((res) => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.authCodeImg = res.data;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
     //重置
     // resetLoginForm() {
     //   //console.log(this)
     //   this.$refs.loginFormRef.resetFields();
     // }
-  }
+  },
 };
 </script>
 
