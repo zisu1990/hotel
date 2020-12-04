@@ -26,27 +26,27 @@
             border
             stripe
           >
-            <el-table-column width="80" type="index"></el-table-column>
+            <el-table-column width="80" type="index"></el-table-column>     
             <el-table-column
-              prop="roomType"
+              prop="name"
               label="房间类型名称"
             ></el-table-column>
             <el-table-column
-              prop="roomPrice"
+              prop="price"
               label="房间价格"
             ></el-table-column>
             <el-table-column
-              prop="settingTime"
+              prop="create_time"
               label="操作时间"
             ></el-table-column>
             <el-table-column
-              prop="settingUser"
+              prop="username"
               label="操作员"
             ></el-table-column>
             <el-table-column label="状态">
               <template v-slot="scope">
                 <el-switch
-                  v-model="scope.row.state"
+                  v-model="scope.row.status"
                   active-color="#13ce66"
                   inactive-color="#999"
                 ></el-switch>
@@ -74,16 +74,21 @@
       <el-dialog title="新房间类型" :visible.sync="dialogVisible" width="28%">
         <el-row type="flex" justify="center">
           <el-col :span="18">
-            <el-form :model="formRoomType" label-width="100px">
-              <el-form-item label="房间类型：">
+            <el-form
+              :rules="rules"
+              :model="formRoomType"
+              ref="formRoomType"
+              label-width="100px"
+            >
+              <el-form-item prop="name" label="房间类型：">
                 <el-input
-                  v-model="formRoomType.addRoomType"
+                  v-model="formRoomType.name"
                   placeholder="请输入房间类型"
                 ></el-input>
               </el-form-item>
-              <el-form-item :model="formRoomType" label="房间价格：">
+              <el-form-item prop="price" label="房间价格：">
                 <el-input
-                  v-model="formRoomType.addRoomPrice"
+                  v-model="formRoomType.price"
                   placeholder="请输入房间价格"
                 ></el-input>
               </el-form-item>
@@ -93,9 +98,7 @@
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="handleRoom">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -113,19 +116,31 @@
 </template>
 <script>
 import { roomtypeAdd, roomtypeLists, roomtypeIndex } from "@/api/RoomType.js";
+import { getToken } from "@/utils/token.js";
 export default {
   data() {
+    var price = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("房间价格不能为空"));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(+value)) {
+          callback(new Error("请输入数字值"));
+        } else {
+          callback();
+        }
+      }, 100);
+    };
     return {
       formRoomType: {
-        roomType: "",
-        addRoomType: "",
-        addRoomPrice: "",
+        name: "",
+        price: "",
       },
       dataRoomType: [
         {
-          roomType: "三人间",
-          roomPrice: "456",
-          settingTime: "12345678912",
+          name: "三人间",
+          price: "456",
+          create_time: "12345678912",
           settingUser: "张三",
           state: 1,
         },
@@ -135,6 +150,13 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
+      },
+      rules: {
+        name: [
+          { required: true, message: "请输入房间类型", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+        ],
+        price: { validator: price, trigger: "blur" },
       },
     };
   },
@@ -149,6 +171,31 @@ export default {
       };
       roomtypeIndex(params).then((res) => {
         console.log(JSON.parse(res));
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.dataRoomType = res.data.list;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    // 新增
+    handleRoom() {
+      this.$refs.formRoomType.validate((valid) => {
+        if (valid) {
+          roomtypeAdd(this.formRoomType).then((res) => {
+            res = JSON.parse(res);
+            if (res.code === 0) {
+              this.message("success", res.message);
+              this.getRows();
+              this.dialogVisible = false;
+            } else {
+              this.message("error", res.message);
+            }
+          });
+        } else {
+          return false;
+        }
       });
     },
     handleEdit(i, v) {},

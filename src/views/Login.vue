@@ -114,12 +114,14 @@ export default {
         captcha_code: this.loginForm.code,
         captcha_id: this.authCodeImg.id,
       };
-      loginVerify(params, 1).then((res) => {
+      loginVerify(params).then((res) => {
         res = JSON.parse(res);
         if (res.code === 0) {
           this.message("success", res.message);
+          saveToken(res.data.token)
           this.$router.replace("/room");
         } else {
+          this.updateAuthCodeImg()
           this.message("error", res.message);
         }
       });

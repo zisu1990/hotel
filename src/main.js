@@ -23,8 +23,7 @@ import axios from 'axios'
 axios.interceptors.request.use(config => {
   NProgress.start()
   // console.log(config)
-  // config.headers.Authorization = store.state.token //为请求头对象，添加token验证的Authorization字段
-  config.headers.Authorization = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MDcwNTE1NzgsInVpZCI6M30.NHmEBJWj7w5hchfmV5gnPB-WPczGi1L7fOX1CGX8oQ8"
+  config.headers.Authorization = sessionStorage.getItem('token') //为请求头对象，添加token验证的Authorization字段
   return config;
 })
 
@@ -42,9 +41,7 @@ import { Message } from 'element-ui'
 
 // 路由守卫
 // router.beforeEach((to, from, next) => {
-//   if (from.path == '/login') {
-//     next()
-//   } else {
+//   if (to.path != '/login') {
 //     let token = sessionStorage.getItem('token')
 //     if (!token) {
 //       Message({ type: "error", message: "登录超时" })
