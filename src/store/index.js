@@ -11,6 +11,12 @@ export default new Vuex.Store({
   mutations: {
     updateNavIsActive(state, blooen) {
       state.navIsActive = blooen
+    },
+    saveToken(state, str) {
+      state.token = str
+    },
+    clearnToken(state){
+      state.token = ""
     }
   },
   actions: {

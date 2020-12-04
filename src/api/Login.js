@@ -5,4 +5,4 @@ export const loginVerify = params => post('/login/index', params)
 
 
 // 验证码
-export const loginCaptcha = data => post('/login/captcha', data)
+export const loginCaptcha = params => post('/captcha/captcha', params)
