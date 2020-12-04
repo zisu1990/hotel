@@ -5,6 +5,7 @@ import store from "./store";
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'//导入全局css样式
+import  '@/utils/common.js'
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
 
@@ -35,9 +36,7 @@ axios.interceptors.response.use(config => {
 })
 
 
-
 Vue.prototype.$http = axios;
-import { Message } from 'element-ui'
 
 // 路由守卫
 // router.beforeEach((to, from, next) => {
@@ -51,11 +50,6 @@ import { Message } from 'element-ui'
 //   }
 // })
 
-Vue.prototype.$message = Message  //提示弹框
-Vue.prototype.message = (type, str) => Message({
-  message: str,
-  type: type,
-})
 new Vue({
   router,
   store,

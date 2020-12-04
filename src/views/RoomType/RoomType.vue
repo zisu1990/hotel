@@ -3,20 +3,16 @@
     <el-main>
       <el-row style="margin-bottom: 20px">
         <el-col :span="6">
-          <el-input
-            v-model="formRoomType.roomType"
-            placeholder="请输入房间类型"
-          ></el-input>
+          <el-input v-model="roomType" clearable @change="handleInput" placeholder="请输入房间类型"></el-input>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
         </el-col>
       </el-row>
 
       <el-row type="flex" justify="start">
         <el-button @click="dialogVisible = true" type="primary">新增</el-button>
       </el-row>
-
       <el-row type="flex" justify="start" style="margin-top: 20px">
         <el-col>
           <el-table
@@ -26,27 +22,20 @@
             border
             stripe
           >
-            <el-table-column width="80" type="index"></el-table-column>     
-            <el-table-column
-              prop="name"
-              label="房间类型名称"
-            ></el-table-column>
-            <el-table-column
-              prop="price"
-              label="房间价格"
-            ></el-table-column>
+            <el-table-column width="80" type="index"></el-table-column>
+            <el-table-column prop="name" label="房间类型名称"></el-table-column>
+            <el-table-column prop="price" label="房间价格"></el-table-column>
             <el-table-column
               prop="create_time"
               label="操作时间"
             ></el-table-column>
-            <el-table-column
-              prop="username"
-              label="操作员"
-            ></el-table-column>
+            <el-table-column prop="username" label="操作员"></el-table-column>
             <el-table-column label="状态">
               <template v-slot="scope">
                 <el-switch
                   v-model="scope.row.status"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   inactive-color="#999"
                 ></el-switch>
@@ -62,7 +51,7 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
+                  @click="handleDelete(scope.row.id)"
                   >删除</el-button
                 >
               </template>
@@ -115,7 +104,12 @@
   </el-container>
 </template>
 <script>
-import { roomtypeAdd, roomtypeLists, roomtypeIndex } from "@/api/RoomType.js";
+import {
+  roomtypeAdd,
+  roomtypeLists,
+  roomtypeIndex,
+  roomtypeDel,
+} from "@/api/RoomType.js";
 import { getToken } from "@/utils/token.js";
 export default {
   data() {
@@ -132,19 +126,12 @@ export default {
       }, 100);
     };
     return {
+      roomType: "",
       formRoomType: {
         name: "",
         price: "",
       },
-      dataRoomType: [
-        {
-          name: "三人间",
-          price: "456",
-          create_time: "12345678912",
-          settingUser: "张三",
-          state: 1,
-        },
-      ],
+      dataRoomType: [],
       dialogVisible: false,
       pagination: {
         currentPage: 1,
@@ -170,7 +157,6 @@ export default {
         page_size: this.pagination.pageSize,
       };
       roomtypeIndex(params).then((res) => {
-        console.log(JSON.parse(res));
         res = JSON.parse(res);
         if (res.code === 0) {
           this.dataRoomType = res.data.list;
@@ -199,7 +185,43 @@ export default {
       });
     },
     handleEdit(i, v) {},
-    handleDelete(i, v) {},
+    // 增加
+    handleDelete(id) {
+      this.confirm()
+        .then(() => {
+          roomtypeDel({ id }).then((res) => {
+            res = JSON.parse(res);
+            if (res.code === 0) {
+              this.getRows();
+              this.message("success", "删除成功");
+            } else {
+              this.message("error", res.message);
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    // 查询
+    handleSearch() {
+      let params = {
+        page: this.pagination.currentPage,
+        page_size: this.pagination.pageSize,
+        name: this.roomType,
+      };
+      roomtypeIndex(params).then((res) => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.dataRoomType = res.data.list;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    handleInput(){
+      if(!this.roomType){
+        this.handleSearch()
+      }
+    },
     // 分页器
     handleSizeChange(val) {
       this.pagination.pageSize = val;
