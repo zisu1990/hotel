@@ -3,7 +3,12 @@
     <el-main>
       <el-row style="margin-bottom: 20px">
         <el-col :span="6">
-          <el-input v-model="roomType" clearable @change="handleInput" placeholder="请输入房间类型"></el-input>
+          <el-input
+            v-model="roomType"
+            clearable
+            @change="handleInput"
+            placeholder="请输入房间类型"
+          ></el-input>
         </el-col>
         <el-col :span="2">
           <el-button type="primary" @click="handleSearch">查询</el-button>
@@ -38,14 +43,13 @@
                   :inactive-value="0"
                   active-color="#13ce66"
                   inactive-color="#999"
+                  @change="handleChangeSwich(scope.row.status,scope.row.id)"
                 ></el-switch>
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  @click="handleEdit(scope.$index, scope.row)"
+                <el-button size="mini" @click="showDialogEdit(scope)"
                   >编辑</el-button
                 >
                 <el-button
@@ -60,7 +64,12 @@
         </el-col>
       </el-row>
 
-      <el-dialog title="新房间类型" :visible.sync="dialogVisible" width="28%">
+      <el-dialog
+        title="新房间类型"
+        :visible.sync="dialogVisible"
+        @closed="cleranFormRoomType"
+        width="28%"
+      >
         <el-row type="flex" justify="center">
           <el-col :span="18">
             <el-form
@@ -71,12 +80,14 @@
             >
               <el-form-item prop="name" label="房间类型：">
                 <el-input
+                  clearable
                   v-model="formRoomType.name"
                   placeholder="请输入房间类型"
                 ></el-input>
               </el-form-item>
               <el-form-item prop="price" label="房间价格：">
                 <el-input
+                  clearable
                   v-model="formRoomType.price"
                   placeholder="请输入房间价格"
                 ></el-input>
@@ -88,6 +99,44 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="handleRoom">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog
+        title="编辑房间类型"
+        :visible.sync="dialogVisibleEdit"
+        width="28%"
+        @closed="cleranFormRoomTypeEdit"
+      >
+        <el-row type="flex" justify="center">
+          <el-col :span="18">
+            <el-form
+              :rules="rules"
+              :model="formRoomTypeEdit"
+              ref="formRoomTypeEdit"
+              label-width="100px"
+            >
+              <el-form-item prop="name" label="房间类型：">
+                <el-input
+                  clearable
+                  v-model="formRoomTypeEdit.name"
+                  placeholder="请输入房间类型"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="price" label="房间价格：">
+                <el-input
+                  clearable
+                  v-model="formRoomTypeEdit.price"
+                  placeholder="请输入房间价格"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleEdit">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -109,8 +158,9 @@ import {
   roomtypeLists,
   roomtypeIndex,
   roomtypeDel,
+  roomtypeEdit,
+  roomtypeModifystatus,
 } from "@/api/RoomType.js";
-import { getToken } from "@/utils/token.js";
 export default {
   data() {
     var price = (rule, value, callback) => {
@@ -131,8 +181,14 @@ export default {
         name: "",
         price: "",
       },
+      formRoomTypeEdit: {
+        name: "",
+        price: "",
+      },
+      editId: "",
       dataRoomType: [],
       dialogVisible: false,
+      dialogVisibleEdit: false,
       pagination: {
         currentPage: 1,
         pageSize: 10,
@@ -160,6 +216,7 @@ export default {
         res = JSON.parse(res);
         if (res.code === 0) {
           this.dataRoomType = res.data.list;
+          this.pagination.total = res.data.count
         } else {
           this.message("error", res.message);
         }
@@ -175,6 +232,7 @@ export default {
               this.message("success", res.message);
               this.getRows();
               this.dialogVisible = false;
+              this.formRoomType = {};
             } else {
               this.message("error", res.message);
             }
@@ -184,8 +242,38 @@ export default {
         }
       });
     },
-    handleEdit(i, v) {},
-    // 增加
+    // 编辑
+    handleEdit() {
+      this.$refs.formRoomTypeEdit.validate((valid) => {
+        let formRoomTypeEdit = {
+          ...this.formRoomTypeEdit,
+          ...{ id: this.editId },
+        };
+        if (valid) {
+          roomtypeEdit(formRoomTypeEdit).then((res) => {
+            res = JSON.parse(res);
+            if (res.code === 0) {
+              this.message("success", res.message);
+              this.getRows();
+              this.dialogVisibleEdit = false;
+              this.cleranFormRoomTypeEdit();
+            } else {
+              this.message("error", res.message);
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    // 显示dialog
+    showDialogEdit(v) {
+      this.formRoomTypeEdit.name = v.row.name;
+      this.formRoomTypeEdit.price = v.row.price;
+      this.editId = v.row.id;
+      this.dialogVisibleEdit = true;
+    },
+    // 删除
     handleDelete(id) {
       this.confirm()
         .then(() => {
@@ -217,10 +305,32 @@ export default {
         }
       });
     },
-    handleInput(){
-      if(!this.roomType){
-        this.handleSearch()
+    handleInput() {
+      if (!this.roomType) {
+        this.handleSearch();
       }
+    },
+    // switch
+    handleChangeSwich(status, id) {
+      let params = {
+        id,
+        status,
+      };
+      roomtypeModifystatus(params).then((res) => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.message("success", res.message);
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    // 清空form
+    cleranFormRoomType() {
+      this.formRoomType = {};
+    },
+    cleranFormRoomTypeEdit() {
+      this.formRoomTypeEdit = {};
     },
     // 分页器
     handleSizeChange(val) {
