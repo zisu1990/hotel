@@ -7,7 +7,7 @@
             clearable
             @change="handleInput"
             v-model="formRoomManage.roomType"
-            placeholder="请输入房间号/房间类型"
+            placeholder="请输入房间类型"
           ></el-input>
         </el-col>
         <el-col :span="2">
@@ -17,15 +17,20 @@
 
       <el-row type="flex" justify="start">
         <el-button @click="showAddialog(true)" type="primary">新增</el-button>
-        <el-button type="primary">下载客房导入模板</el-button>
+        <el-button type="primary"
+          ><a href="https://api.anhuiqingyou.com/uploads/roomdemo.xlsx"
+            >下载客房导入模板</a
+          >
+        </el-button>
         <!-- <el-button>导入客房信息</el-button> -->
         <el-upload
           style="margin-left: 10px"
           action=""
+          :limit="1"
           :auto-upload="false"
           accept=".xlsx, .xls"
           :show-file-list="false"
-          :on-change="handleChange"
+          :on-change="submitUpload"
         >
           <el-button>导入客房信息</el-button>
         </el-upload>
@@ -95,7 +100,7 @@
 
       <el-dialog
         :title="dialogTittle"
-        @close="formRoomManage = {}"
+        @close="closeDialog"
         :visible.sync="dialogVisible"
         width="35%"
       >
@@ -441,13 +446,45 @@ export default {
         }
       });
     },
+    // 关闭对话框
+    closeDialog() {
+      this.formRoomManage = {
+        addRoomNum: "",
+        onRoomFloor: "",
+        addRoomType: "",
+        liveUserName: "",
+        addRoomPrice: "",
+        isHourRoom: "",
+        roomWIFI: "",
+      };
+    },
     handleInput() {
       if (!this.roomType) {
         this.handleSearch();
       }
     },
+
     // 上传exsel
-    handleChange(file, fileList) {},
+    submitUpload(file, fileList) {
+      if (!file.name) {
+        this.message("warning", "请选择要上传的文件");
+        return false;
+      }
+      console.log(file.raw);
+      roomUpload({ file: file.raw }).then((res) => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        console.log(res);
+        if (res.code == 0) {
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    // 上传时校验
+    // handleExceed(file,fileList){
+    //   console.log(file)
+    //   console.log(fileList)
+    // },
 
     // 分页器
     handleSizeChange(val) {

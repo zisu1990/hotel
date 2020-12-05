@@ -43,7 +43,7 @@
                   :inactive-value="0"
                   active-color="#13ce66"
                   inactive-color="#999"
-                  @change="handleChangeSwich(scope.row.status,scope.row.id)"
+                  @change="handleChangeSwich(scope.row.status, scope.row.id)"
                 ></el-switch>
               </template>
             </el-table-column>
@@ -135,7 +135,7 @@
         </el-row>
 
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button @click="dialogVisibleEdit = false">取 消</el-button>
           <el-button type="primary" @click="handleEdit">确 定</el-button>
         </span>
       </el-dialog>
@@ -216,7 +216,7 @@ export default {
         res = JSON.parse(res);
         if (res.code === 0) {
           this.dataRoomType = res.data.list;
-          this.pagination.total = res.data.count
+          this.pagination.total = res.data.count;
         } else {
           this.message("error", res.message);
         }
@@ -327,10 +327,10 @@ export default {
     },
     // 清空form
     cleranFormRoomType() {
-      this.formRoomType = {};
+      this.formRoomType = { name: "", price: "" };
     },
     cleranFormRoomTypeEdit() {
-      this.formRoomTypeEdit = {};
+      this.formRoomTypeEdit = { name: "", price: "" };
     },
     // 分页器
     handleSizeChange(val) {

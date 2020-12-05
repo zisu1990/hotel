@@ -14,3 +14,5 @@ export const roomUpload = params => post('/room/upload', params)
 export const roomModifystatus = params => post('/room/modifystatus', params)
 // 详情
 export const roomInfo = params => post('/room/info', params)
+// // 详情
+// export const roomInfo = params => post('/room/info', params)

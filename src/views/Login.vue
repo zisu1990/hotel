@@ -36,6 +36,7 @@
 
         <el-form-item class="codewarp">
           <el-input
+            clearable
             v-model="loginForm.code"
             placeholder="请输入验证码"
             class="code"
@@ -118,10 +119,10 @@ export default {
         res = JSON.parse(res);
         if (res.code === 0) {
           this.message("success", res.message);
-          saveToken(res.data.token)
+          saveToken(res.data.token);
           this.$router.replace("/room");
         } else {
-          this.updateAuthCodeImg()
+          this.updateAuthCodeImg();
           this.message("error", res.message);
         }
       });
