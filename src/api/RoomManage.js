@@ -1,6 +1,4 @@
 import { post } from './http.js'
-// 房间列表
-export const roomLists = params => post('/room/lists', params)
 
 // 新增
 export const roomAdd = params => post('/room/add', params)
@@ -16,3 +14,5 @@ export const roomUpload = params => post('/room/upload', params)
 export const roomModifystatus = params => post('/room/modifystatus', params)
 // 详情
 export const roomInfo = params => post('/room/info', params)
+// // 详情
+// export const roomInfo = params => post('/room/info', params)
