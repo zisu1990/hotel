@@ -19,3 +19,14 @@ export const addMember = params => post('/member/add', params)
 
 //会员修改
 export const editMember = params => post('/member/edit', params)
+
+//会员删除
+export const deleteMember = params => post('/member/del', params)
+
+
+//充值方式
+export const paymethod = params => post('/paymethod/lists', params)
+
+
+//会员充值
+export const memberAccount = params => post('/memberaccount/add', params)
