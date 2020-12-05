@@ -4,6 +4,7 @@
       <el-row style="margin-bottom: 20px">
         <el-col :span="6">
           <el-input
+            ref="upload"
             clearable
             @change="handleInput"
             v-model="formRoomManage.roomType"
@@ -22,14 +23,20 @@
         </el-button>
         <!-- <el-button>导入客房信息</el-button> -->
         <el-upload
+        ref="upload"
           style="margin-left: 10px"
-          action
-          :limit="1"
-          :auto-upload="false"
+          action="http://www.api.vip/api/room/import"
+          :multiple="false"
+          :auto-upload="true"
           accept=".xlsx, .xls"
           :show-file-list="false"
-          :on-change="submitUpload"
+          :on-change="fileChange"
+          :file-list="fileList"
+          :http-request="submitUpload"
         >
+          
+          <!-- :on-success="handleAvatarSuccess" -->
+
           <el-button>导入客房信息</el-button>
         </el-upload>
       </el-row>
@@ -56,6 +63,7 @@
             <el-table-column label="状态">
               <template v-slot="scope">
                 <el-switch
+                  @change="handleChangeSwitch(scope.row)"
                   v-model="scope.row.status"
                   :active-value="1"
                   :inactive-value="0"
@@ -165,7 +173,8 @@ import {
   roomIndex,
   roomUpload,
   roomModifystatus,
-  roomInfo
+  roomInfo,
+  roomImport,
 } from "@/api/RoomManage.js";
 import { roomtypeLists } from "@/api/RoomType.js";
 export default {
@@ -255,7 +264,8 @@ export default {
         pageSize: 10,
         total: 0
       },
-      dialogTittle: "新房间"
+      dialogTittle: "新房间",
+      fileList: [],
     };
   },
   created() {
@@ -406,29 +416,62 @@ export default {
         this.handleSearch();
       }
     },
-
+    // roomModifystatus
     // 上传exsel
     submitUpload(file, fileList) {
-      if (!file.name) {
+      // console.log(file)
+      if (!file.file.name) {
         this.message("warning", "请选择要上传的文件");
         return false;
       }
-      console.log(file.raw);
-      roomUpload({ file: file.raw }).then(res => {
+      let formData = new FormData();
+      formData.append("file", file.file);
+      roomUpload(formData).then((res) => {
         res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res);
         if (res.code == 0) {
+          this.importFile(res.data[0][0]);
         } else {
           this.message("error", res.message);
         }
       });
+    },
+    importFile(v) {
+      roomImport({ file: v }).then((res) => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        console.log(res);
+        if (res.code == 0) {
+          this.getRows();
+          this.message("success", res.message);
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+    // 清空upload
+    fileChange(file) {
+      this.$refs.upload.clearFiles(); //清除上传文件对象
+      this.fileList = []; //清空选择的文件列表
+      this.$emit("close", false);
     },
     // 上传时校验
     // handleExceed(file,fileList){
     //   console.log(file)
     //   console.log(fileList)
     // },
-
+    handleChangeSwitch(v) {
+      let params = {
+        id: v.id,
+        status: v.status,
+      };
+      roomModifystatus(params).then((res) => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        if (res.code == 0) {
+          this.message("success", res.message);
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
     // 分页器
     handleSizeChange(val) {
       this.pagination.pageSize = val;
