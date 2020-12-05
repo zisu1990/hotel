@@ -41,12 +41,18 @@
         <el-table-column type="index" width="50" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" width="80" align="center"></el-table-column>
         <el-table-column prop="sex" label="性别" width="50" align="center"></el-table-column>
-        <el-table-column prop="levelname" label="会员等级" width="100" align="center"></el-table-column>
+        <el-table-column prop="level" label="会员等级" width="100" align="center"></el-table-column>
         <el-table-column prop="mobile" label="手机号" width="120" align="center"></el-table-column>
-        <el-table-column prop="card_no" label="身份证号 "  show-overflow-tooltip width="120" align="center"></el-table-column>
-        <el-table-column prop="address" label="地址" show-overflow-tooltip width="200" align="center"></el-table-column>
+        <el-table-column
+          prop="card_no"
+          label="身份证号 "
+          show-overflow-tooltip
+          width="120"
+          align="center"
+        ></el-table-column>
+        <el-table-column prop="address" label="地址" show-overflow-tooltip width="180" align="center"></el-table-column>
         <el-table-column prop="balance" label="卡余额" width="80" align="center"></el-table-column>
-        <el-table-column prop="navname" label="国籍" width="60" align="center"></el-table-column>
+        <el-table-column prop="nationality" label="国籍" width="80" align="center"></el-table-column>
         <el-table-column prop="integral" label="积分" width="80" align="center"></el-table-column>
         <el-table-column
           prop="company_name"
@@ -62,7 +68,13 @@
           show-overflow-tooltip
           align="center"
         ></el-table-column>
-        <el-table-column prop="username" label="操作员" width="80" show-overflow-tooltip align="center"></el-table-column>
+        <el-table-column
+          prop="username"
+          label="操作员"
+          width="80"
+          show-overflow-tooltip
+          align="center"
+        ></el-table-column>
         <el-table-column label="状态" align="center" width="80">
           <template v-slot="scope">
             <el-switch v-model="scope.row.state" active-color="#13ce66" inactive-color="#999"></el-switch>
@@ -70,9 +82,9 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="RechargeDialogVisible=true">充值</el-button>
+            <el-button type="primary" size="small" @click="RechargeDialog(scope.row)">充值</el-button>
             <el-button type="warning" size="small" @click="EditDialog(scope.row)">修改</el-button>
-            <el-button type="danger" size="small" @click="DeleteDialog(scope)">删除</el-button>
+            <el-button type="danger" size="small" @click="DeleteDialog(scope.row.member_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -114,24 +126,28 @@
           <el-row :gutter="20" type="flex" class="select">
             <el-col :span="12">
               <el-form-item label="会员等级：">
-                <el-select v-model="level" placeholder="请选择" @change="selectLevel($event)">
+                <el-select v-model="AddForm.level" placeholder="请选择" @change="selectLevel($event)">
                   <el-option
                     v-for="(item,index) in memberlevel"
                     :key="index"
                     :label="item.name"
-                    :value="item.id"
+                    :value="item.name"
                   ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="国籍：">
-                <el-select v-model="native" placeholder="请选择" @change="selectNative($event)">
+                <el-select
+                  v-model="AddForm.nationality"
+                  placeholder="请选择"
+                  @change="selectNative($event)"
+                >
                   <el-option
                     v-for="(item,index) in nativeList"
                     :key="index"
                     :label="item.name"
-                    :value="item.id"
+                    :value="item.name"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -190,7 +206,7 @@
                     v-for="(item,index) in memberlevel"
                     :key="index"
                     :label="item.name"
-                    :value="item.id"
+                    :value="item.name"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -198,7 +214,7 @@
             <el-col :span="12">
               <el-form-item label="国籍：">
                 <el-select
-                  v-model="EditForm.native"
+                  v-model="EditForm.nationality"
                   placeholder="请选择"
                   @change="editSelectNative($event)"
                 >
@@ -206,7 +222,7 @@
                     v-for="(item,index) in nativeList"
                     :key="index"
                     :label="item.name"
-                    :value="item.id"
+                    :value="item.name"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -221,25 +237,17 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="12">
-              <el-form-item label="办理门店：">
-                <el-select v-model="EditForm.store" placeholder="请选择">
-                  <el-option label="宿松路滨湖分店" value="1"></el-option>
-                  <el-option label="大学城店" value="2"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>-->
           </el-row>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="EditDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="EditDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="handleEditInfo()">确 定</el-button>
         </span>
       </el-dialog>
 
       <!-- 充值 -->
-      <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%">
-        <el-form :model="RechargeForm" label-width="100px">
+      <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%" >
+        <el-form :model="RechargeForm" label-width="100px" :rules="RechargeFormRules"  ref="RechargeFormRef">
           <el-form-item label="会员姓名：">
             <el-input v-model="RechargeForm.name" disabled></el-input>
           </el-form-item>
@@ -247,23 +255,26 @@
             <el-input v-model="RechargeForm.level" disabled></el-input>
           </el-form-item>
           <el-form-item label="现有金额：">
-            <el-input v-model="RechargeForm.money" disabled></el-input>
+            <el-input v-model="RechargeForm.balance" disabled></el-input>
           </el-form-item>
           <el-form-item label="支付方式：">
             <el-row>
               <el-col :span="7">
-                <el-select v-model="RechargeForm.payforType" placeholder="请选择">
-                  <el-option label="现金" value="1"></el-option>
-                  <el-option label="支付宝" value="2"></el-option>
-                  <el-option label="微信" value="3"></el-option>
+                <el-select v-model="RechargeForm.recharge_type" placeholder="请选择">
+                <el-option
+                    v-for="(item,index) in paymethod"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.name"
+                  ></el-option>
                 </el-select>
               </el-col>
             </el-row>
           </el-form-item>
-          <el-form-item label="充值金额：">
+          <el-form-item label="充值金额：" prop="money">
             <el-row>
               <el-col :span="7">
-                <el-input v-model="RechargeForm.jine"></el-input>
+                <el-input v-model="RechargeForm.money"></el-input>
               </el-col>
               <el-col :span="1">元</el-col>
               <el-col :span="4">赠 50 元</el-col>
@@ -273,7 +284,7 @@
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="RechargeDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="RechargeDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="handleRecharge">确 定</el-button>
         </span>
       </el-dialog>
     </el-main>
@@ -287,8 +298,12 @@ import {
   addMember,
   memberlevel,
   native,
-  editMember
+  editMember,
+  deleteMember,
+  paymethod,
+  memberAccount
 } from "@/api/member.js";
+
 export default {
   data() {
     return {
@@ -302,50 +317,59 @@ export default {
 
       total: 0,
       MemberTableData: [],
+
+      //充值
       RechargeDialogVisible: false,
       RechargeForm: {
-        name: "张丹",
-        level: "黑钻会员",
-        money: "4600元",
-        payforType: "",
-        jine: ""
+        name: "",
+        level: "",
+        balance: "",
+        recharge_type: "",
+        money: "",
+        member_id:""
       },
+
+      //充值jiaoyan 
+      RechargeFormRules:{
+        money: [
+          { required: true, message: "请输入充值金额", trigger: "blur" },
+        ],
+      },
+
+
+
       AddDialogVisible: false,
       AddForm: {
         name: "",
         mobile: "",
         card_no: "",
         address: "",
-        level_id: "",
-        nationality_id: "",
-        sex: "",
-        // store: ""
-        status: 1
+        level: "",
+        nationality: "",
+        sex: ""
       },
 
       // 会员等级列表
       memberlevel: [],
 
-      level: "", //会员等级
-
-      native: "", //国籍
-
       // 国籍列表
       nativeList: [],
+
+
+      // 充值列表
+      paymethod:[],
 
       EditDialogVisible: false,
       EditForm: {
         name: "",
-        tel: "",
-        idcard: "",
+        mobile: "",
+        card_no: "",
         address: "",
-        level_id: 0,
-        nationality_id: 0,
-        sex: "",
-        store: "",
-        level: "", //会员等级
-        native: "" //国籍
-      }
+        level: "",
+        nationality: "",
+        sex: ""
+      },
+      member_id: "" //会员id
     };
   },
   created() {
@@ -412,24 +436,22 @@ export default {
     },
 
     selectLevel(e) {
-      this.AddForm.level_id = e;
+      this.AddForm.level = e;
     },
     selectNative(e) {
-      this.AddForm.nationality_id = e;
+      this.AddForm.nationality = e;
     },
     selectSex(e) {
-      console.log(e);
       this.AddForm.sex = e;
     },
 
     editSelectLevel(e) {
-      this.EditForm.level_id = e;
+      this.EditForm.level = e;
     },
     editSelectNative(e) {
-      this.EditForm.nationality_id = e;
+      this.EditForm.nationality = e;
     },
     editSelectSex(e) {
-      console.log(e);
       this.EditForm.sex = e;
     },
 
@@ -461,8 +483,8 @@ export default {
         if (res.code === 0) {
           this.message("success", "添加成功");
           this.getMemberList();
-                this.memberlevel={};
-      this.nativeList={}
+          this.memberlevel = {};
+          this.nativeList = {};
           this.AddDialogVisible = false;
           this.AddForm = {};
         } else {
@@ -474,20 +496,119 @@ export default {
     //关闭弹框清空表单
     cleranAddForm() {
       this.AddForm = {};
-      this.memberlevel={};
-      this.nativeList={}
+      this.memberlevel = {};
+      this.nativeList = {};
     },
 
     //修改会员弹框
     EditDialog(v) {
       console.log(v);
       this.EditDialogVisible = true;
-      this.EditForm = v;
-      this.EditForm.level_id = v.level_id;
-      this.EditForm.nationality_id = v.nationality_id;
+      this.EditForm.name = v.name;
+      this.EditForm.mobile = v.mobile;
+      this.EditForm.card_no = v.card_no;
+      this.EditForm.address = v.address;
+      this.EditForm.level = v.level;
+      this.EditForm.nationality = v.nationality;
+      this.EditForm.sex = v.sex;
+      this.member_id = v.member_id;
       this.getMemberLevel();
       this.getNativeList();
-    }
+
+
+    },
+
+    //提交修改信息
+    handleEditInfo() {
+      let params = {
+        name: this.EditForm.name,
+        mobile: this.EditForm.mobile,
+        card_no: this.EditForm.card_no,
+        address: this.EditForm.address,
+        level: this.EditForm.level,
+        nationality: this.EditForm.nationality,
+        sex: this.EditForm.sex,
+        member_id: this.member_id
+      };
+      editMember(params).then(res => {
+        res = JSON.parse(res);
+        if (res.code === 0) {
+          this.message("success", "修改成功");
+          this.getMemberList();
+          this.EditDialogVisible = false;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+    //会员删除
+    DeleteDialog(member_id) {
+      console.log(member_id);
+      this.confirm()
+        .then(() => {
+          deleteMember({ member_id }).then(res => {
+            res = JSON.parse(res);
+            if (res.code === 0) {
+              this.getMemberList();
+              this.message("success", "删除成功");
+            } else {
+              this.message("error", res.message);
+            }
+          });
+        })
+        .catch(() => {});
+    },
+
+
+    //充值方式
+    getPaymethodList() {
+      paymethod().then(res => {
+        res = JSON.parse(res);
+        console.log(res, "获取充值列表");
+        if (res.code === 0) {
+          this.paymethod = res.data;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+    //充值弹框
+    RechargeDialog(v){
+      this.RechargeDialogVisible=true;
+      this.RechargeForm.name=v.name;
+      this.RechargeForm.level=v.level;
+      this.RechargeForm.balance=v.balance;
+      this.RechargeForm.member_id=v.member_id;
+      this.getPaymethodList()
+    },
+
+    //充值提交
+    handleRecharge() {
+      let params={
+        member_id:this.RechargeForm.member_id,
+        recharge_type:this.RechargeForm.recharge_type,
+        money:this.RechargeForm.money
+      }
+      this.$refs.RechargeFormRef.validate( vaild => {
+        if (vaild) {
+            memberAccount(params).then(res => {
+              res = JSON.parse(res);
+              console.log(res, "充值");
+              if (res.code === 0) {
+                this.RechargeDialogVisible=false;
+                this.RechargeForm='';
+                this.RechargeForm.recharge_type='';
+                this.getMemberList();
+              } else {
+                this.message("error", res.message);
+              }
+            });
+        }
+      });
+    },
+
   }
 };
 </script>

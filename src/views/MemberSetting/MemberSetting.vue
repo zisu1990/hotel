@@ -2,15 +2,17 @@
   <!-- 会员设置-->
   <el-container>
     <el-main>
-      <el-form :model="BookingForm" label-width="100px">
+      <el-form :model="memberForm" label-width="100px">
         <el-row>
           <el-col :span="6">
             <el-form-item label="会员等级：">
-              <el-select v-model="BookingForm.level" placeholder="请选择">
-                <el-option label="钻石会员" value="1"></el-option>
-                <el-option label="黑钻会员" value="2"></el-option>
-                <el-option label="白金会员" value="3"></el-option>
-                <el-option label="普通会员" value="4"></el-option>
+              <el-select v-model="memberForm.level" placeholder="请选择">
+                  <el-option
+                    v-for="(item,index) in memberlevel"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.name"
+                  ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -24,15 +26,19 @@
           <el-button type="primary" @click="AddDialogVisible=true">增加</el-button>
         </el-row>
       </div>-->
-      <el-table :data="LogTableData" style="width: 100%" border stripe>
+      <el-table :data="memberTableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="80" align="center"></el-table-column>
 
-        <el-table-column prop="Name" label="会员等级名称" width="120" align="center"></el-table-column>
-        <el-table-column prop="fanwei" label="等级前置条件（积分范围）" align="center"></el-table-column>
-        <el-table-column prop="company" label="所属企业" align="center"></el-table-column>
+        <el-table-column prop="name" label="会员等级名称" width="120" align="center"></el-table-column>
+        <el-table-column  label="等级前置条件（积分范围）" align="center">
+          <template  v-slot ="scope">
+              {{scope.row.integral_start}}{{scope.row.integral_end}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="company_name" label="所属企业" align="center"></el-table-column>
         <el-table-column prop="discount" label="享受折扣" align="center"></el-table-column>
-        <el-table-column prop="time" label="录入时间" align="center"></el-table-column>
-        <el-table-column prop="youhui" label="优惠内容" align="center"></el-table-column>
+        <el-table-column prop="create_time" label="录入时间" align="center"></el-table-column>
+        <el-table-column prop="res" label="优惠内容" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template>
             <el-button type="primary" size="small" @click="editdialogVisible=true">设置</el-button>
@@ -112,39 +118,20 @@
 
 
 <script>
+import {memberlevel} from "@/api/member.js";
 export default {
   data() {
     return {
-      BookingForm: {
+      memberForm: {
         level: ""
       },
-      LogTableData: [
-        {
-          Name: "钻石会员",
-          fanwei: "0-2000",
-          discount: "9折",
-          time: "2020-04-13 13:13",
-          company: "安徽轻游信息技术有限公司",
-          youhui: "充2000送500;充1000送50"
-        },
-        {
-          Name: "白金会员",
-          fanwei: "0-2000",
+      // 会员等级列表
+      memberlevel: [],
 
-          discount: "9折",
-          time: "2020-04-13 13:13",
-          company: "安徽轻游信息技术有限公司",
-          youhui: "充2000送500"
-        },
-        {
-          Name: "黑钻会员",
-          fanwei: "0-2000",
 
-          discount: "9折",
-          time: "2020-04-13 13:13",
-          company: "安徽轻游信息技术有限公司",
-          youhui: "充2000送500"
-        }
+
+      memberTableData: [
+
       ],
       currentPage4: 4,
       AddForm: {
@@ -158,7 +145,29 @@ export default {
       editdialogVisible: false
     };
   },
+
+  created(){
+    this.getMemberLevel()
+  },
   methods: {
+
+    // 获取会员等级列表
+    getMemberLevel() {
+      
+      memberlevel().then(res => {
+        res = JSON.parse(res);
+        console.log(res, "获取会员等级列表");
+        if (res.code === 0) {
+          this.memberlevel = res.data;
+          this.memberTableData=res.data;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+
+
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
