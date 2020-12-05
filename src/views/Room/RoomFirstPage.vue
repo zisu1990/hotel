@@ -49,7 +49,7 @@
           <div>
             <div class="roomType-title">
               <span class="iconBlue"></span>
-              <h2>房间</h2>
+              <h2>房态</h2>
             </div>
             <div class="roomType-choose">
               <el-check-group v-model="roomState">

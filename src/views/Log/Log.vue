@@ -25,7 +25,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" @click="getLogList">查询</el-button>
+            <el-button type="primary" @click="getLogList()">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -41,9 +41,9 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="LogForm.currentPage"
-        :page-sizes="[5, 10, 20, 30]"
-        :page-size="LogForm.pageSize"
+        :current-page="LogForm.page"
+        :page-sizes="[30, 50, 100, 200,300,500,800]"
+        :page-size="LogForm.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
@@ -61,33 +61,36 @@ export default {
         start_time: "",
         end_time: "",
         name: "",
-        currentPage: 1,
-        pageSize: 10,
-        
+        page: 1,
+        page_size: 10
       },
       LogTableData: [],
       total: 0
     };
   },
-  created() {},
+  created() {
+    this.getLogList();
+  },
   methods: {
     getLogList() {
+      console.log(this.LogForm.start_time);
       Log(this.LogForm).then(res => {
-        console.log(JSON.parse(res), "日志列表");
-        // if (res.code == 0) {
-        //   console.log(res.code);
-        //   this.LogTableData = res.data.list;
-        // }
+        res = JSON.parse(res);
+        console.log(res, "日志列表");
+        if (res.code === 0) {
+          this.LogTableData = res.data.list;
+          this.total = res.data.count;
+        }
       });
     },
 
     // 分页
     handleSizeChange(val) {
-      this.LogForm.pageSize = val;
+      this.LogForm.page_size = val;
       this.getLogList();
     },
     handleCurrentChange(val) {
-      this.LogForm.currentPage = val;
+      this.LogForm.page = val;
       this.getLogList();
     }
   }
