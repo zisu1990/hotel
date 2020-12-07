@@ -5,10 +5,9 @@ import store from "./store";
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'//导入全局css样式
-import  '@/utils/common.js'
+import '@/utils/common.js'
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
-
 
 // import TreeTable from 'vue-table-with-tree-grid'
 // Vue.component('tree-table', TreeTable)

@@ -63,7 +63,7 @@ export default {
   watch: {
     "$store.state.navIsActive": function (v) {
       //你需要执行的代码
-      console.log("tag", v);
+      // console.log("tag", v);
     },
   },
 };
