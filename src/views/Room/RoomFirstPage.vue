@@ -19,12 +19,12 @@
             </template>
 
             <ul class="floorList">
-              <li v-for="v in f.floorItem" :key="v.id" :style="{ background: v.background }">
+              <li v-for="v in f.floorItem" @click="setRoomState(v)" :key="v.id" :style="{ background: v.color }">
                 <div class="roomStatus">
                   <span>{{ v.room_no }}</span>
                   <span>{{ v.roomtype }}</span>
                 </div>
-                <p>{{ v.status | updataStatus }}</p>
+                <p>{{ v.state | updataStatus }}</p>
               </li>
             </ul>
           </el-collapse-item>
@@ -59,13 +59,13 @@
             <div class="roomType-choose">
               <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
                 <el-checkbox v-for="(v, i) in roomType" :key="i" :label="v.name">
-                  {{ v.name }}</el-checkbox>
+                  {{ v.name }} ({{ v.jing_count }}/{{ v.count }})</el-checkbox>
               </el-checkbox-group>
-              <!-- ({{ v.sheng }}/{{ v.sum }}) -->
+
             </div>
           </div>
         </div>
-        <div class="roomType">
+        <!-- <div class="roomType">
           <div>
             <div class="roomType-title">
               <span class="iconBlue"></span>
@@ -86,8 +86,40 @@
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
       </div>
+      <el-dialog title="房态维护" :visible.sync="dialogVisible" width="30%">
+        <el-form ref="adddialogVisible" :model="formRoomFirstPage" label-width="100px">
+          <el-row type="flex" justify="space-between">
+            <el-col :span="11">
+              <el-form-item prop="addRoomNum" label="房号：">
+                <el-input clearable v-model="formRoomFirstPage.addRoomNum" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item prop="onRoomFloor" label="所在楼层：">
+                <el-input clearable v-model="formRoomFirstPage.onRoomFloor" disabled></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="space-between">
+            <el-col :span="11">
+              <el-form-item prop="addRoomNum" label="房号：">
+                <el-select clearable v-model="roomStateValue" placeholder="请选择">
+                  <el-option v-for="(item,index) in roomStateOption" :key="index" :label="item.name" :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitRoomState">确 定</el-button>
+        </span>
+      </el-dialog>
 
       <div class="aside-bottom">
         <div class="roomType">
@@ -117,7 +149,8 @@
     roomstateList,
     roomsRoomcount,
     roomLists,
-    roomtypeLists
+    roomtypeLists,
+    roomModify
   } from "@/api/RoomFirstPage.js";
   export default {
     data() {
@@ -164,7 +197,24 @@
         checkRoomState: [],
         roomType: [],
         checkRoomType: [],
-
+        roomStateValue: "",
+        roomStateOption: [{
+          name: "清扫",
+          id: 1
+        }, {
+          name: "维修",
+          id: 2
+        }, {
+          name: "维修结束",
+          id: 3
+        }],
+        // 房间id
+        roomID: "",
+        formRoomFirstPage: {
+          addRoomNum: "",
+          onRoomFloor: "",
+        },
+        dialogVisible: false,
         // 楼层数据
         louceng: [],
         // 客房业务导航
@@ -216,6 +266,7 @@
     },
     filters: {
       updataStatus(v) {
+        // console.log(v)
         let str = "";
         switch (v) {
           case 1:
@@ -234,7 +285,7 @@
             str = "预定发";
             break;
           case 6:
-            str = "维修费";
+            str = "维修房";
             break;
           default:
             str = "未知";
@@ -263,7 +314,7 @@
         this.getroomtypeLists()
         roomLists().then((res) => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          // console.log(res.data);
+          // console.log(res)
           if (res.code == 0) {
             let {
               data
@@ -317,7 +368,7 @@
       getroomtypeLists() {
         roomtypeLists().then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             let {
               data
@@ -337,14 +388,14 @@
           roomType = this.checkRoomType.join(',')
           room = this.checkRoomState.join(',')
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
         roomLists({
           state: room,
           roomtype: roomType
         }).then((res) => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res);
+          // console.log(res);
           if (res.code == 0) {
             let {
               data
@@ -370,14 +421,14 @@
           roomType = this.checkRoomType.join(',')
           room = this.checkRoomState.join(',')
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
         roomLists({
           state: room,
           roomtype: roomType
         }).then((res) => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res);
+          // console.log(res);
           if (res.code == 0) {
             let {
               data
@@ -394,7 +445,32 @@
             this.message("error", res.message);
           }
         });
-      }
+      },
+      // 修改房态
+      setRoomState(v) {
+        this.dialogVisible = true
+        this.roomID = v.id
+        this.formRoomFirstPage.addRoomNum = v.room_no
+        this.formRoomFirstPage.onRoomFloor = v.floor
+        // console.log(v)
+      },
+      submitRoomState() {
+        // console.log(typeof this.roomID)
+        let params = {
+          ids: this.roomID + "",
+          repair: this.roomStateValue
+        }
+        roomModify(params).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          // console.log(res)
+          if (res.code == 0) {
+            this.getRows()
+            this.dialogVisible = false
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
     },
   };
 </script>
@@ -573,6 +649,13 @@
                 padding: 0;
               }
             }
+          }
+
+          li:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+            box-shadow: #989898 5px 5px 5px;
+            transition: all 200ms;
           }
         }
       }

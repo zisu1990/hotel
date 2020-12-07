@@ -12,3 +12,6 @@ export const roomLists = params => post('/room/lists', params)
 
 // 获取房型列表
 export const roomtypeLists = params => post('/roomtype/lists', params)
+
+// 修改房型
+export const roomModify = params => post('/room/modify', params)
