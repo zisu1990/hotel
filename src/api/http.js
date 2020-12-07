@@ -22,7 +22,6 @@ export const post = function (url, params = {}) {
         axios.post(BASE_URL + BASE_API + url, params).then(res => {
             resolve(res.data);
         }).catch(err => {
-            reject(err.data)
         })
     });
 }

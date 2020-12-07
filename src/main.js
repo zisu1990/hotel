@@ -23,8 +23,8 @@ import axios from 'axios'
 axios.interceptors.request.use(config => {
   NProgress.start()
   // console.log(config)
-  config.headers.Authorization = sessionStorage.getItem('token') //为请求头对象，添加token验证的Authorization字段
-  return config;
+  config.headers.Authorization = sessionStorage.getItem('token')
+  return config
 })
 
 //在response拦截器在隐藏进度条NProgress.done()
