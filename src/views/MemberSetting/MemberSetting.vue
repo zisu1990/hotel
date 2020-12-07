@@ -14,9 +14,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="2">
+          <!-- <el-col :span="2">
             <el-button type="primary">查询</el-button>
-          </el-col>
+          </el-col>-->
         </el-row>
       </el-form>
       <!-- <div class="btn">
@@ -34,9 +34,8 @@
         <el-table-column prop="time" label="录入时间" align="center"></el-table-column>
         <el-table-column prop="youhui" label="优惠内容" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="150">
-          <template>
-            <el-button type="primary" size="small" @click="editdialogVisible=true">设置</el-button>
-            <el-button type="danger" size="small">删除</el-button>
+          <template v-slot="scope">
+            <el-button type="primary" size="small" @click="editDialog(scope.row)">设置</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,29 +43,25 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="memberFormSearch.page"
+        :page-sizes="[10, 20, 30, 40,50,100]"
+        :page-size="memberFormSearch.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="total"
       ></el-pagination>
 
-      <el-dialog title="新增会员等级" :model="AddForm" :visible.sync="editdialogVisible" width="30%">
-        <el-form v-model="AddForm" label-width="120px">
+      <el-dialog title="设置优惠条件" :visible.sync="editdialogVisible" width="30%">
+        <el-form v-model="setForm" label-width="120px">
           <el-form-item label="会员等级名称：">
-            <el-input v-model="AddForm.name" disabled></el-input>
-          </el-form-item>
-
-          <el-form-item label="会员等级名称：">
-            <el-input v-model="AddForm.level" disabled></el-input>
+            <el-input v-model="setForm.name" disabled></el-input>
           </el-form-item>
           <el-form-item label="所属企业：">
-            <el-input v-model="AddForm.company" disabled></el-input>
+            <el-input v-model="setForm.company_name" disabled></el-input>
           </el-form-item>
           <el-form-item label="享受折扣：">
             <el-row>
               <el-col :span="6">
-                <el-input v-model="AddForm.discount"></el-input>
+                <el-input v-model="setForm.discount"></el-input>
               </el-col>
               <el-col :span="2">
                 <span>折</span>
@@ -79,13 +74,13 @@
                 <span>充</span>
               </el-col>
               <el-col :span="6">
-                <el-input v-model="AddForm.chong"></el-input>
+                <el-input v-model="setForm.chong"></el-input>
               </el-col>
               <el-col :span="2">
                 <span>送</span>
               </el-col>
               <el-col :span="6">
-                <el-input v-model="AddForm.song"></el-input>
+                <el-input v-model="setForm.song"></el-input>
               </el-col>
               <el-col :span="2">
                 <i class="el-icon-remove"></i>
@@ -94,10 +89,6 @@
                 <i class="el-icon-circle-plus"></i>
               </el-col>
             </el-row>
-          </el-form-item>
-
-          <el-form-item label="录入时间：">
-            <el-input v-model="AddForm.time"></el-input>
           </el-form-item>
         </el-form>
 
@@ -153,17 +144,20 @@ export default {
         company: "安徽轻游信息技术有限公司",
         chong: "",
         song: "",
-        discount: ""
+        discount: "",
+       
       },
       editdialogVisible: false
     };
   },
   methods: {
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.memberFormSearch.page_size = val;
+      this.memberLevelList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.memberFormSearch.page = val;
+      this.memberLevelList();
     }
   }
 };
@@ -192,11 +186,10 @@ export default {
         width: 415px;
       }
     }
-
   }
-      /deep/.el-dialog__footer {
-      text-align: center;
-    }
+  /deep/.el-dialog__footer {
+    text-align: center;
+  }
 }
 </style>
 
