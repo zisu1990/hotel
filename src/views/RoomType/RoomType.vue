@@ -214,7 +214,6 @@ export default {
       };
       roomtypeIndex(params).then((res) => {
         res = JSON.parse(res);
-        console.log(res,'2222')
         if (res.code === 0) {
           this.dataRoomType = res.data.list;
           this.pagination.total = res.data.count;

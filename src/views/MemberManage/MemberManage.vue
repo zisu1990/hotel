@@ -2,22 +2,17 @@
   <!-- 会员管理 -->
   <el-container>
     <el-main>
-      <el-form :model="memberForm" label-width="100px">
+      <el-form :model="BookingForm" label-width="100px">
         <el-row>
           <el-col :span="6">
-            <el-form-item label="开始时间：">
-              <el-date-picker v-model="memberForm.start_time" type="datetime" placeholder="选择日期"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
             <el-form-item label="办理时间：">
-              <el-date-picker v-model="memberForm.end_time" type="datetime" placeholder="选择日期"></el-date-picker>
+              <el-date-picker v-model="BookingForm.value1" type="date" placeholder="选择日期"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item>
               <el-input
-                v-model="memberForm.keys"
+                v-model="BookingForm.name"
                 placeholder="请输入姓名/身份证号/手机号"
                 clearable
                 :style="{width: '100%'}"
@@ -26,56 +21,31 @@
           </el-col>
 
           <el-col :span="2">
-            <el-button type="primary" @click="Querybtn()">查询</el-button>
+            <el-button type="primary">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
 
       <div class="btn">
         <el-row>
-          <el-button type="primary" @click="AddMemberDialog">增加</el-button>
+          <el-button type="primary" @click="AddDialogVisible=true">增加</el-button>
         </el-row>
       </div>
 
       <el-table :data="MemberTableData" style="width: 100%" border stripe>
-        <el-table-column type="index" width="50" align="center"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="80" align="center"></el-table-column>
+        <el-table-column type="index" width="30" align="center"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="100" align="center"></el-table-column>
         <el-table-column prop="sex" label="性别" width="50" align="center"></el-table-column>
-        <el-table-column prop="level" label="会员等级" width="100" align="center"></el-table-column>
-        <el-table-column prop="mobile" label="手机号" width="120" align="center"></el-table-column>
-        <el-table-column
-          prop="card_no"
-          label="身份证号 "
-          show-overflow-tooltip
-          width="120"
-          align="center"
-        ></el-table-column>
-        <el-table-column prop="address" label="地址" show-overflow-tooltip width="180" align="center"></el-table-column>
-        <el-table-column prop="balance" label="卡余额" width="80" align="center"></el-table-column>
-        <el-table-column prop="nationality" label="国籍" width="80" align="center"></el-table-column>
-        <el-table-column prop="integral" label="积分" width="80" align="center"></el-table-column>
-        <el-table-column
-          prop="company_name"
-          label="办理门店"
-          show-overflow-tooltip
-          width="110"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="create_time"
-          label="操作时间"
-          width="120"
-          show-overflow-tooltip
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="username"
-          label="操作员"
-          width="80"
-          show-overflow-tooltip
-          align="center"
-        ></el-table-column>
-        <el-table-column label="状态" align="center" width="80">
+        <el-table-column prop="telphone" label="手机号" width="100" align="center"></el-table-column>
+        <el-table-column prop="idCard" label="身份证号" width="120" align="center"></el-table-column>
+        <el-table-column prop="address" label="地址" align="center"></el-table-column>
+        <el-table-column prop="yue" label="卡余额" width="80" align="center"></el-table-column>
+        <el-table-column prop="Native" label="国籍" width="60" align="center"></el-table-column>
+        <el-table-column prop="integral" label="积分" align="center"></el-table-column>
+        <el-table-column prop="store" label="办理门店" width="120" align="center"></el-table-column>
+        <el-table-column prop="OperationTime" label="操作时间" align="center"></el-table-column>
+        <el-table-column prop="OperationPerson" label="操作员" width="80" align="center"></el-table-column>
+        <el-table-column label="状态">
           <template v-slot="scope">
             <el-switch
               active-color="#13ce66"
@@ -87,11 +57,10 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="250">
-          <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="RechargeDialog(scope.row)">充值</el-button>
-            <el-button type="warning" size="small" @click="EditDialog(scope.row)">修改</el-button>
-            <el-button type="danger" size="small" @click="DeleteDialog(scope.row.member_id)">删除</el-button>
+        <el-table-column label="操作" align="center" width="150">
+          <template>
+            <el-button type="primary" size="small" @click="RechargeDialogVisible=true">充值</el-button>
+            <el-button type="warning" size="small" @click="EditDialogVisible=true">修改</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -99,17 +68,23 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="memberForm.page"
-        :page-sizes="[5, 10, 20, 30,50,100]"
-        :page-size="memberForm.page_size"
+        :current-page="currentPage4"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="400"
       ></el-pagination>
 
       <!-- 新增会员 -->
+<<<<<<< HEAD
       <el-dialog title="新增会员" :visible.sync="AddDialogVisible" width="30%" @closed="cleranAddForm">
         <el-form :model="AddForm" label-width="120px" :rules="AddFormRules" ref="AddFormRef">
           <el-form-item label="会员姓名：" prop="name">
+=======
+      <el-dialog title="会员充值" :visible.sync="AddDialogVisible" width="30%">
+        <el-form :model="AddForm" label-width="100px">
+          <el-form-item label="会员姓名：">
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
             <el-row :gutter="10">
               <el-col :span="14">
                 <el-input v-model="AddForm.name"></el-input>
@@ -120,18 +95,28 @@
             </el-row>
           </el-form-item>
 
+<<<<<<< HEAD
           <el-form-item label="手机号：" prop="mobile">
             <el-input v-model="AddForm.mobile"></el-input>
           </el-form-item>
 
           <el-form-item label="身份证号：" prop="card_no">
             <el-input v-model="AddForm.card_no"></el-input>
+=======
+          <el-form-item label="手机号：">
+            <el-input v-model="AddForm.tel"></el-input>
+          </el-form-item>
+
+          <el-form-item label="身份证号：">
+            <el-input v-model="AddForm.idcard"></el-input>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
           </el-form-item>
           <el-form-item label="身份证地址：" prop="address">
             <el-input v-model="AddForm.address"></el-input>
           </el-form-item>
-          <el-row :gutter="20" type="flex" class="select">
+          <el-row :gutter="20" type="flex"  class="select">
             <el-col :span="12">
+<<<<<<< HEAD
               <el-form-item label="会员等级：" prop="level">
                 <el-select v-model="AddForm.level" placeholder="请选择" @change="selectLevel($event)">
                   <el-option
@@ -140,10 +125,18 @@
                     :label="item.name"
                     :value="item.name"
                   ></el-option>
+=======
+              <el-form-item label="会员等级：">
+                <el-select v-model="AddForm.level" placeholder="请选择">
+                  <el-option label="钻石会员" value="1"></el-option>
+                  <el-option label="白金会员" value="2"></el-option>
+                  <el-option label="普通会员" value="3"></el-option>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
+<<<<<<< HEAD
               <el-form-item label="国籍：" prop="nationality">
                 <el-select
                   v-model="AddForm.nationality"
@@ -156,16 +149,31 @@
                     :label="item.name"
                     :value="item.name"
                   ></el-option>
+=======
+              <el-form-item label="国籍：">
+                <el-select v-model="AddForm.native" placeholder="请选择">
+                  <el-option label="中国" value="1"></el-option>
+                  <el-option label="美国" value="2"></el-option>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :gutter="20" class="select">
+          <el-row :gutter="20"  class="select">
             <el-col :span="12">
               <el-form-item label="性别：">
-                <el-select v-model="AddForm.sex" placeholder="请选择" @change="selectSex($event)">
-                  <el-option label="男" value="男"></el-option>
-                  <el-option label="女" value="女"></el-option>
+                <el-select v-model="AddForm.sex" placeholder="请选择">
+                  <el-option label="男" value="1"></el-option>
+                  <el-option label="女" value="2"></el-option>
+ 
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="办理门店：">
+                <el-select v-model="AddForm.store" placeholder="请选择">
+                  <el-option label="宿松路滨湖分店" value="1"></el-option>
+                  <el-option label="大学城店" value="2"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -173,7 +181,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="AddDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="AddMemberSubmit">确 定</el-button>
+          <el-button type="primary" @click="AddDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -191,18 +199,28 @@
             </el-row>
           </el-form-item>
 
+<<<<<<< HEAD
           <el-form-item label="手机号：" prop="mobile">
             <el-input v-model="EditForm.mobile"></el-input>
           </el-form-item>
 
           <el-form-item label="身份证号：" prop="card_no">
             <el-input v-model="EditForm.card_no"></el-input>
+=======
+          <el-form-item label="手机号：">
+            <el-input v-model="EditForm.tel"></el-input>
+          </el-form-item>
+
+          <el-form-item label="身份证号：">
+            <el-input v-model="EditForm.idcard"></el-input>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
           </el-form-item>
           <el-form-item label="身份证地址：" prop="address">
             <el-input v-model="EditForm.address"></el-input>
           </el-form-item>
-          <el-row :gutter="20" type="flex" class="select">
+          <el-row :gutter="20" type="flex"  class="select">
             <el-col :span="12">
+<<<<<<< HEAD
               <el-form-item label="会员等级：" prop="level">
                 <el-select
                   v-model="EditForm.level"
@@ -215,10 +233,18 @@
                     :label="item.name"
                     :value="item.name"
                   ></el-option>
+=======
+              <el-form-item label="会员等级：">
+                <el-select v-model="EditForm.level" placeholder="请选择">
+                  <el-option label="钻石会员" value="1"></el-option>
+                  <el-option label="白金会员" value="2"></el-option>
+                  <el-option label="普通会员" value="3"></el-option>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
+<<<<<<< HEAD
               <el-form-item label="国籍：" prop="nationality">
                 <el-select
                   v-model="EditForm.nationality"
@@ -231,16 +257,38 @@
                     :label="item.name"
                     :value="item.name"
                   ></el-option>
+=======
+              <el-form-item label="国籍：">
+                <el-select v-model="EditForm.native" placeholder="请选择">
+                  <el-option label="中国" value="1"></el-option>
+                  <el-option label="美国" value="2"></el-option>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :gutter="20" class="select">
+          <el-row :gutter="20"  class="select">
             <el-col :span="12">
+<<<<<<< HEAD
               <el-form-item label="性别：" prop="sex">
                 <el-select v-model="EditForm.sex" placeholder="请选择" @change="editSelectSex($event)">
                   <el-option label="男" value="男"></el-option>
                   <el-option label="女" value="女"></el-option>
+=======
+              <el-form-item label="性别：">
+                <el-select v-model="EditForm.sex" placeholder="请选择">
+                  <el-option label="男" value="1"></el-option>
+                  <el-option label="女" value="2"></el-option>
+ 
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="办理门店：">
+                <el-select v-model="EditForm.store" placeholder="请选择">
+                  <el-option label="宿松路滨湖分店" value="1"></el-option>
+                  <el-option label="大学城店" value="2"></el-option>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
                 </el-select>
               </el-form-item>
             </el-col>
@@ -248,18 +296,23 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="EditDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleEditInfo()">确 定</el-button>
+          <el-button type="primary" @click="EditDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
 
+
       <!-- 充值 -->
       <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%">
+<<<<<<< HEAD
         <el-form
           :model="RechargeForm"
           label-width="100px"
           :rules="RechargeFormRules"
           ref="RechargeFormRef"
         >
+=======
+        <el-form :model="RechargeForm" label-width="100px">
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
           <el-form-item label="会员姓名：">
             <el-input v-model="RechargeForm.name" disabled></el-input>
           </el-form-item>
@@ -267,11 +320,12 @@
             <el-input v-model="RechargeForm.level" disabled></el-input>
           </el-form-item>
           <el-form-item label="现有金额：">
-            <el-input v-model="RechargeForm.balance" disabled></el-input>
+            <el-input v-model="RechargeForm.money" disabled></el-input>
           </el-form-item>
           <el-form-item label="支付方式：">
             <el-row>
               <el-col :span="7">
+<<<<<<< HEAD
                 <el-select v-model="RechargeForm.recharge_type" placeholder="请选择">
                   <el-option
                     v-for="(item,index) in paymethod"
@@ -279,16 +333,26 @@
                     :label="item.name"
                     :value="item.name"
                   ></el-option>
+=======
+                <el-select v-model="RechargeForm.payforType" placeholder="请选择">
+                  <el-option label="现金" value="1"></el-option>
+                  <el-option label="支付宝" value="2"></el-option>
+                  <el-option label="微信" value="3"></el-option>
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
                 </el-select>
               </el-col>
             </el-row>
           </el-form-item>
+<<<<<<< HEAD
 
           <el-form-item label="充值金额：" prop="money">
+=======
+          <el-form-item label="充值金额：">
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
             <el-row>
               <el-col :span="2">充</el-col>
               <el-col :span="7">
-                <el-input v-model="RechargeForm.money"></el-input>
+                <el-input v-model="RechargeForm.jine"></el-input>
               </el-col>
               
               <el-col :span="2">赠</el-col>
@@ -302,7 +366,7 @@
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="RechargeDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleRecharge">确 定</el-button>
+          <el-button type="primary" @click="RechargeDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
     </el-main>
@@ -311,6 +375,7 @@
 
 
 <script>
+<<<<<<< HEAD
 import {
   memberList,
   addMember,
@@ -323,6 +388,8 @@ import {
   memberStatus
 } from "@/api/member.js";
 
+=======
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
 export default {
   data() {
     // 自定义手机号验证
@@ -352,20 +419,59 @@ export default {
     };
 
     return {
-      memberForm: {
-        start_time: "",
-        end_time: "",
-        keys: "",
-        page: 1,
-        page_size: 10
+      BookingForm: {
+        value1: "",
+        name: "",
+        tel: ""
       },
-
-      total: 0,
-      MemberTableData: [],
-
-      //充值
+      MemberTableData: [
+        {
+          name: "张三",
+          sex: "男",
+          idCard: "340881199910265489",
+          address: "安徽省合肥市西藏路1110号",
+          telphone: "18256032124",
+          yue: 1000,
+          Native: "中国",
+          integral: 3000,
+          store: "宿松路店",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴",
+          state: 1
+        },
+        {
+          name: "张三",
+          sex: "男",
+          idCard: "340881199910265489",
+          address: "安徽省合肥市西藏路1110号",
+          telphone: "18256032124",
+          yue: 1000,
+          Native: "中国",
+          integral: 3000,
+          store: "宿松路店",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴",
+          state: 1
+        },
+        {
+          name: "张三",
+          sex: "男",
+          idCard: "340881199910265489",
+          address: "安徽省合肥市西藏路1110号",
+          telphone: "18256032124",
+          yue: 1000,
+          Native: "中国",
+          integral: 3000,
+          store: "宿松路店",
+          OperationTime: "2020-04-13 13:12",
+          OperationPerson: "小吴",
+          state: 1
+        }
+      ],
+      currentPage4: 4,
       RechargeDialogVisible: false,
       RechargeForm: {
+<<<<<<< HEAD
         name: "",
         level: "",
         balance: "",
@@ -435,64 +541,45 @@ export default {
       paymethod: [],
 
       EditDialogVisible: false,
-      EditForm: {
-        name: "",
-        mobile: "",
-        card_no: "",
-        address: "",
-        level: "",
-        nationality: "",
-        sex: ""
+=======
+        name: "张丹",
+        level: "黑钻会员",
+        money: "4600元",
+        payforType: "",
+        jine: ""
       },
-      member_id: "" //会员id
+      AddDialogVisible: false,
+      AddForm: {
+        name:'',
+        tel:'',
+        idcard:'',
+        address:'',
+        level:'',
+        native:'',
+        sex:'',
+        store:''
+
+      },
+      EditDialogVisible:false,
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
+      EditForm: {
+        name:'',
+        tel:'',
+        idcard:'',
+        address:'',
+        level:'',
+        native:'',
+        sex:'',
+        store:''
+      },
     };
   },
-  created() {
-    this.getMemberList();
-  },
   methods: {
-    //会员列表
-    getMemberList() {
-      let params = {
-        page: this.memberForm.page,
-        page_size: this.memberForm.page_size
-      };
-      memberList(params).then(res => {
-        res = JSON.parse(res);
-        console.log(res, "会员列表");
-        if (res.code === 0) {
-          this.MemberTableData = res.data.list;
-          this.total = res.data.count;
-        }
-      });
-    },
-
-    // 查询
-    Querybtn() {
-      let params = {
-        page: this.memberForm.page,
-        page_size: this.memberForm.page_size,
-        start_time: this.memberForm.start_time,
-        end_time: this.memberForm.end_time,
-        keys: this.memberForm.keys
-      };
-      memberList(params).then(res => {
-        res = JSON.parse(res);
-        console.log(res, "会员查询列表");
-        if (res.code === 0) {
-          this.MemberTableData = res.data.list;
-          this.total = res.data.count;
-        }
-      });
-    },
-
-    // 分页
     handleSizeChange(val) {
-      console.log(val);
-      this.memberForm.page_size = val;
-      this.getMemberList();
+      console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+<<<<<<< HEAD
       this.memberForm.page = val;
       this.getMemberList();
     },
@@ -707,6 +794,9 @@ export default {
           this.message("error", res.message);
         }
       });
+=======
+      console.log(`当前页: ${val}`);
+>>>>>>> 714d20d5462d760b3e3ebbffaff74bc622a8b7c0
     }
   }
 };
@@ -733,7 +823,7 @@ export default {
 .select {
   .el-form {
     /deep/.el-select {
-      width: 100%;
+      width:100%;
     }
   }
 }
