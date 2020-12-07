@@ -34,7 +34,7 @@
                 <el-form-item label="团体名称：" v-show="tuanti">
                   <el-input
                     clearable
-                    disabled
+                    
                     v-model="formLabelAlign.groupname"
                   ></el-input>
                 </el-form-item>
