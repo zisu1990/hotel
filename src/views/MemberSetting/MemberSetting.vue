@@ -2,23 +2,28 @@
   <!-- 会员设置-->
   <el-container>
     <el-main>
-      <el-form :model="memberForm" label-width="100px">
+      <el-form :model="memberFormSearch" label-width="100px">
         <el-row>
           <el-col :span="6">
             <el-form-item label="会员等级：">
-              <el-select v-model="memberForm.level" placeholder="请选择">
-                  <el-option
-                    v-for="(item,index) in memberlevel"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.name"
-                  ></el-option>
+              <el-select
+                v-model="memberFormSearch.level"
+                placeholder="请选择"
+                @change="selectLevel($event)"
+                
+              >
+                <el-option
+                  v-for="(item,index) in memberlevel"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="2">
+          <!-- <el-col :span="2">
             <el-button type="primary">查询</el-button>
-          </el-col>
+          </el-col>-->
         </el-row>
       </el-form>
       <!-- <div class="btn">
@@ -30,19 +35,16 @@
         <el-table-column type="index" width="80" align="center"></el-table-column>
 
         <el-table-column prop="name" label="会员等级名称" width="120" align="center"></el-table-column>
-        <el-table-column  label="等级前置条件（积分范围）" align="center">
-          <template  v-slot ="scope">
-              {{scope.row.integral_start}}{{scope.row.integral_end}}
-          </template>
+        <el-table-column label="等级前置条件（积分范围）" align="center">
+          <template v-slot="scope">{{scope.row.integral_start}}-{{scope.row.integral_end}}</template>
         </el-table-column>
         <el-table-column prop="company_name" label="所属企业" align="center"></el-table-column>
         <el-table-column prop="discount" label="享受折扣" align="center"></el-table-column>
         <el-table-column prop="create_time" label="录入时间" align="center"></el-table-column>
         <el-table-column prop="res" label="优惠内容" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="150">
-          <template>
-            <el-button type="primary" size="small" @click="editdialogVisible=true">设置</el-button>
-            <el-button type="danger" size="small">删除</el-button>
+          <template v-slot="scope">
+            <el-button type="primary" size="small" @click="editDialog(scope.row)">设置</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,29 +52,25 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="memberFormSearch.page"
+        :page-sizes="[10, 20, 30, 40,50,100]"
+        :page-size="memberFormSearch.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="total"
       ></el-pagination>
 
-      <el-dialog title="新增会员等级" :model="AddForm" :visible.sync="editdialogVisible" width="30%">
-        <el-form v-model="AddForm" label-width="120px">
+      <el-dialog title="设置优惠条件" :visible.sync="editdialogVisible" width="30%">
+        <el-form v-model="setForm" label-width="120px">
           <el-form-item label="会员等级名称：">
-            <el-input v-model="AddForm.name" disabled></el-input>
-          </el-form-item>
-
-          <el-form-item label="会员等级名称：">
-            <el-input v-model="AddForm.level" disabled></el-input>
+            <el-input v-model="setForm.name" disabled></el-input>
           </el-form-item>
           <el-form-item label="所属企业：">
-            <el-input v-model="AddForm.company" disabled></el-input>
+            <el-input v-model="setForm.company_name" disabled></el-input>
           </el-form-item>
           <el-form-item label="享受折扣：">
             <el-row>
               <el-col :span="6">
-                <el-input v-model="AddForm.discount"></el-input>
+                <el-input v-model="setForm.discount"></el-input>
               </el-col>
               <el-col :span="2">
                 <span>折</span>
@@ -85,13 +83,13 @@
                 <span>充</span>
               </el-col>
               <el-col :span="6">
-                <el-input v-model="AddForm.chong"></el-input>
+                <el-input v-model="setForm.chong"></el-input>
               </el-col>
               <el-col :span="2">
                 <span>送</span>
               </el-col>
               <el-col :span="6">
-                <el-input v-model="AddForm.song"></el-input>
+                <el-input v-model="setForm.song"></el-input>
               </el-col>
               <el-col :span="2">
                 <i class="el-icon-remove"></i>
@@ -100,10 +98,6 @@
                 <i class="el-icon-circle-plus"></i>
               </el-col>
             </el-row>
-          </el-form-item>
-
-          <el-form-item label="录入时间：">
-            <el-input v-model="AddForm.time"></el-input>
           </el-form-item>
         </el-form>
 
@@ -118,48 +112,69 @@
 
 
 <script>
-import {memberlevel} from "@/api/member.js";
+import { memberlevel, memberLevelList } from "@/api/member.js";
 export default {
   data() {
     return {
-      memberForm: {
-        level: ""
+      memberFormSearch: {
+        level: "",
+        page_size: 1,
+        page: 1
       },
+      id: "",
+      total: 0,
       // 会员等级列表
       memberlevel: [],
-
-
-
-      memberTableData: [
-
-      ],
-      currentPage4: 4,
-      AddForm: {
-        name: "钻石会员",
-        level: "2001-4000分",
-        company: "安徽轻游信息技术有限公司",
+      memberTableData: [],
+      setForm: {
+        name: "",
+        company_name: "",
         chong: "",
         song: "",
-        discount: ""
+        discount: "",
+       
       },
       editdialogVisible: false
     };
   },
 
-  created(){
-    this.getMemberLevel()
+  created() {
+    this.getMemberLevel();
+    
   },
   methods: {
-
-    // 获取会员等级列表
+    // 会员等级列表
     getMemberLevel() {
-      
-      memberlevel().then(res => {
+      let params = {
+        page: this.memberFormSearch.page,
+        page_size: this.memberFormSearch.page_size,
+        
+      };
+      memberlevel(params).then(res => {
         res = JSON.parse(res);
         console.log(res, "获取会员等级列表");
         if (res.code === 0) {
           this.memberlevel = res.data;
-          this.memberTableData=res.data;
+          this.memberTableData = res.data;
+           this.total = res.data.count;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+    selectLevel(e) {
+      let params = {
+        page: this.memberFormSearch.page,
+        page_size: this.memberFormSearch.page_size,
+        id: e
+      };
+      memberLevelList(params).then(res => {
+        res = JSON.parse(res);
+        console.log(res, "查询等级列表");
+        if (res.code === 0) {
+          this.memberTableData = res.data.list;
+          this.total = res.data.count;
         } else {
           this.message("error", res.message);
         }
@@ -167,12 +182,22 @@ export default {
     },
 
 
+    //设置弹框
+    editDialog(v) {
+      console.log(v)
+      this.editdialogVisible = true;
+      this.setForm.name=v.name;
+      this.setForm.company_name=v.company_name;
+      this.setForm.discount=v.discount
+    },
 
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.memberFormSearch.page_size = val;
+      this.memberLevelList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.memberFormSearch.page = val;
+      this.memberLevelList();
     }
   }
 };
@@ -201,11 +226,10 @@ export default {
         width: 415px;
       }
     }
-
   }
-      /deep/.el-dialog__footer {
-      text-align: center;
-    }
+  /deep/.el-dialog__footer {
+    text-align: center;
+  }
 }
 </style>
 

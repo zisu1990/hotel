@@ -77,7 +77,14 @@
         ></el-table-column>
         <el-table-column label="状态" align="center" width="80">
           <template v-slot="scope">
-            <el-switch v-model="scope.row.state" active-color="#13ce66" inactive-color="#999"></el-switch>
+            <el-switch
+              active-color="#13ce66"
+              inactive-color="#999"
+              @change="handleChangeSwitch(scope.row)"
+              v-model="scope.row.status"
+              :active-value="1"
+              :inactive-value="0"
+            ></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="250">
@@ -101,8 +108,8 @@
 
       <!-- 新增会员 -->
       <el-dialog title="新增会员" :visible.sync="AddDialogVisible" width="30%" @closed="cleranAddForm">
-        <el-form :model="AddForm" label-width="100px">
-          <el-form-item label="会员姓名：">
+        <el-form :model="AddForm" label-width="120px" :rules="AddFormRules" ref="AddFormRef">
+          <el-form-item label="会员姓名：" prop="name">
             <el-row :gutter="10">
               <el-col :span="14">
                 <el-input v-model="AddForm.name"></el-input>
@@ -113,19 +120,19 @@
             </el-row>
           </el-form-item>
 
-          <el-form-item label="手机号：">
+          <el-form-item label="手机号：" prop="mobile">
             <el-input v-model="AddForm.mobile"></el-input>
           </el-form-item>
 
-          <el-form-item label="身份证号：">
+          <el-form-item label="身份证号：" prop="card_no">
             <el-input v-model="AddForm.card_no"></el-input>
           </el-form-item>
-          <el-form-item label="身份证地址：">
+          <el-form-item label="身份证地址：" prop="address">
             <el-input v-model="AddForm.address"></el-input>
           </el-form-item>
           <el-row :gutter="20" type="flex" class="select">
             <el-col :span="12">
-              <el-form-item label="会员等级：">
+              <el-form-item label="会员等级：" prop="level">
                 <el-select v-model="AddForm.level" placeholder="请选择" @change="selectLevel($event)">
                   <el-option
                     v-for="(item,index) in memberlevel"
@@ -137,7 +144,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="国籍：">
+              <el-form-item label="国籍：" prop="nationality">
                 <el-select
                   v-model="AddForm.nationality"
                   placeholder="请选择"
@@ -172,8 +179,8 @@
 
       <!-- 修改会员 -->
       <el-dialog title="修改" :visible.sync="EditDialogVisible" width="30%">
-        <el-form :model="EditForm" label-width="100px">
-          <el-form-item label="会员姓名：">
+        <el-form :model="EditForm" label-width="120px" :rules="EditFormRules" ref="EditFormRef">
+          <el-form-item label="会员姓名：" prop="name">
             <el-row :gutter="10">
               <el-col :span="14">
                 <el-input v-model="EditForm.name"></el-input>
@@ -184,19 +191,19 @@
             </el-row>
           </el-form-item>
 
-          <el-form-item label="手机号：">
+          <el-form-item label="手机号：" prop="mobile">
             <el-input v-model="EditForm.mobile"></el-input>
           </el-form-item>
 
-          <el-form-item label="身份证号：">
+          <el-form-item label="身份证号：" prop="card_no">
             <el-input v-model="EditForm.card_no"></el-input>
           </el-form-item>
-          <el-form-item label="身份证地址：">
+          <el-form-item label="身份证地址：" prop="address">
             <el-input v-model="EditForm.address"></el-input>
           </el-form-item>
           <el-row :gutter="20" type="flex" class="select">
             <el-col :span="12">
-              <el-form-item label="会员等级：">
+              <el-form-item label="会员等级：" prop="level">
                 <el-select
                   v-model="EditForm.level"
                   placeholder="请选择"
@@ -212,7 +219,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="国籍：">
+              <el-form-item label="国籍：" prop="nationality">
                 <el-select
                   v-model="EditForm.nationality"
                   placeholder="请选择"
@@ -230,7 +237,7 @@
           </el-row>
           <el-row :gutter="20" class="select">
             <el-col :span="12">
-              <el-form-item label="性别：">
+              <el-form-item label="性别：" prop="sex">
                 <el-select v-model="EditForm.sex" placeholder="请选择" @change="editSelectSex($event)">
                   <el-option label="男" value="男"></el-option>
                   <el-option label="女" value="女"></el-option>
@@ -246,8 +253,13 @@
       </el-dialog>
 
       <!-- 充值 -->
-      <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%" >
-        <el-form :model="RechargeForm" label-width="100px" :rules="RechargeFormRules"  ref="RechargeFormRef">
+      <el-dialog title="会员充值" :visible.sync="RechargeDialogVisible" width="30%">
+        <el-form
+          :model="RechargeForm"
+          label-width="100px"
+          :rules="RechargeFormRules"
+          ref="RechargeFormRef"
+        >
           <el-form-item label="会员姓名：">
             <el-input v-model="RechargeForm.name" disabled></el-input>
           </el-form-item>
@@ -261,7 +273,7 @@
             <el-row>
               <el-col :span="7">
                 <el-select v-model="RechargeForm.recharge_type" placeholder="请选择">
-                <el-option
+                  <el-option
                     v-for="(item,index) in paymethod"
                     :key="index"
                     :label="item.name"
@@ -271,13 +283,19 @@
               </el-col>
             </el-row>
           </el-form-item>
+
           <el-form-item label="充值金额：" prop="money">
             <el-row>
+              <el-col :span="2">充</el-col>
               <el-col :span="7">
                 <el-input v-model="RechargeForm.money"></el-input>
               </el-col>
+              
+              <el-col :span="2">赠</el-col>
+              <el-col :span="7">
+                <el-input v-model="RechargeForm.give_money"></el-input>
+              </el-col>
               <el-col :span="1">元</el-col>
-              <el-col :span="4">赠 50 元</el-col>
             </el-row>
           </el-form-item>
         </el-form>
@@ -301,11 +319,38 @@ import {
   editMember,
   deleteMember,
   paymethod,
-  memberAccount
+  memberAccount,
+  memberStatus
 } from "@/api/member.js";
 
 export default {
   data() {
+    // 自定义手机号验证
+    var checkMible = (rule, value, callback) => {
+      // 验证手机号的正则表达式
+      const regMiblel = /^1[3456789]\d{9}$/;
+
+      if (regMiblel.test(value)) {
+        // 合法的手机号
+        return callback();
+      } else {
+        callback(new Error("请输入正确的手机号"));
+      }
+    };
+
+    // 身份证号码的校验
+    var idCard = (rule, value, callback) => {
+      // 验证手机号的正则表达式
+      const regcard = /^[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X])$/;
+
+      if (regcard.test(value)) {
+        // 合法的手机号
+        return callback();
+      } else {
+        callback(new Error("请输入正确的身份证号码"));
+      }
+    };
+
     return {
       memberForm: {
         start_time: "",
@@ -326,17 +371,14 @@ export default {
         balance: "",
         recharge_type: "",
         money: "",
-        member_id:""
+        member_id: "",
+        give_money:""
       },
 
-      //充值jiaoyan 
-      RechargeFormRules:{
-        money: [
-          { required: true, message: "请输入充值金额", trigger: "blur" },
-        ],
+      //充值jiaoyan
+      RechargeFormRules: {
+        money: [{ required: true, message: "请输入充值金额", trigger: "blur" }]
       },
-
-
 
       AddDialogVisible: false,
       AddForm: {
@@ -348,6 +390,40 @@ export default {
         nationality: "",
         sex: ""
       },
+      AddFormRules: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        address: [{ required: true, message: "请输入地址", trigger: "blur" }],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          { validator: checkMible, trigger: "blur" }
+        ],
+        card_no: [
+          { required: true, message: "请输入身份证号码", trigger: "blur" },
+          { validator: idCard, trigger: "blur" }
+        ],
+        level: [{ required: true, message: "请选择会员等级", trigger: "blur" }],
+        nationality: [
+          { required: true, message: "请选择国籍", trigger: "blur" }
+        ],
+        sex: [{ required: true, message: "请选择性别", trigger: "blur" }]
+      },
+      EditFormRules: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        address: [{ required: true, message: "请输入地址", trigger: "blur" }],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          { validator: checkMible, trigger: "blur" }
+        ],
+        card_no: [
+          { required: true, message: "请输入身份证号码", trigger: "blur" },
+          { validator: idCard, trigger: "blur" }
+        ],
+        level: [{ required: true, message: "请选择会员等级", trigger: "blur" }],
+        nationality: [
+          { required: true, message: "请选择国籍", trigger: "blur" }
+        ],
+        sex: [{ required: true, message: "请选择性别", trigger: "blur" }]
+      },
 
       // 会员等级列表
       memberlevel: [],
@@ -355,9 +431,8 @@ export default {
       // 国籍列表
       nativeList: [],
 
-
       // 充值列表
-      paymethod:[],
+      paymethod: [],
 
       EditDialogVisible: false,
       EditForm: {
@@ -477,18 +552,22 @@ export default {
 
     //提交新增会员
     AddMemberSubmit() {
-      addMember(this.AddForm).then(res => {
-        res = JSON.parse(res);
-        console.log(res, "新增");
-        if (res.code === 0) {
-          this.message("success", "添加成功");
-          this.getMemberList();
-          this.memberlevel = {};
-          this.nativeList = {};
-          this.AddDialogVisible = false;
-          this.AddForm = {};
-        } else {
-          this.message("error", res.message);
+      this.$refs.AddFormRef.validate(vaild => {
+        if (vaild) {
+          addMember(this.AddForm).then(res => {
+            res = JSON.parse(res);
+            console.log(res, "新增");
+            if (res.code === 0) {
+              this.message("success", "添加成功");
+              this.getMemberList();
+              this.memberlevel = {};
+              this.nativeList = {};
+              this.AddDialogVisible = false;
+              this.AddForm = {};
+            } else {
+              this.message("error", res.message);
+            }
+          });
         }
       });
     },
@@ -514,8 +593,6 @@ export default {
       this.member_id = v.member_id;
       this.getMemberLevel();
       this.getNativeList();
-
-
     },
 
     //提交修改信息
@@ -530,14 +607,18 @@ export default {
         sex: this.EditForm.sex,
         member_id: this.member_id
       };
-      editMember(params).then(res => {
-        res = JSON.parse(res);
-        if (res.code === 0) {
-          this.message("success", "修改成功");
-          this.getMemberList();
-          this.EditDialogVisible = false;
-        } else {
-          this.message("error", res.message);
+      this.$refs.EditFormRef.validate(vaild => {
+        if (vaild) {
+          editMember(params).then(res => {
+            res = JSON.parse(res);
+            if (res.code === 0) {
+              this.message("success", "修改成功");
+              this.getMemberList();
+              this.EditDialogVisible = false;
+            } else {
+              this.message("error", res.message);
+            }
+          });
         }
       });
     },
@@ -560,7 +641,6 @@ export default {
         .catch(() => {});
     },
 
-
     //充值方式
     getPaymethodList() {
       paymethod().then(res => {
@@ -575,40 +655,59 @@ export default {
     },
 
     //充值弹框
-    RechargeDialog(v){
-      this.RechargeDialogVisible=true;
-      this.RechargeForm.name=v.name;
-      this.RechargeForm.level=v.level;
-      this.RechargeForm.balance=v.balance;
-      this.RechargeForm.member_id=v.member_id;
-      this.getPaymethodList()
+    RechargeDialog(v) {
+      this.RechargeDialogVisible = true;
+      this.RechargeForm.name = v.name;
+      this.RechargeForm.level = v.level;
+      this.RechargeForm.balance = v.balance;
+      this.RechargeForm.member_id = v.member_id;
+      this.getPaymethodList();
     },
 
     //充值提交
     handleRecharge() {
-      let params={
-        member_id:this.RechargeForm.member_id,
-        recharge_type:this.RechargeForm.recharge_type,
-        money:this.RechargeForm.money
-      }
-      this.$refs.RechargeFormRef.validate( vaild => {
+      let params = {
+        member_id: this.RechargeForm.member_id,
+        recharge_type: this.RechargeForm.recharge_type,
+        money: this.RechargeForm.money,
+        give_money:this.RechargeForm.give_money
+      };
+      this.$refs.RechargeFormRef.validate(vaild => {
         if (vaild) {
-            memberAccount(params).then(res => {
-              res = JSON.parse(res);
-              console.log(res, "充值");
-              if (res.code === 0) {
-                this.RechargeDialogVisible=false;
-                this.RechargeForm='';
-                this.RechargeForm.recharge_type='';
-                this.getMemberList();
-              } else {
-                this.message("error", res.message);
-              }
-            });
+          memberAccount(params).then(res => {
+            res = JSON.parse(res);
+            console.log(res, "充值");
+            if (res.code === 0) {
+              this.getMemberList();
+              this.RechargeDialogVisible=false;
+              this.RechargeForm.recharge_type='';
+              this.RechargeForm.money='';
+              this.RechargeForm.give_money='';
+              this.message("success", "充值成功");
+            } else {
+              this.message("error", res.message);
+            }
+          });
         }
       });
     },
 
+    // 改变会员状态
+    handleChangeSwitch(v) {
+      console.log(v);
+      let params = {
+        member_id: v.member_id,
+        status: v.status,
+      };
+      memberStatus(params).then((res) => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        if (res.code == 0) {
+          this.message("success", res.message);
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    }
   }
 };
 </script>

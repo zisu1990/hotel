@@ -30,7 +30,7 @@
         </el-row>
       </el-form>
 
-      <el-table :data="LogTableData" style="width: 100%" border stripe>
+      <el-table :data="LogTableData" style="width: 99%" border stripe>
         <el-table-column type="index" width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="操作员姓名" width="120" align="center"></el-table-column>
         <el-table-column prop="desc" label="操作内容" align="center"></el-table-column>
