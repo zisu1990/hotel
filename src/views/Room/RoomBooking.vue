@@ -6,11 +6,6 @@
           <el-row>
             <p class="title">客房预订</p>
           </el-row>
-          <!-- <el-row>
-            <el-col :push="2" :span="6">
-              <p class="roomTittle">客户信息</p>
-            </el-col>
-          </el-row> -->
           <el-form
             ref="formLabelAlign"
             :label-position="labelPosition"
@@ -22,30 +17,40 @@
               <el-col :span="7">
                 <el-form-item label="客户类型：">
                   <el-select
-                    v-model="formLabelAlign.clientType"
+                    v-model="formLabelAlign.type"
                     style="width: 100%"
+                    @change="selectKeHuType($event)"
                   >
-                    <el-option label="散客" checked value="sanke"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                 <el-option
+                    v-for="(item,index) in keHuType"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.name"
+                  ></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="团体名称：">
+                <el-form-item label="团体名称：" v-show="tuanti">
                   <el-input
                     clearable
-                    v-model="formLabelAlign.groupName"
+                    
+                    v-model="formLabelAlign.groupname"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="国籍：">
-                  <el-select
+                  <el-select @change="selectNative($event)"
                     v-model="formLabelAlign.nationality"
                     style="width: 100%"
                   >
-                    <el-option label="中国" value="中国"></el-option>
-                    <el-option label="英国" value="英国"></el-option>
+                  <el-option
+                    v-for="(item,index) in nativeList"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.name"
+                  ></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -56,23 +61,23 @@
                 <el-form-item label="会员卡号：">
                   <el-input
                     clearable
-                    v-model="formLabelAlign.cardNum"
+                    v-model="formLabelAlign.member_card"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="预订人：" prop="userName">
+                <el-form-item label="预订人：" prop="name">
                   <el-input
                     clearable
-                    v-model="formLabelAlign.userName"
+                    v-model="formLabelAlign.name"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="联系电话：" prop="userPhone">
+                <el-form-item label="联系电话：" prop="tel">
                   <el-input
                     clearable
-                    v-model="formLabelAlign.userPhone"
+                    v-model="formLabelAlign.tel"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -80,10 +85,10 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="预到时间：" prop="timeStart">
+                <el-form-item label="预到时间：" prop="start_time">
                   <el-date-picker
                     style="width: 100%"
-                    v-model="formLabelAlign.timeStart"
+                    v-model="formLabelAlign.start_time"
                     type="datetime"
                     placeholder="选择日期时间"
                   >
@@ -91,17 +96,17 @@
                 </el-form-item>
               </el-col>
               <el-col class="setEndDay" :span="10">
-                <el-form-item label="预离时间：" prop="timeEnd">
+                <el-form-item label="预离时间：" prop="end_time">
                   <el-date-picker
                     style="width: 60%"
-                    v-model="formLabelAlign.timeEnd"
+                    v-model="formLabelAlign.end_time"
                     type="datetime"
                     placeholder="选择日期时间"
                   >
                   </el-date-picker>
                   <el-input
                   style="width: 40%"
-                    v-model="formLabelAlign.nationality"
+                    v-model="formLabelAlign.datecount"
                     placeholder="请输入天数"
                   ></el-input>
                 </el-form-item>
@@ -130,13 +135,13 @@
                   >
                     <el-table-column
                       align="center"
-                      prop="homeName"
+                      prop="name"
                       label="房间类型"
                     >
                     </el-table-column>
                     <el-table-column
                       align="center"
-                      prop="pric"
+                      prop="price"
                       label="房间单价(元)"
                     >
                     </el-table-column>
@@ -170,102 +175,21 @@
                   </el-table>
                 </el-col>
               </el-row>
-              <!-- <el-col :push="3" :span="17" class="content"> -->
-              <!-- <el-row>
-                  <el-col :pull="2" :span="10" class="checkedbox">
-                    <el-row>
-                      <el-checkbox v-model="checked">单人间(15/20)</el-checkbox>
-                    </el-row>
-                    <el-row>
-                      <el-checkbox v-model="checked">双人间(15/20)</el-checkbox>
-                    </el-row>
-                    <el-row>
-                      <el-checkbox v-model="checked">三人间(15/20)</el-checkbox>
-                    </el-row>
-                    <el-row>
-                      <el-checkbox v-model="checked">五人间(15/20)</el-checkbox>
-                    </el-row>
-                    <el-row>
-                      <el-checkbox v-model="checked">十人间(15/20)</el-checkbox>
-                    </el-row>
-                    <el-row>
-                      <el-checkbox v-model="checked">钟点房(15/20)</el-checkbox>
-                    </el-row>
-                  </el-col>
-                  <el-col :span="14" class="checkedroom">
-                    <div
-                      v-for="(item, index) in 1"
-                      :key="index"
-                      class="checkedroom-item"
-                    >
-                      <el-col :span="2"> <span>一楼：</span></el-col>
-                      <el-col :span="22">
-                        <div class="floor">
-                          <div
-                            v-for="(item, index) in 20"
-                            :key="index"
-                            class="flooRoom"
-                          >
-                            <p>8105</p>
-                            <p>三人间</p>
-                          </div>
-                        </div>
-                      </el-col>
-                    </div>
-                  </el-col>
-                </el-row> -->
 
-              <!-- <el-row>
-                  <el-row style="margin-bottom: 20px">
-                    <el-col :span="6">房间号</el-col>
-                    <el-col :span="6">房间数</el-col>
-                    <el-col :span="6">房间单价</el-col>
-                    <el-col :span="6"></el-col>
-                  </el-row>
-                  <el-row
-                    v-for="(item, index) in 3"
-                    :key="index"
-                    style="margin-bottom: 20px"
-                  >
-                    <el-col :span="6">
-                      <el-select
-                        v-model="formLabelAlign.nationality"
-                        style="width: 50%"
-                      >
-                        <el-option label="中国" value="中国"></el-option>
-                        <el-option label="英国" value="英国"></el-option>
-                      </el-select>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-input
-                        style="width: 50%"
-                        v-model="formLabelAlign.userPhone"
-                      ></el-input>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-input
-                        style="width: 50%"
-                        v-model="formLabelAlign.userPhone"
-                      ></el-input>
-                    </el-col>
-                    <el-col :span="6"></el-col>
-                  </el-row>
-                </el-row> -->
-              <!-- </el-col> -->
             </el-row>
             <el-row type="flex" style="margin-top: 20px" justify="center">
               <el-col :span="6">
                 <el-form-item label="房费总金额：">
                   <el-input
                     clearable
-                    v-model="formLabelAlign.roomSumMoney"
+                    v-model="formLabelAlign.count_money"
                   ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="会员卡支付：">
                   <el-select
-                    v-model="formLabelAlign.isVipPay"
+                    v-model="formLabelAlign.is_card_pay"
                     style="width: 100%"
                   >
                     <el-option label="是" value="1"></el-option>
@@ -285,14 +209,18 @@
 
             <el-row type="flex" justify="center">
               <el-col :span="6">
-                <el-form-item label="预订支付方式：" prop="payWay">
+                <el-form-item label="预订支付方式：" prop="paymethod">
                   <el-select
-                    v-model="formLabelAlign.payWay"
+                    v-model="formLabelAlign.paymethod"
                     style="width: 100%"
+                    @change="selectPay($event)"
                   >
-                    <el-option label="现金" value="xianjin"></el-option>
-                    <el-option label="支付宝" value="zhifubao"></el-option>
-                    <el-option label="微信" value="weixin"></el-option>
+                 <el-option
+                    v-for="(item,index) in payForForhod"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.name"
+                  ></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -312,7 +240,7 @@
                 <el-form-item label="备注：">
                   <el-input
                     type="textarea"
-                    v-model="formLabelAlign.remark"
+                    v-model="formLabelAlign.beizhu"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -338,6 +266,9 @@
   </el-container>
 </template>
 <script>
+import { native,paymethod} from "@/api/member.js";   //国籍列表
+import { roomtypeLists} from "@/api/RoomType.js"; //房间类型
+import {customerType} from "@/api/RoomBooking.js";
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -371,6 +302,7 @@ export default {
     };
     return {
       // 表单值
+      tuanti:true,
       formLabelAlign: {
         clientType: "",
         groupName: "",
@@ -415,46 +347,60 @@ export default {
       // 表格对应的数据
       roomTableData: [
         {
-          homeName: "单人间",
-          pric: 200,
+          name: "单人间",
+          price: 200,
           suMoney: 0,
           sum: 0,
         },
         {
-          homeName: "单人间",
-          pric: 200,
+          name: "单人间",
+          price: 200,
           suMoney: 0,
           sum: 0,
         },
         {
-          homeName: "单人间",
-          pric: 200,
+          name: "单人间",
+          price: 200,
           suMoney: 0,
           sum: 0,
         },
         {
-          homeName: "单人间",
-          pric: 200,
+          name: "单人间",
+          price: 200,
           suMoney: 0,
           sum: 0,
         },
 
         {
-          homeName: "单人间",
-          pric: 200,
+          name: "单人间",
+          price: 200,
           suMoney: 0,
           sum: 0,
         },
         {
-          homeName: "单人间",
-          pric: 200,
+          name: "单人间",
+          price: 200,
           suMoney: 0,
           sum: 0,
         },
       ],
+
+      // 国籍列表
+      nativeList: [],
+      // 支付方式
+      payForForhod:[],
+
+      //客户类型
+      keHuType:[]
     };
   },
   mounted() {},
+  created(){
+      this.getNativeList();
+      this.getPaymethodList();
+      this.getRoomType();
+      this.getCustomerType()
+  },
   methods: {
     // 提交表单
     submitForm() {
@@ -475,7 +421,7 @@ export default {
     handleAdd(i, t) {
       let roomTableData = this.roomTableData[i];
       roomTableData.sum = Number(roomTableData.sum) + 1;
-      roomTableData.suMoney += roomTableData.pric;
+      roomTableData.suMoney += roomTableData.price;
     },
     handleReduce(i, t) {
       let roomTableData = this.roomTableData[i];
@@ -487,7 +433,7 @@ export default {
         return;
       } else {
         roomTableData.sum -= 1;
-        roomTableData.suMoney -= roomTableData.pric;
+        roomTableData.suMoney -= roomTableData.price;
       }
     },
     // 设置最后一行合计
@@ -515,6 +461,8 @@ export default {
 
       return sums;
     },
+
+
     //获取input值
     handleSum(i, t) {
       let roomTableData = this.roomTableData[i];
@@ -532,9 +480,87 @@ export default {
         });
         return;
       } else {
-        roomTableData.suMoney = roomTableData.pric * roomTableData.sum;
+        roomTableData.suMoney = roomTableData.price * roomTableData.sum;
       }
     },
+
+
+    //获取国籍列表
+    getNativeList() {
+      native().then(res => {
+        res = JSON.parse(res);
+        console.log(res, "获取国籍列表");
+        if (res.code === 0) {
+          this.nativeList = res.data.list;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+
+    //选中国籍的值
+    selectNative(e){
+      this.formLabelAlign.nationality=e;
+    },
+
+    //充值方式
+    getPaymethodList() {
+      paymethod().then(res => {
+        res = JSON.parse(res);
+        console.log(res, "获取充值列表");
+        if (res.code === 0) {
+          this.payForForhod = res.data;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+    //选中充值的方式
+    selectPay(e){
+      this.formLabelAlign.paymethod=e;
+
+    },
+
+
+    //获取客户类型
+    getCustomerType(){
+      customerType().then(res => {
+        res = JSON.parse(res);
+        console.log(res, "获取客户列表");
+        if (res.code === 0) {
+          this.keHuType = res.data;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
+    //选中充值的方式
+    selectKeHuType(e){
+      this.formLabelAlign.type=e;
+      if(e=='散客'){
+        this.tuanti=false
+      }
+      else{
+        this.tuanti=true
+      }
+    },
+
+
+    //获取所有房间类型
+    getRoomType(){
+      roomtypeLists().then(res => {
+        res = JSON.parse(res);
+        console.log(res, "获取所有房间类型");
+        if (res.code === 0) {
+          // this.payForForhod = res.data;
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    }
   },
 };
 </script>

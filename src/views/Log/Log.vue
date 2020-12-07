@@ -25,7 +25,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary" @click="getLogList">查询</el-button>
+            <el-button type="primary" @click="getLogList()">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -69,15 +69,23 @@ export default {
       total: 0
     };
   },
-  created() {},
+  created() {
+    this.getLogList()
+  },
   methods: {
     getLogList() {
-      Log(this.LogForm).then(res => {
+        let params = {
+        page: this.LogForm.currentPage,
+        page_size: this.LogForm.pageSize,
+      }
+      Log(params).then(res => {
         console.log(JSON.parse(res), "日志列表");
-        // if (res.code == 0) {
-        //   console.log(res.code);
-        //   this.LogTableData = res.data.list;
-        // }
+        if (res.code === 0) {
+          this.LogTableData = res.data.list;
+          this.total=res.data.count;
+        } else {
+          this.message("error", res.message);
+        }
       });
     },
 
