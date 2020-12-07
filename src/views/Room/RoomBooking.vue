@@ -34,7 +34,7 @@
                 <el-form-item label="团体名称：" v-show="tuanti">
                   <el-input
                     clearable
-                    
+                    disabled
                     v-model="formLabelAlign.groupname"
                   ></el-input>
                 </el-form-item>
@@ -539,6 +539,7 @@ export default {
 
     //选中充值的方式
     selectKeHuType(e){
+      console.log(e)
       this.formLabelAlign.type=e;
       if(e=='散客'){
         this.tuanti=false
