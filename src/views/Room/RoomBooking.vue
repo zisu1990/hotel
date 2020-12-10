@@ -25,7 +25,7 @@
                     v-for="(item,index) in keHuType"
                     :key="index"
                     :label="item.name"
-                    :value="item.name"
+                    :value="item.id"
                   ></el-option>
                   </el-select>
                 </el-form-item>
@@ -324,16 +324,19 @@ export default {
       labelPosition: "right",
       // 表单验证规则
       rules: {
-        userName: [
+        name: [
           { required: true, message: "请输入预订人名称", trigger: "blur" },
           { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
         ],
-        userPhone: [{ validator: checkPhone, trigger: "blur" }],
-        timeStart: [
+        tel: [
+           { required: true, message: "请输入电话号码", trigger: "blur" },
+          { validator: checkPhone, trigger: "blur" }
+          ],
+        start_time: [
           { required: true, message: "请选择日期", trigger: "change" },
         ],
-        timeEnd: [{ required: true, message: "请选择日期", trigger: "change" }],
-        payWay: [
+        end_time: [{ required: true, message: "请选择日期", trigger: "change" }],
+        paymethod: [
           { required: true, message: "请选择预订支付方式", trigger: "change" },
         ],
         bookMoney: [{ validator: bookMoney, trigger: "blur" }],
@@ -537,11 +540,11 @@ export default {
       });
     },
 
-    //选中充值的方式
+    //选中客户类型
     selectKeHuType(e){
       console.log(e)
       this.formLabelAlign.type=e;
-      if(e=='散客'){
+      if(e=='1'){
         this.tuanti=false
       }
       else{
