@@ -41,26 +41,5 @@ axios.interceptors.response.use(config => {
         return Promise.reject(error);
     }
 );
-axios.interceptors.response.use(
-    response => {
-        return response;
-    },
-    error => {
-        if (error.response) {
-            console.log("请求错误", error.response.status);
-            switch (error.response.status) {
-                case 401:
-                    // store.dispatch('logout');
-                    console.log("401");
-                    break;
-                case 404:
-                    console.log('接口不存在');
-                    break;
-                case 500:
-                    console.log('服务器错误');
-            }
-        }
-        return Promise.reject(error);// 返回接口返回的错误信息
-    })
 
 Vue.prototype.$http = axios;
