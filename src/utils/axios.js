@@ -9,13 +9,11 @@ axios.interceptors.request.use(config => {
     return config;
 });
 axios.interceptors.response.use(config => {
-    console.log(config)
     NProgress.done();
     return config;
 },
     error => {
         if (error.config) {
-            console.log("请求错误", error.response.status);
             switch (error.response.status) {
                 case 401:
                     // store.dispatch('logout');

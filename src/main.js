@@ -9,19 +9,19 @@ import '@/utils/common.js'
 import '@/utils/axios.js'
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
-
 // 路由守卫
-// router.beforeEach((to, from, next) => {
-//   if (to.path != '/login') {
-//     let token = sessionStorage.getItem('token')
-//     if (!token) {
-//       Message({ type: "error", message: "登录超时" })
-//     } else {
-//       next()
-//     }
-//   }
-// })
-
+router.beforeEach((to, from, next) => {
+  if (to.path != '/login') {
+    let token = sessionStorage.getItem('token')
+    if (!token) {
+      next('/login')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 new Vue({
   router,
   store,
