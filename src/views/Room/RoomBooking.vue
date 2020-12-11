@@ -37,7 +37,8 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input clearable v-model="formLabelAlign.member_card"></el-input>
+                  <el-input clearable @blur="handleChangeIsVIP" @clear="handleClearInput"
+                    v-model="formLabelAlign.member_card"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -47,7 +48,8 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="联系电话：" prop="tel">
-                  <el-input clearable v-model="formLabelAlign.tel"></el-input>
+                  <el-input clearable @clear="handleClearInput" @blur="handleChangeIsVIPTel"
+                    v-model="formLabelAlign.tel"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -75,7 +77,7 @@
 
             <el-row>
               <el-row>
-                <el-col :push="2" :span="7">
+                <el-col :span="7">
                   <p class="roomTittle">房间选择：</p>
                 </el-col>
               </el-row>
@@ -173,7 +175,8 @@
   import {
     customerType,
     orderYdroomtype,
-    orderAdd
+    orderAdd,
+    orderMemberinfo
   } from "@/api/RoomBooking.js";
   import {
     getAllTime,
@@ -356,6 +359,7 @@
       // 提交表单
       submitForm() {
         let that = this
+        that.setTableRoomPrice(this.roomTableData)
         this.$refs.formLabelAlign.validate((valid) => {
           if (valid) {
             let formLabelAlign = this.formLabelAlign
@@ -382,9 +386,9 @@
             }
             orderAdd(params).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
-              console.log(res)
+              // console.log(res)
               if (res.code == 0) {
-
+                this.message("success", res.message)
               } else {
                 this.message("error", res.message)
               }
@@ -398,12 +402,71 @@
         let arr = []
         arr = v.filter(v => v.sum != 0)
         arr.forEach(v => str += `${v.name},${v.sum};`)
-        // console.log(str)
+        str = str.substring(0, str.length - 1)
         return str
       },
       // 重置表单
       resetForm() {
         this.$refs.formLabelAlign.resetFields();
+      },
+      // 根据身份证查询是否会员
+      handleChangeIsVIP() {
+        orderMemberinfo({
+          member_card: this.formLabelAlign.member_card
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+            console.log(data)
+            if (!data) {
+              this.formLabelAlign.member_card = ''
+              this.formLabelAlign.tel = ''
+              return this.message("error", '请输入正确的会员卡号')
+            } else {
+              this.message("success", res.message)
+              this.formLabelAlign.tel = data.mobile
+              this.$forceUpdate()
+            }
+          } else {
+            this.formLabelAlign.member_card = ''
+            this.formLabelAlign.tel = ''
+            this.message("error", res.message)
+          }
+        })
+      },
+      // 清空会员手机
+      handleClearInput() {
+        this.formLabelAlign.member_card = ''
+        this.formLabelAlign.tel = ''
+      },
+      // 根据手机号查询是否会员
+      handleChangeIsVIPTel() {
+        orderMemberinfo({
+          member_card: this.formLabelAlign.tel
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+            // console.log(data)
+            if (!data) {
+              this.formLabelAlign.tel = ''
+              this.formLabelAlign.member_card = ''
+              return this.message("error", '请输入正确的会员卡号')
+            } else {
+              this.message("success", res.message)
+              this.formLabelAlign.member_card = data.card_no
+              this.$forceUpdate()
+            }
+          } else {
+            this.formLabelAlign.member_card = ''
+            this.formLabelAlign.tel = ''
+            this.message("error", res.message)
+          }
+        })
       },
       // 开始日期change
       pickerStart_time(v) {
@@ -514,10 +577,6 @@
         return sums;
       },
 
-      // 获取房间数
-      getSumRoomOfType() {
-
-      },
       //获取input值
       handleSum(i, t) {
         let roomTableData = this.roomTableData[i];
