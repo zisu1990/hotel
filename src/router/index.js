@@ -51,7 +51,7 @@ Vue.use(VueRouter)
 //     hideclose:true,//不可以关闭
 //   }
 // },
-const routes = [{
+const routes = [{ 
   path: '/',
   name: 'home',
   redirect: '/login',

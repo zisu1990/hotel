@@ -6,49 +6,22 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'//导入全局css样式
 import '@/utils/common.js'
+import '@/utils/axios.js'
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
-
-// import TreeTable from 'vue-table-with-tree-grid'
-// Vue.component('tree-table', TreeTable)
-
-//导入NProgress包对应的js和css  -------网页上方加载的进度条
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
-
-// 安装axios请求
-import axios from 'axios'
-// axios.defaults.headers.post["Content-Type"] = "multipart/form-data";
-//在request拦截器在展示进度条NProgress.start()
-axios.interceptors.request.use(config => {
-  NProgress.start()
-  // console.log(config)
-  config.headers.Authorization = sessionStorage.getItem('token')
-  return config
-})
-
-//在response拦截器在隐藏进度条NProgress.done()
-
-axios.interceptors.response.use(config => {
-  NProgress.done()
-  return config
-})
-
-
-Vue.prototype.$http = axios;
-
 // 路由守卫
-// router.beforeEach((to, from, next) => {
-//   if (to.path != '/login') {
-//     let token = sessionStorage.getItem('token')
-//     if (!token) {
-//       Message({ type: "error", message: "登录超时" })
-//     } else {
-//       next()
-//     }
-//   }
-// })
-
+router.beforeEach((to, from, next) => {
+  if (to.path != '/login') {
+    let token = sessionStorage.getItem('token')
+    if (!token) {
+      next('/login')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 new Vue({
   router,
   store,
