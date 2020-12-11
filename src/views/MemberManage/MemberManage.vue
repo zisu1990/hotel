@@ -290,7 +290,7 @@
               <el-col :span="7">
                 <el-input v-model="RechargeForm.money"></el-input>
               </el-col>
-              
+
               <el-col :span="2">赠</el-col>
               <el-col :span="7">
                 <el-input v-model="RechargeForm.give_money"></el-input>
@@ -372,7 +372,7 @@ export default {
         recharge_type: "",
         money: "",
         member_id: "",
-        give_money:""
+        give_money: ""
       },
 
       //充值jiaoyan
@@ -671,7 +671,7 @@ export default {
         member_id: this.RechargeForm.member_id,
         recharge_type: this.RechargeForm.recharge_type,
         money: this.RechargeForm.money,
-        give_money:this.RechargeForm.give_money
+        give_money: this.RechargeForm.give_money
       };
       this.$refs.RechargeFormRef.validate(vaild => {
         if (vaild) {
@@ -680,10 +680,10 @@ export default {
             console.log(res, "充值");
             if (res.code === 0) {
               this.getMemberList();
-              this.RechargeDialogVisible=false;
-              this.RechargeForm.recharge_type='';
-              this.RechargeForm.money='';
-              this.RechargeForm.give_money='';
+              this.RechargeDialogVisible = false;
+              this.RechargeForm.recharge_type = "";
+              this.RechargeForm.money = "";
+              this.RechargeForm.give_money = "";
               this.message("success", "充值成功");
             } else {
               this.message("error", res.message);
@@ -698,9 +698,9 @@ export default {
       console.log(v);
       let params = {
         member_id: v.member_id,
-        status: v.status,
+        status: v.status
       };
-      memberStatus(params).then((res) => {
+      memberStatus(params).then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
         if (res.code == 0) {
           this.message("success", res.message);

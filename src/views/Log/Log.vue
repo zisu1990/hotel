@@ -79,7 +79,8 @@ export default {
         page_size: this.LogForm.pageSize,
       }
       Log(params).then(res => {
-        console.log(JSON.parse(res), "日志列表");
+         res = typeof res == "string" ? JSON.parse(res) : res;
+        console.log(res, "日志列表");
         if (res.code === 0) {
           this.LogTableData = res.data.list;
           this.total=res.data.count;
