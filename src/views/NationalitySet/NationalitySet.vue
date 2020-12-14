@@ -1,14 +1,15 @@
 <template>
     <el-container>
         <el-main>
-            <!-- <el-row style="margin-bottom: 20px">
+            <el-row style="margin-bottom: 20px">
                 <el-col :span="6">
-                    <el-input v-model="payType" clearable @change="handleInput" placeholder="请输入房间类型"></el-input>
+                    <el-input v-model="nationalityName" clearable @change="handleInput" placeholder="请输入国籍名称">
+                    </el-input>
                 </el-col>
                 <el-col :span="2">
                     <el-button type="primary" @click="handleSearch">查询</el-button>
                 </el-col>
-            </el-row> -->
+            </el-row>
 
             <el-row type="flex" justify="start">
                 <el-button @click="handleClientType" type="primary">新增</el-button>
@@ -55,7 +56,7 @@
         nationalityIndex,
         nationalityEdit,
         nationalityAdd,
-        nationalityDel
+        nationalityDel,
     } from '@/api/NationalitySet.js'
     export default {
         data() {
@@ -78,6 +79,7 @@
                     pageSize: 10,
                     total: 0,
                 },
+                nationalityName: ""
             }
         },
         created() {
@@ -155,6 +157,30 @@
                 this.formClienType = {
                     name: "",
                     id: ""
+                }
+            },
+            // 查询
+            handleSearch() {
+                let params = {
+                    page: this.pagination.currentPage,
+                    page_size: this.pagination.pageSize,
+                    name: this.nationalityName
+                };
+                nationalityIndex(params).then(res => {
+                    res = typeof res == "string" ? JSON.parse(res) : res;
+                    console.log(res)
+                    if (res.code == 0) {
+                        this.tableClienType = res.data.list
+                        this.pagination.total = res.data.count
+                    } else {
+                        this.message("error", res.message)
+                    }
+                })
+            },
+            // inputchange事件
+            handleInput() {
+                if (!this.nationalityName) {
+                    this.getRows()
                 }
             },
             /** 删除按钮操作 */
