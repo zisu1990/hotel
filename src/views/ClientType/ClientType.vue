@@ -14,7 +14,7 @@
                 <el-button @click="handleClientType" type="primary">新增</el-button>
             </el-row>
 
-            <el-table :data="tableClienType" style="width: 100%" border>
+            <el-table :data="tableClienType" stripe style="width: 100%" border>
                 <el-table-column type="index" width="50" align="center"></el-table-column>
                 <el-table-column prop="name" label="客户类型" align="center"></el-table-column>
                 <el-table-column prop="create_time" label="操作时间" align="center"></el-table-column>
@@ -30,9 +30,9 @@
             <el-dialog :title="dialogTittle" :visible.sync="dialogVisible" @closed="cleranFormPayType" width="28%">
                 <el-row type="flex" justify="center">
                     <el-col :span="18">
-                        <el-form :rules="rules" :model="formClienType" ref="formPayType" label-width="100px">
-                            <el-form-item prop="name" label="支付方式：">
-                                <el-input clearable v-model="formClienType.name" placeholder="请输入支付方式"></el-input>
+                        <el-form :rules="rules" :model="formClienType" ref="formClienType" label-width="100px">
+                            <el-form-item prop="name" label="客户类型：">
+                                <el-input clearable v-model="formClienType.name" placeholder="请输入客户类型"></el-input>
                             </el-form-item>
                         </el-form>
                     </el-col>
@@ -48,16 +48,26 @@
 </template>
 <script>
     import {
-        customertypeLists
+        customertypeLists,
+        customertypeAdd,
+        customertypeEdit,
+        customertypeDel
     } from '@/api/ClientType.js'
     export default {
         data() {
             return {
                 dialogVisible: false,
+                dialogTittle: "新增客户类型",
                 tableClienType: [],
-                formClienType: {},
+                formClienType: {
+                    name: ""
+                },
                 rules: {
-
+                    name: [{
+                        required: true,
+                        message: "请输入客户类型",
+                        trigger: 'blur'
+                    }]
                 }
             }
         },
@@ -76,16 +86,82 @@
                     }
                 })
             },
+            // 添加或者编辑
+            handleRoom() {
+                let formClienType = this.formClienType
+                this.$refs.formClienType.validate(valite => {
+                    if (valite) {
+                        if (formClienType.id) {
+                            customertypeEdit({
+                                name: formClienType.name,
+                                id: formClienType.id
+                            }).then(res => {
+                                res = typeof res == "string" ? JSON.parse(res) : res;
+                                if (res.code == 0) {
+                                    this.dialogVisible = false
+                                    this.message("success", res.message)
+                                    this.getRows()
+                                } else {
+                                    this.message("error", res.message)
+                                }
+                            })
+                        } else {
+                            customertypeAdd({
+                                name: formClienType.name
+                            }).then(res => {
+                                res = typeof res == "string" ? JSON.parse(res) : res;
+                                if (res.code == 0) {
+                                    this.dialogVisible = false
+                                    this.getRows()
+                                    this.message('success', res.message)
+                                } else {
+                                    this.message("error", res.message)
+                                }
+                            })
+                        }
+                    } else {
+                        return false
+                    }
+                })
+            },
+            // 编辑btn
+            showDialogEdit(v) {
+                this.dialogVisible = true
+                this.dialogTittle = "编辑客户类型"
+                this.formClienType.name = v.row.name
+                this.formClienType.id = v.row.id
+            },
             // 新增btn
             handleClientType() {
+                this.dialogTittle = "新增客户类型"
                 this.dialogVisible = true
             },
             // dialog关闭时
-            cleranFormPayType() {},
-            // 编辑操作
-            showDialogEdit() {
-
+            cleranFormPayType() {
+                this.formClienType = {
+                    name: "",
+                    id: ""
+                }
             },
+            /** 删除按钮操作 */
+            handleDelete(id) {
+                this.confirm()
+                    .then(() => {
+                        customertypeDel({
+                            id
+                        }).then(res => {
+                            res = typeof res == "string" ? JSON.parse(res) : res;
+                            console.log(res)
+                            if (res.code == 0) {
+                                this.getRows()
+                                this.message("success", res.message)
+                            } else {
+                                this.message("error", res.message)
+                            }
+                        })
+                    })
+                    .catch(() => {});
+            }
         }
     }
 </script>

@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'//导入全局css样式
 import '@/utils/common.js'
 import '@/utils/axios.js'
+import '@/assets/icon/iconfont.css'
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
 // 路由守卫
