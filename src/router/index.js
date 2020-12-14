@@ -17,6 +17,8 @@ import RoomCard from '../views/Room/RoomCard.vue';
 import DamageRecad from '../views/Room/DamageRecad.vue';
 import ShiftWorkPage from '../views/Room/ShiftWorkPage.vue';
 import CheckOut from '../views/Room/Check_out.vue';
+import BookPayType from '../views/BookPayType/BookPayType.vue';
+import ClientType from '../views/ClientType/ClientType.vue';
 
 import Guest from '../views/Guest/Guest.vue';
 
@@ -51,7 +53,7 @@ Vue.use(VueRouter)
 //     hideclose:true,//不可以关闭
 //   }
 // },
-const routes = [{ 
+const routes = [{
   path: '/',
   name: 'home',
   redirect: '/login',
@@ -136,7 +138,7 @@ const routes = [{
           }
         },
         {
-          
+
           path: '/CheckOut', //退房
           component: CheckOut,
           meta: {
@@ -229,6 +231,20 @@ const routes = [{
       component: DataReport,
       meta: {
         title: '数据统计'
+      }
+    },
+    {
+      path: '/BookPayType', //预订支付方式
+      component: BookPayType,
+      meta: {
+        title: '预订支付方式设置'
+      }
+    },
+    {
+      path: '/ClientType', //预订支付方式
+      component: ClientType,
+      meta: {
+        title: '客户类型设置'
       }
     },
   ]

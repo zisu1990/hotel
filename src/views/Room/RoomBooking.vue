@@ -46,10 +46,10 @@
                   <el-input clearable v-model="formLabelAlign.name"></el-input>
                 </el-form-item>
               </el-col>
+              <!--  @clear="handleClearInput" @blur="handleChangeIsVIPTel" -->
               <el-col :span="7">
                 <el-form-item label="联系电话：" prop="tel">
-                  <el-input clearable @clear="handleClearInput" @blur="handleChangeIsVIPTel"
-                    v-model="formLabelAlign.tel"></el-input>
+                  <el-input clearable v-model="formLabelAlign.tel"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -411,30 +411,60 @@
       },
       // 根据身份证查询是否会员
       handleChangeIsVIP() {
-        orderMemberinfo({
-          member_card: this.formLabelAlign.member_card
-        }).then(res => {
-          res = typeof res == "string" ? JSON.parse(res) : res;
-          if (res.code == 0) {
-            let {
-              data
-            } = res
-            console.log(data)
-            if (!data) {
+        if (this.formLabelAlign.tel) {
+          orderMemberinfo({
+            member_card: this.formLabelAlign.tel
+          }).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res)
+            if (res.code == 0) {
+              let {
+                data
+              } = res
+              // console.log(data)
+              if (!data) {
+                return this.message("error", '会员账号与手机号不匹配')
+              } else if (data) {
+                let card_no = data.card_no
+                console.log(card_no)
+                // this.message("success", res.message)
+                // this.formLabelAlign.member_card = data.card_no
+                // this.$forceUpdate()
+                if (card_no == this.formLabelAlign.member_card) {
+                  this.message("success", 操作成功)
+                } else {
+                  return this.message("error", '会员账号与手机号不匹配')
+                }
+              }
+            } else {
+              this.message("error", res.message)
+            }
+          })
+        } else {
+          orderMemberinfo({
+            member_card: this.formLabelAlign.member_card
+          }).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            if (res.code == 0) {
+              let {
+                data
+              } = res
+              if (!data) {
+                this.formLabelAlign.member_card = ''
+                this.formLabelAlign.tel = ''
+                return this.message("error", '请输入正确的会员卡号')
+              } else {
+                this.message("success", res.message)
+                this.formLabelAlign.tel = data.mobile
+                this.$forceUpdate()
+              }
+            } else {
               this.formLabelAlign.member_card = ''
               this.formLabelAlign.tel = ''
-              return this.message("error", '请输入正确的会员卡号')
-            } else {
-              this.message("success", res.message)
-              this.formLabelAlign.tel = data.mobile
-              this.$forceUpdate()
+              this.message("error", res.message)
             }
-          } else {
-            this.formLabelAlign.member_card = ''
-            this.formLabelAlign.tel = ''
-            this.message("error", res.message)
-          }
-        })
+          })
+        }
       },
       // 清空会员手机
       handleClearInput() {
@@ -442,32 +472,32 @@
         this.formLabelAlign.tel = ''
       },
       // 根据手机号查询是否会员
-      handleChangeIsVIPTel() {
-        orderMemberinfo({
-          member_card: this.formLabelAlign.tel
-        }).then(res => {
-          res = typeof res == "string" ? JSON.parse(res) : res;
-          if (res.code == 0) {
-            let {
-              data
-            } = res
-            // console.log(data)
-            if (!data) {
-              this.formLabelAlign.tel = ''
-              this.formLabelAlign.member_card = ''
-              return this.message("error", '请输入正确的会员卡号')
-            } else {
-              this.message("success", res.message)
-              this.formLabelAlign.member_card = data.card_no
-              this.$forceUpdate()
-            }
-          } else {
-            this.formLabelAlign.member_card = ''
-            this.formLabelAlign.tel = ''
-            this.message("error", res.message)
-          }
-        })
-      },
+      // handleChangeIsVIPTel() {
+      //   orderMemberinfo({
+      //     member_card: this.formLabelAlign.tel
+      //   }).then(res => {
+      //     res = typeof res == "string" ? JSON.parse(res) : res;
+      //     if (res.code == 0) {
+      //       let {
+      //         data
+      //       } = res
+      //       // console.log(data)
+      //       if (!data) {
+      //         this.formLabelAlign.tel = ''
+      //         this.formLabelAlign.member_card = ''
+      //         return this.message("error", '请输入正确的会员卡号')
+      //       } else {
+      //         this.message("success", res.message)
+      //         this.formLabelAlign.member_card = data.card_no
+      //         this.$forceUpdate()
+      //       }
+      //     } else {
+      //       this.formLabelAlign.member_card = ''
+      //       this.formLabelAlign.tel = ''
+      //       this.message("error", res.message)
+      //     }
+      //   })
+      // },
       // 开始日期change
       pickerStart_time(v) {
         if (this.formLabelAlign.end_time) {
