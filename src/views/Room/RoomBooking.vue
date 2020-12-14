@@ -437,7 +437,7 @@
                 }
               }
             } else {
-              this.message("error", res.message)
+              this.message("error", '会员账号与手机号不匹配')
             }
           })
         } else {

@@ -42,6 +42,8 @@ import GoodsManage from '../views/GoodsManage/GoodsManage.vue';
 
 import DataReport from '../views/DataReport/DataReport.vue';
 
+import NationalitySet from '../views/NationalitySet/NationalitySet.vue';
+
 
 Vue.use(VueRouter)
 // {
@@ -234,17 +236,24 @@ const routes = [{
       }
     },
     {
-      path: '/BookPayType', //预订支付方式
+      path: '/BookPayType', //预订支付方式设置
       component: BookPayType,
       meta: {
         title: '预订支付方式设置'
       }
     },
     {
-      path: '/ClientType', //预订支付方式
+      path: '/ClientType', //客户类型设置
       component: ClientType,
       meta: {
         title: '客户类型设置'
+      }
+    },
+    {
+      path: '/NationalitySet', //国籍设置
+      component: NationalitySet,
+      meta: {
+        title: '国籍设置'
       }
     },
   ]

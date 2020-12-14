@@ -1,0 +1,16 @@
+{
+  "id": "2269133",
+  "name": "饿了么",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-other",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "695192",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    }
+  ]
+}

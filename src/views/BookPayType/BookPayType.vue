@@ -14,7 +14,7 @@
                 <el-button @click="addPayTypeHandle" type="primary">新增</el-button>
             </el-row>
 
-            <el-table :data="payLists" style="width: 100%" border>
+            <el-table stripe :data="payLists" style="width: 100%" border>
                 <el-table-column type="index" width="50" align="center"></el-table-column>
                 <el-table-column prop="name" label="支付方式" align="center"></el-table-column>
                 <el-table-column prop="create_time" label="操作时间" align="center"></el-table-column>
