@@ -31,7 +31,7 @@
                 <el-row type="flex" justify="center">
                     <el-col :span="18">
                         <el-form :rules="rules" :model="formClienType" ref="formClienType" label-width="100px">
-                            <el-form-item prop="name" label="国际名称：">
+                            <el-form-item prop="name" label="国籍名称：">
                                 <el-input clearable v-model="formClienType.name" placeholder="请输入国籍名称"></el-input>
                             </el-form-item>
                         </el-form>
