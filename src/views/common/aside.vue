@@ -2,7 +2,7 @@
   <div class="sidebar">
     <el-menu ref="navListRef" :default-active="$route.path" class="el-menu-vertical-demo menu" active-text-color="#FFFF"
       unique-opened router>
-      <el-menu-item style="font-size:17px;padding-left:30px" :class="{ 'is-active': $store.state.navIsActive }"
+      <el-menu-item style="font-size:17px;padding-left:20px" :class="{ 'is-active': $store.state.navIsActive }"
         index="/RoomFirstPage">
         <i class="el-icon-s-home"></i>
         <span slot="title">客房业务</span>
@@ -29,7 +29,7 @@
         </template>
         <el-menu-item-group>
 
-          <el-menu-item  index="/NationalitySet">
+          <el-menu-item index="/NationalitySet">
             <span>国籍设置</span>
           </el-menu-item>
           <el-menu-item index="/BillSetting">
