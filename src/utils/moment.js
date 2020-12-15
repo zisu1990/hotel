@@ -95,7 +95,7 @@ moment.locale('zh-cn', {
     }
 })
 export function getAllTime(v) {
-    return moment(v).format("YYYY-MM-DD 00:00:00")
+    return moment(v).format("YYYY-MM-DD hh:mm:ss")
 }
 export function getDayTime(start, end) {
     return moment(end).from(moment(start), true)
