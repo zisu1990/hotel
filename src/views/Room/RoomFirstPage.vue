@@ -308,22 +308,27 @@
         let roomID = this.roomID
         let RoomNum = this.formRoomFirstPage.addRoomNum
         let query = {}
-        // console.log(roomID, RoomNum);
-        if (data.path == 'Replenishuser') {
-          if (!roomID || !RoomNum) {
+        let arr = ['RoomBooking', 'Check_in', 'ShiftWorkPage', 'login']
+        let result = arr.some(item => data.path == item)
+        if (result) {
+          this.$router.push({
+            path: data.path,
+          });
+        } else {
+          if (roomID && RoomNum) {
+            query = {
+              id: roomID,
+              room_no: RoomNum
+            }
+          } else {
             return this.message('warning', '请选择房间')
           }
+          this.$router.push({
+            path: data.path,
+            query
+          });
         }
-        if (roomID && RoomNum) {
-          query = {
-            id: roomID,
-            room_no: RoomNum
-          }
-        }
-        this.$router.push({
-          path: data.path,
-          query
-        });
+
       },
       getRows() {
         this.getTotalState();
