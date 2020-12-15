@@ -308,6 +308,12 @@
         let roomID = this.roomID
         let RoomNum = this.formRoomFirstPage.addRoomNum
         let query = {}
+        // console.log(roomID, RoomNum);
+        if (data.path == 'Replenishuser') {
+          if (!roomID || !RoomNum) {
+            return this.message('warning', '请选择房间')
+          }
+        }
         if (roomID && RoomNum) {
           query = {
             id: roomID,
@@ -459,10 +465,10 @@
       },
       // 修改房态
       setRoomState(v) {
-        // this.dialogVisible = true
-
         if (v.id === this.roomID) {
           this.roomID = ""
+          this.formRoomFirstPage.addRoomNum = ""
+          this.formRoomFirstPage.onRoomFloor = ""
         } else {
           this.roomID = v.id
           this.formRoomFirstPage.addRoomNum = v.room_no
@@ -494,7 +500,6 @@
 <style lang="less" scoped>
   .roomStyle {
     transform: scale(1.1);
-    cursor: pointer;
     box-shadow: #989898 5px 5px 5px;
     transition: all 200ms;
   }
@@ -652,6 +657,10 @@
           flex-wrap: wrap;
           width: 100%;
           margin-left: 10px;
+
+          li:hover {
+            cursor: pointer;
+          }
 
           li {
             background: #005ab9;
