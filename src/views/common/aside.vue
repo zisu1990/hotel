@@ -2,7 +2,7 @@
   <div class="sidebar">
     <el-menu ref="navListRef" :default-active="$route.path" class="el-menu-vertical-demo menu" active-text-color="#FFFF"
       unique-opened router>
-      <el-menu-item style="font-size:17px;padding-left:70px" :class="{ 'is-active': $store.state.navIsActive }"
+      <el-menu-item style="font-size:17px;padding-left:30px" :class="{ 'is-active': $store.state.navIsActive }"
         index="/RoomFirstPage">
         <i class="el-icon-s-home"></i>
         <span slot="title">客房业务</span>
@@ -13,10 +13,10 @@
           <span>业务查询</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item align="center" index="/Booking">
+          <el-menu-item index="/Booking">
             <span slot="title">预订查询</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/Guest">
+          <el-menu-item index="/Guest">
             <span>住客查询</span>
           </el-menu-item>
         </el-menu-item-group>
@@ -29,16 +29,16 @@
         </template>
         <el-menu-item-group>
 
-          <el-menu-item align="center" index="/NationalitySet">
+          <el-menu-item  index="/NationalitySet">
             <span>国籍设置</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/BillSetting">
+          <el-menu-item index="/BillSetting">
             <span>计费设置</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/ClientType">
+          <el-menu-item index="/ClientType">
             <span>客户类型设置</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/BookPayType">
+          <el-menu-item index="/BookPayType">
             <span>预订支付方式设置</span>
           </el-menu-item>
         </el-menu-item-group>
@@ -51,41 +51,41 @@
         </template>
         <el-menu-item-group>
 
-          <el-menu-item align="center" index="/Device">
+          <el-menu-item index="/Device">
             <span>设备管理</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/GoodsManage">
+          <el-menu-item index="/GoodsManage">
             <span>物件管理</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/RoomManage">
+          <el-menu-item index="/RoomManage">
             <span>房间管理</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/RoomType">
+          <el-menu-item index="/RoomType">
             <span>房间类型管理</span>
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu>
+      <el-submenu index="5">
         <template slot="title">
           <i class="el-icon-s-management"></i>
           <span>会员管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item align="center" index="/MemberManage">
+          <el-menu-item index="/MemberManage">
             <span>会员管理</span>
           </el-menu-item>
-          <el-menu-item align="center" index="/MemberSetting">
+          <el-menu-item index="/MemberSetting">
             <span>会员设置</span>
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-menu-item align="center" index="/GuestInfo">
+      <el-menu-item index="/GuestInfo">
         <span>客史信息</span>
       </el-menu-item>
-      <el-menu-item align="center" index="/Log">
+      <el-menu-item index="/Log">
         <span>操作日志</span>
       </el-menu-item>
-      <el-menu-item align="center" index="/DataReport">
+      <el-menu-item index="/DataReport">
         <span>数据统计</span>
       </el-menu-item>
     </el-menu>
@@ -127,14 +127,13 @@
     .el-menu-item {
       // width: 260px;
       // height: 54px;
-      // padding-left: 70px !important;
       font-size: 15px;
     }
 
 
     /deep/.el-submenu__title {
+      // padding-left:30px !important;
       font-size: 17px;
-      padding-left: 70px !important;
     }
   }
 </style>

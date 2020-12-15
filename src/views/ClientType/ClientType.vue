@@ -78,7 +78,7 @@
             getRows() {
                 customertypeLists().then(res => {
                     res = typeof res == "string" ? JSON.parse(res) : res;
-                    console.log(res)
+                    // console.log(res)
                     if (res.code == 0) {
                         this.tableClienType = res.data
                     } else {
@@ -151,7 +151,7 @@
                             id
                         }).then(res => {
                             res = typeof res == "string" ? JSON.parse(res) : res;
-                            console.log(res)
+                            // console.log(res)
                             if (res.code == 0) {
                                 this.getRows()
                                 this.message("success", res.message)

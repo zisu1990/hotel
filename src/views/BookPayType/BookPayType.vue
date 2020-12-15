@@ -81,7 +81,7 @@
             getRows() {
                 paymethodLists().then(res => {
                     res = typeof res == "string" ? JSON.parse(res) : res;
-                    console.log(res)
+                    // console.log(res)
                     if (res.code == 0) {
                         this.payLists = res.data
                     } else {
@@ -151,7 +151,7 @@
                 this.dialogTittle = "编辑支付方式"
                 this.formPayType.name = v.row.name
                 this.formPayType.id = v.row.id
-                console.log(v.row.name, v.row.id)
+                // console.log(v.row.name, v.row.id)
             },
             // 新增
             addPayTypeHandle() {
@@ -166,7 +166,7 @@
                             id
                         }).then(res => {
                             res = typeof res == "string" ? JSON.parse(res) : res;
-                            console.log(res)
+                            // console.log(res)
                             if (res.code == 0) {
                                 this.getRows()
                                 this.message("success", res.message)
