@@ -112,6 +112,7 @@
     }
 
     .el-menu-item.is-active {
+      
       font-size: 16px !important;
       background: linear-gradient(7deg, #005ab9 0%, #005ab9 27%, #1b79dd 100%);
       border-radius: 0px 10px 10px 0px;
@@ -121,6 +122,7 @@
       transition: 400ms ease-out;
       z-index: 1000;
       color: #ffff;
+      width: 260px;
     }
 
 

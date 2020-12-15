@@ -3,183 +3,120 @@
     <el-main>
       <h2>入住登记</h2>
       <div class="checkWarp">
-        <el-form :model="checkInForm" label-width="140px">
+        <el-form :rules="rules" ref="checkInForm" :model="checkInForm" label-width="140px">
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
-              <el-form-item label="客户类型：">
-                <el-select
-                  v-model="checkInForm.personType"
-                  placeholder="选择客客户类型"
-                  :style="{ width: '100%' }"
-                >
-                  <el-option
-                    v-for="(item, index) in personTypeOptions"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  ></el-option>
+              <el-form-item label="客户类型：" prop="personType">
+                <el-select v-model="checkInForm.personType" placeholder="选择客客户类型" :style="{ width: '100%' }">
+                  <el-option v-for="(item,index) in keHuType" :key="index" :label="item.name" :value="item.name">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="团体名称：">
-                <el-input
-                  v-model="checkInForm.teamName"
-                  placeholder="请输入团体名称"
-                  clearable
-                  :style="{ width: '100%' }"
-                ></el-input>
+              <el-form-item label="团体名称：" prop="teamName">
+                <el-input v-model="checkInForm.teamName" placeholder="请输入团体名称" clearable :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="国籍：">
-                <el-select
-                  v-model="checkInForm.native"
-                  placeholder="选择国籍"
-                  :style="{ width: '100%' }"
-                >
-                  <el-option
-                    v-for="(item, index) in nativeOptions"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  ></el-option>
+              <el-form-item label="国籍：" prop="native">
+                <el-select v-model="checkInForm.native" placeholder="选择国籍" :style="{ width: '100%' }">
+                  <el-option v-for="(item,index) in nativeList" :key="index" :label="item.name" :value="item.name">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8" style="display: flex; align-content: center">
-              <el-form-item label="证件类型：">
-                <el-select
-                  v-model="checkInForm.certificate"
-                  placeholder="选择证件类型"
-                  :style="{ width: '100%' }"
-                >
-                  <el-option
-                    v-for="(item, index) in certificateOptions"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  ></el-option>
+              <el-form-item label="证件类型：" prop="certificate">
+                <el-select v-model="checkInForm.certificate" placeholder="选择证件类型" :style="{ width: '100%' }">
+                  <el-option v-for="(item, index) in certificateOptions" :key="index" :label="item.name"
+                    :value="item.name"></el-option>
                 </el-select>
               </el-form-item>
               <el-button type="primary" class="duCard">读身份证</el-button>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="联系电话：">
-                <el-input
-                  v-model="checkInForm.tel"
-                  placeholder="请输入联系电话"
-                  clearable
-                  :style="{ width: '100%' }"
-                ></el-input>
+              <el-form-item label="联系电话：" prop="tel">
+                <el-input v-model="checkInForm.tel" placeholder="请输入联系电话" clearable :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="会员卡号：">
-                <el-input
-                  v-model="checkInForm.vipNumber"
-                  placeholder="请输入会员卡号"
-                  clearable
-                  :style="{ width: '100%' }"
-                ></el-input>
+                <el-input v-model="checkInForm.vipNumber" placeholder="请输入会员卡号" clearable :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
-              <el-form-item label="客主姓名：">
-                <el-input
-                  v-model="checkInForm.name"
-                  placeholder="请输入客主姓名"
-                  clearable
-                  :style="{ width: '100%' }"
-                ></el-input>
+              <el-form-item label="客主姓名：" prop="name">
+                <el-input v-model="checkInForm.name" placeholder="请输入客主姓名" clearable :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="证件号码：">
-                <el-input
-                  v-model="checkInForm.idNumber"
-                  placeholder="请输入证件号码"
-                  clearable
-                  :style="{ width: '100%' }"
-                ></el-input>
+              <el-form-item label="证件号码：" prop="idNumber">
+                <el-input v-model="checkInForm.idNumber" placeholder="请输入证件号码" clearable :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-button
-                type="success"
-                round
-                class="checkIn-search"
-                @click="ResidentsDialogVisible = true"
-              >住客登记查询</el-button>
+              <el-button type="success" round class="checkIn-search" @click="ResidentsDialogVisible = true">住客登记查询
+              </el-button>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="24">
-              <el-form-item label="证件地址：">
-                <el-input
-                  v-model="checkInForm.adderss"
-                  placeholder="请输入证件地址"
-                  clearable
-                  :style="{ width: '100%' }"
-                ></el-input>
+              <el-form-item label="证件地址：" prop="adderss">
+                <el-input v-model="checkInForm.adderss" placeholder="请输入证件地址" clearable :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
-              <el-form-item label="入住时间：">
-                <el-date-picker v-model="checkInForm.value1" type="date" placeholder="选择日期"></el-date-picker>
+              <el-form-item label="入住时间：" prop="start_time">
+                <el-date-picker @change="pickerStart_time" v-model="checkInForm.start_time" type="datetime"
+                  placeholder="选择日期"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="离店时间：">
-                <el-date-picker v-model="checkInForm.value2" type="date" placeholder="选择日期"></el-date-picker>
+              <el-form-item label="离店时间：" prop="end_time">
+                <el-date-picker @change="pickerEnd_time" v-model="checkInForm.end_time" type="datetime"
+                  placeholder="选择日期"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
-                <el-input
-                  v-model="checkInForm.days"
-                  placeholder
-                  clearable
-                  :style="{ width: '40%' }"
-                  class="days"
-                ></el-input>
+                <el-input v-model="checkInForm.datecount" placeholder clearable :style="{ width: '40%' }" class="days">
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <p class="chooseTitle">可选房型：</p>
-          <div class="chooseRoom">
+          <div class="chooseRoom" >
             <el-row :gutter="20" type="flex" justify="left">
               <el-col :span="8">
-                <el-check-group v-model="roomType">
-                  <el-checkbox
-                    v-for="(v, i) in roomType"
-                    :key="i"
-                    :name="v.roomtype"
-                  >{{ v.roomtype }}({{ v.sheng }}/{{ v.sum }})</el-checkbox>
-                </el-check-group>
+                <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
+                  <el-checkbox v-for="(v, i) in roomType" :key="i" :label="v.name">
+                    {{ v.name }}({{ v.kx_count }}/{{ v.count }})
+                  </el-checkbox>
+                </el-checkbox-group>
               </el-col>
 
               <el-col :span="16" class="chooseRoomRight">
                 <div class="floorItem" v-for="(v, i) in louceng" :key="i">
                   <p>{{ v.floor }}：</p>
                   <ul>
-                    <li
-                      v-for="(f, index) in v.listItem"
-                      :key="index"
-                      :class="f.className"
-                      @click="chooseRoom(i, index, f)"
-                    >
-                      <span>{{ f.floorNo }}</span>
-                      <span>{{ f.type }}</span>
+                    <!-- :class="f.className"
+                    @click="chooseRoom(i, index, f)" -->
+                    <li class="fangjian" v-for="(f, index) in v.item" :key="index">
+                      <span>{{ f.room_no }}</span>
+                      <span>{{ f.roomtype }}</span>
                     </li>
                   </ul>
                 </div>
@@ -189,26 +126,16 @@
           <p class="chooseTitle">已选客房：</p>
           <el-row>
             <el-col :span="24">
-              <el-table
-                stripe
-                :header-cell-style="tableStyle"
-                :cell-style="tableStyle"
-                :data="roomTableData"
-                style="width: 100%; margin-top: 10px"
-                max-height="500px"
-              >
+              <el-table stripe :header-cell-style="tableStyle" :cell-style="tableStyle" :data="roomTableData"
+                style="width: 100%; margin-top: 10px" max-height="500px">
                 <el-table-column prop="homeName" label="房间类型" width="150px"></el-table-column>
                 <el-table-column prop="roomNum" label="房间号"></el-table-column>
                 <el-table-column prop="pric" label="房间单价(元)"></el-table-column>
 
                 <el-table-column label="操作">
                   <template v-slot="scope">
-                    <el-button
-                      icon="el-icon-delete"
-                      circle
-                      type="danger"
-                      @click="handleReduce(scope.$index, scope.row)"
-                    ></el-button>
+                    <el-button icon="el-icon-delete" circle type="danger"
+                      @click="handleReduce(scope.$index, scope.row)"></el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -241,11 +168,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="预付方式：">
-                <el-select
-                  v-model="checkInForm.payfor"
-                  placeholder="选择支付方式"
-                  :style="{ width: '100%' }"
-                >
+                <el-select v-model="checkInForm.payfor" placeholder="选择支付方式" :style="{ width: '100%' }">
                   <el-option label="现金" value="1"></el-option>
                   <el-option label="支付宝" value="2"></el-option>
                   <el-option label="微信" value="3"></el-option>
@@ -262,23 +185,17 @@
           <el-row :gutter="20" type="flex" justify="left">
             <el-col :span="16" style="display: flex; align-content: center">
               <el-form-item label="会员卡支付：">
-                <el-select
-                  v-model="checkInForm.isCardPayfor"
-                  placeholder="选择支付方式"
-                  :style="{ width: '100%' }"
-                >
+                <el-select v-model="checkInForm.isCardPayfor" placeholder="选择支付方式" :style="{ width: '100%' }">
                   <el-option label="会员卡支付" value="1"></el-option>
                   <el-option label="否" value="2"></el-option>
                 </el-select>
               </el-form-item>
-              <span
-                style="
+              <span style="
                   font-size: 14px;
                   color: #005ab9;
                   padding-top: 10px;
                   padding-left: 5px;
-                "
-              >余额：300元</span>
+                ">余额：300元</span>
             </el-col>
             <el-col :span="8">
               <el-form-item label="卡扣金额（元）：">
@@ -289,7 +206,7 @@
 
           <el-row :gutter="20" type="flex" justify="center" class="btn">
             <el-button>重置</el-button>
-            <el-button type="primary" @click="GateCardDialogVisible = true">确认</el-button>
+            <el-button type="primary" @click="submitForm">确认</el-button>
           </el-row>
         </el-form>
       </div>
@@ -316,748 +233,533 @@
         </span>
       </el-dialog>
 
-      <!-- 门卡写入 -->
-      <el-dialog title="门卡写入" :visible.sync="GateCardDialogVisible" width="50%" center>
-        <el-table :data="GateCardTableData" style="width: 100%" border>
-          <el-table-column prop="roomNum" label="房间号" width="80" align="center"></el-table-column>
-          <el-table-column prop="time" label="入住时间" align="center"></el-table-column>
-          <el-table-column prop="cardSum" label="卡数量" width="80" align="center"></el-table-column>
-          <el-table-column prop="operation" label="操作" align="center" width="150">
-            <template>
-              <el-button type="warning" size="small">清卡</el-button>
-              <el-button type="primary" size="small">读卡</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <span slot="footer" class="dialog-footer" style="text-align: center">
-          <el-button @click="payforDialogVisible = true">下一步</el-button>
-        </span>
-      </el-dialog>
 
-      <!-- 预付款单打印 -->
-      <el-dialog title="预付款单" :visible.sync="payforDialogVisible" width="50%">
-        <ul class="payForList">
-          <li>
-            <span>单据号：12345688</span>
-            <span>房间号：8102</span>
-            <span>同住房号：8103</span>
-          </li>
-          <li>
-            <span>姓名：张三</span>
-            <span>性别：男</span>
-            <span>身份证号：340881199921004896</span>
-          </li>
-          <li>
-            <span>入住时间：2020-11-04 14:47</span>
-            <span>预离时间：2020-11-08 14:00</span>
-          </li>
-          <li>
-            <span>消费类型：住宿预交款（含押金）</span>
-            <span>金额：1000元</span>
-          </li>
-          <li>
-            <span>收款时间：2020-11-04 14:47</span>
-          </li>
-          <li>
-            <p>注：1、续住请在14时前到总台办理；</p>
-            <p>2、入住时间超过次日14—18时加收房费半价，超过18时按一天结账；</p>
-            <p>3、请妥善保管好您的贵重物品。</p>
-          </li>
-          <li>
-            <span>宾客电话：13156894556</span>
-            <span>本酒店电话：0551-68686868</span>
-            <span>打印时间：2020-11-04 14:47</span>
-          </li>
-        </ul>
-        <div class="qianzi">客户签字：</div>
-
-        <span slot="footer" class="dialog-footer" style="text-align: center">
-          <el-button @click="budayin">暂不打印</el-button>
-          <el-button type="primary" @click="dayin">打印</el-button>
-        </span>
-      </el-dialog>
     </el-main>
   </el-container>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      checkInForm: {
-        personType: "",
-        teamName: "",
-        certificate: "",
-        tel: "",
-        vipNumber: "",
-        name: "",
-        idNumber: "",
-        adderss: "",
-        value1: "",
-        value2: "",
-        days: "4天",
-        RoomSumMoney: 1000,
-        deposit: 200,
-        advancePay: 0,
-        payfor: "",
-        advanceMoney: 200,
-        isCardPayfor: "",
-        cardPayfor: 500
-      },
-      checkInRef: {
-        personType: [],
-        teamName: []
-      },
-      personTypeOptions: [
-        {
-          label: "散客",
-          value: 1
-        },
-        {
-          label: "团体",
-          value: 2
+  import {
+    nationalityIndex,
+    customertypeLists,
+    zhengjianLists,
+    orderYdroomtype
+  } from '@/api/Check_in.js'
+  import {
+    getAllTime,
+    getDayTime
+  } from '@/utils/moment.js'
+  export default {
+    data() {
+      var checkPhone = (rule, value, callback) => {
+        const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
+        if (!value) {
+          return callback(new Error("电话号码不能为空"));
         }
-      ],
-      nativeOptions: [
-        {
-          label: "中国",
-          value: 1
-        },
-        {
-          label: "美国",
-          value: 2
-        }
-      ],
-      certificateOptions: [
-        {
-          label: "身份证",
-          value: 1
-        },
-        {
-          label: "驾驶证",
-          value: 2
-        },
-        {
-          label: "学生证",
-          value: 3
-        }
-      ],
-      roomType: [
-        {
-          roomtype: "单人间",
-          sheng: 10,
-          sum: 30
-        },
-        {
-          roomtype: "标间",
-          sheng: 10,
-          sum: 30
-        },
-        {
-          roomtype: "三人间",
-          sheng: 10,
-          sum: 30
-        },
-        {
-          roomtype: "五人间",
-          sheng: 10,
-          sum: 30
-        },
-        {
-          roomtype: "十人间",
-          sheng: 10,
-          sum: 30
-        },
-        {
-          roomtype: "钟点房",
-          sheng: 10,
-          sum: 30
-        }
-      ],
-      louceng: [
-        {
-          floor: "1楼",
-          listItem: [
-            {
-              id: 1,
-              floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 2,
-              floorNo: 8103,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 3,
-              floorNo: 8104,
-              status: "入住中",
-              type: "五人间",
-              background: "#FE775E",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 4,
-              floorNo: 8105,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 5,
-              floorNo: 8106,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 6,
-              floorNo: 8107,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 7,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 8,
-              floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 9,
-              floorNo: 8103,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 10,
-              floorNo: 8104,
-              status: "入住中",
-              type: "五人间",
-              background: "#FE775E",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 11,
-              floorNo: 8105,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 12,
-              floorNo: 8106,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 13,
-              floorNo: 8107,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 14,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
+        setTimeout(() => {
+          if (!Number.isInteger(+value)) {
+            callback(new Error("请输入数字值"));
+          } else {
+            if (phoneReg.test(value)) {
+              callback();
+            } else {
+              callback(new Error("电话号码格式不正确"));
             }
-          ]
+          }
+        }, 100);
+      };
+      return {
+        // 国籍列表
+        nativeList: [],
+        //客户类型
+        keHuType: [],
+        checkInForm: {
+          personType: "",
+          teamName: "",
+          certificate: "",
+          tel: "",
+          vipNumber: "",
+          name: "",
+          idNumber: "",
+          adderss: "",
+          end_time: "",
+          start_time: "",
+          datecount: "",
+          RoomSumMoney: 1000,
+          deposit: 200,
+          advancePay: 0,
+          payfor: "",
+          advanceMoney: 200,
+          isCardPayfor: "",
+          cardPayfor: 500,
         },
-        {
-          floor: "2楼",
-          listItem: [
-            {
-              id: 24,
-              floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 25,
-              floorNo: 8102,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 26,
-              floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 27,
-              floorNo: 8103,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 28,
-              floorNo: 8104,
-              status: "入住中",
-              type: "五人间",
-              background: "#FE775E",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 29,
-              floorNo: 8105,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 30,
-              floorNo: 8106,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 31,
-              floorNo: 8107,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 32,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 33,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            }
-          ]
+        checkRoomType: [],
+        checkInRef: {
+          personType: [],
+          teamName: []
         },
-        {
-          floor: "3楼",
-          listItem: [
-            {
-              id: 15,
-              floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
+        nativeOptions: [],
+        certificateOptions: [],
+        roomType: [],
+        louceng: [],
+        // 表单验证
+        rules: {
+          personType: [{
+            required: true,
+            message: "请选择客户类型",
+            trigger: "change"
+          }],
+          teamName: [{
+            required: true,
+            message: "请输入团体名称",
+            trigger: "blur"
+          }, {
+            min: 2,
+            max: 5,
+            message: "长度在 2 到 5 个字符",
+            trigger: "blur"
+          }],
+          native: [{
+            required: true,
+            message: "请选择国籍",
+            trigger: "change"
+          }],
+          certificate: [{
+            required: true,
+            message: "请选择证件类型",
+            trigger: "change"
+          }],
+          tel: [{
+              required: true,
+              message: "请输入电话号码",
+              trigger: "blur"
             },
             {
-              id: 16,
-              floorNo: 8102,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 17,
-              floorNo: 8102,
-              status: "预订中",
-              type: "三人间",
-              background: "#FCB634",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 18,
-              floorNo: 8103,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 19,
-              floorNo: 8104,
-              status: "入住中",
-              type: "五人间",
-              background: "#FE775E",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 20,
-              floorNo: 8105,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 21,
-              floorNo: 8106,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 22,
-              floorNo: 8107,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 23,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 34,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 35,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
-            },
-            {
-              id: 36,
-              floorNo: 8108,
-              status: "空闲中",
-              type: "五人间",
-              background: "#005AB9",
-              icon: "@/assets/image/zhong.png",
-              className: "fangjian"
+              validator: checkPhone,
+              trigger: "blur"
             }
-          ]
-        }
-      ],
-      // 选中房间
-      isActiveArr: [],
+          ],
+          name: [{
+            required: true,
+            message: "请输入客主姓名",
+            trigger: "blur"
+          }, {
+            min: 2,
+            max: 5,
+            message: "长度在 2 到 5 个字符",
+            trigger: "blur"
+          }],
+          idNumber: [{
+            required: true,
+            message: "请输入证件号码",
+            trigger: "blur"
+          }],
+          adderss: [{
+            required: true,
+            message: "请输入证件地址",
+            trigger: "blur"
+          }, {
+            min: 2,
+            max: 5,
+            message: "长度在 2 到 5 个字符",
+            trigger: "blur"
+          }],
+          start_time: [{
+            required: true,
+            message: "请选择入住时间",
+            trigger: "change"
+          }],
+          end_time: [{
+            required: true,
+            message: "请选择离店时间",
+            trigger: "change"
+          }],
+        },
+        // 选中房间
+        isActiveArr: [],
 
-      // 表格对应的数据
-      roomTableData: [
-        {
+        // 表格对应的数据
+        roomTableData: [{
           homeName: "单人间",
           roomNum: 8102,
           pric: 200
-        }
-      ],
-      // 表格样式
-      tableStyle: {
-        textAlign: "center"
-      },
+        }],
+        // 表格样式
+        tableStyle: {
+          textAlign: "center"
+        },
 
-      // 弹框住客登记、
-      ResidentsDialogVisible: false,
-      // 住客登记表格
-      ResidentsTableData: [
-        {
+        // 弹框住客登记、
+        ResidentsDialogVisible: false,
+        // 住客登记表格
+        ResidentsTableData: [{
           roomNum: 8102,
           name: "张三",
           sex: "男",
           cardType: "身份证",
           address: "安徽省合肥市滨湖新区西藏路"
-        }
-      ],
-      // 门卡写入
-      GateCardDialogVisible: false,
-      // 门卡写入表格
-      GateCardTableData: [
-        {
-          roomNum: 8102,
-          time: "2020-11-11 10:20:45—2020-11-12 14:00:00",
-          cardSum: 1
-        },
-        {
-          roomNum: 8104,
-          time: "2020-11-11 10:20:45—2020-11-12 14:00:00",
-          cardSum: 1
-        },
-        {
-          roomNum: 8104,
-          time: "2020-11-11 10:20:45—2020-11-12 14:00:00",
-          cardSum: 1
-        },
-        {
-          roomNum: 8104,
-          time: "2020-11-11 10:20:45—2020-11-12 14:00:00",
-          cardSum: 1
-        }
-      ],
+        }],
 
-      // 酒店预付款单打印
-      payforDialogVisible: false
-    };
-  },
-  methods: {
-    // // 加，减，总
-    // handleAdd(i, t) {
-    //   let roomTableData = this.roomTableData[i];
-    //   roomTableData.sum += 1;
-    //   roomTableData.suMoney += roomTableData.pric;
-    // },
-    handleReduce(i, v) {
-      let roomTableData = this.roomTableData;
-      if (roomTableData.length == 1) {
-        this.$message.error("不可删除");
-        return;
-      }
-      roomTableData.splice(i, 1);
-    },
-
-    //打印
-    dayin() {
-      this.payforDialogVisible = false;
-      this.GateCardDialogVisible = false;
-    },
-    budayin() {
-      this.payforDialogVisible = false;
-      this.GateCardDialogVisible = false;
-    },
-    chooseRoom(id, i, item) {
-      // activeBlue
-      item.className = "activeBlue";
-      this.isActiveArr.push(item);
-      // {
-      //   homeName: "单人间",
-      //   roomNum: 8102,
-      //   pric: 200,
-      // }
-      let data = {
-        homeName: item.type,
-        roomNum: item.floorNo,
-        pric: 200
       };
-      this.roomTableData.push(data);
-      console.log(this.isActiveArr);
+    },
+    created() {
+      this.getRows()
+    },
+    mounted() {
+      // console.log('tag', this.$route.query)
+    },
+    methods: {
+      getRows() {
+        this.getNativeList()
+        this.getCustomerType()
+        this.getCredentials()
+      },
+      // 提交表单
+      submitForm() {
+        this.$refs.checkInForm.validate(valite => {
+          if (valite) {
+
+          } else {
+            return false
+          }
+        })
+      },
+      //获取客户类型
+      getCustomerType() {
+        customertypeLists().then(res => {
+          res = JSON.parse(res);
+          // console.log(res, "获取客户列表");
+          if (res.code === 0) {
+            this.keHuType = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+
+      //获取国籍列表
+      getNativeList() {
+        nationalityIndex().then(res => {
+          res = JSON.parse(res);
+          // console.log(res, "获取国籍列表");
+          if (res.code === 0) {
+            this.nativeList = res.data.list;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+      // 获取证件类型
+      getCredentials() {
+        zhengjianLists().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.certificateOptions = res.data
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      // 开始日期change
+      pickerStart_time(v) {
+        if (!v) {
+          this.roomType = ""
+          this.louceng = ""
+        }
+        if (this.checkInForm.end_time) {
+          if (v > this.checkInForm.end_time) {
+            this.message('warning', '遇到时间不能大于预离时间')
+            this.checkInForm.start_time = ""
+            return
+          }
+          this.checkInForm.datecount = getDayTime(v, this.checkInForm.end_time)
+          orderYdroomtype({
+            start_time: getAllTime(v),
+            end_time: getAllTime(this.checkInForm.end_time)
+          }).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res)
+            if (res.code == 0) {
+              this.$forceUpdate()
+              this.roomType = res.data
+              this.louceng = res.room_list
+            } else {
+              this.$forceUpdate()
+              this.message("error", res.message)
+            }
+          })
+        }
+      },
+      // 可选房型查询
+      handleChangeRoomType() {
+        orderYdroomtype({
+          start_time: getAllTime(this.checkInForm.start_time),
+          roomtype: this.setCheckRoomTypeStr(this.checkRoomType),
+          end_time: getAllTime(this.checkInForm.end_time)
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.$forceUpdate()
+            this.roomType = res.data
+            this.louceng = res.room_list
+          } else {
+            this.$forceUpdate()
+            this.message("error", res.message)
+          }
+        })
+      },
+      setCheckRoomTypeStr(v) {
+        let str = ""
+        v.forEach(element => {
+          str += element + ","
+        });
+        str = str.substring(0, str.length - 1)
+        console.log(str)
+        return str
+      },
+      // 结束日期change
+      pickerEnd_time(v) {
+        if (!v) {
+          this.roomType = ""
+          this.louceng = ""
+        }
+        if (this.checkInForm.start_time) {
+          if (v < this.checkInForm.start_time) {
+            this.message('warning', '预离时间不能小于遇到时间')
+            this.checkInForm.end_time = ""
+            return
+          }
+          this.checkInForm.datecount = getDayTime(this.checkInForm.start_time, v)
+          orderYdroomtype({
+            start_time: getAllTime(this.checkInForm.start_time),
+            end_time: getAllTime(v)
+          }).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res)
+            if (res.code == 0) {
+              this.roomType = res.data
+              this.louceng = res.room_list
+              this.$forceUpdate()
+
+            } else {
+              this.message("error", res.message)
+              this.$forceUpdate()
+
+            }
+          })
+        }
+      },
+      // // 加，减，总
+      // handleAdd(i, t) {
+      //   let roomTableData = this.roomTableData[i];
+      //   roomTableData.sum += 1;
+      //   roomTableData.suMoney += roomTableData.pric;
+      // },
+      handleReduce(i, v) {
+        let roomTableData = this.roomTableData;
+        if (roomTableData.length == 1) {
+          this.$message.error("不可删除");
+          return;
+        }
+        roomTableData.splice(i, 1);
+      },
+
+      //打印
+      dayin() {
+        this.payforDialogVisible = false;
+        this.GateCardDialogVisible = false;
+      },
+      budayin() {
+        this.payforDialogVisible = false;
+        this.GateCardDialogVisible = false;
+      },
+      // chooseRoom(id, i, item) {
+      //   // activeBlue
+      //   item.className = "activeBlue";
+      //   this.isActiveArr.push(item);
+      //   // {
+      //   //   homeName: "单人间",
+      //   //   roomNum: 8102,
+      //   //   pric: 200,
+      //   // }
+      //   let data = {
+      //     homeName: item.type,
+      //     roomNum: item.floorNo,
+      //     pric: 200
+      //   };
+      //   this.roomTableData.push(data);
+      //   console.log(this.isActiveArr);
+      // }
     }
-  }
-};
+  };
 </script>
 
 
 <style lang="less" scoped>
-.el-main {
-  background: #fff;
-  h2 {
-    margin-top: 20px;
-    font-size: 26px;
-    color: #005ab9;
-    font-weight: normal;
-  }
-  .checkWarp {
-    width: 70%;
-    margin-left: 15%;
-    margin-top: 40px;
-    .checkIn-search {
-      margin-left: -150px;
-    }
-    .duCard {
-      height: 40px;
-      line-height: 40px;
-      margin-left: 5px;
-      padding: 0 5px;
-    }
-    .days {
-      margin-left: -350px;
-    }
-    .chooseTitle {
-      text-align: left;
-    }
-    .chooseRoom {
-      background: #f9f9f9;
-      padding: 20px 20px 0;
-      margin: 10px 0 20px;
+  .el-main {
+    background: #fff;
 
-      /deep/.el-checkbox {
-        text-align: left;
-        display: block;
-        margin-bottom: 20px;
+    h2 {
+      margin-top: 20px;
+      font-size: 26px;
+      color: #005ab9;
+      font-weight: normal;
+    }
+
+    .checkWarp {
+      width: 70%;
+      margin-left: 15%;
+      margin-top: 40px;
+
+      .checkIn-search {
+        margin-left: -150px;
       }
-      .chooseRoomRight {
-        height: 280px;
-        overflow-y: auto;
+
+      .duCard {
+        height: 40px;
+        line-height: 40px;
+        margin-left: 5px;
+        padding: 0 5px;
       }
-      .floorItem {
+
+      .days {
+        margin-left: -350px;
+      }
+
+      .chooseTitle {
         text-align: left;
-        p {
-          margin-bottom: 10px;
+      }
+
+      .chooseRoom {
+        background: #f9f9f9;
+        padding: 20px 20px 0;
+        margin: 10px 0 20px;
+
+        /deep/.el-checkbox {
+          text-align: left;
+          display: block;
+          margin-bottom: 20px;
         }
-        ul {
-          display: flex;
 
-          flex-wrap: wrap;
-          .fangjian {
-            padding: 5px 10px;
-            border: 1px solid #333;
-            margin: 0 10px 10px 0;
-            span {
-              display: block;
-              color: #333;
-              font-size: 14px;
-              cursor: pointer;
+        .chooseRoomRight {
+          height: 280px;
+          overflow-y: auto;
+        }
+
+        .floorItem {
+          text-align: left;
+
+          p {
+            margin-bottom: 10px;
+          }
+
+          ul {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            .fangjian {
+              padding: 5px 10px;
+              border: 1px solid #333;
+              margin: 0 10px 10px 0;
+
+              span {
+                display: block;
+                color: #333;
+                font-size: 14px;
+                cursor: pointer;
+              }
             }
           }
         }
       }
-    }
-    .btn {
-      margin-top: 30px;
-      .el-button {
-        width: 100px;
-      }
-    }
-    .el-table {
-      margin-bottom: 30px;
-    }
-    .roomSetting {
-      display: flex;
-      justify-content: center;
 
-      .el-input {
-        width: 45px;
+      .btn {
+        margin-top: 30px;
+
+        .el-button {
+          width: 100px;
+        }
+      }
+
+      .el-table {
+        margin-bottom: 30px;
+      }
+
+      .roomSetting {
+        display: flex;
+        justify-content: center;
+
+        .el-input {
+          width: 45px;
+        }
+      }
+    }
+
+    .payForList li {
+      text-align: left;
+      padding: 20px;
+      border-bottom: 1px solid #f3f3f3;
+      font-size: 18px;
+
+      span,
+      p {
+        padding: 0 20px;
+      }
+    }
+
+    /deep/.el-dialog__footer {
+      text-align: center;
+    }
+
+    .qianzi {
+      text-align: right;
+      margin: 40px 200px 40px 0;
+    }
+
+    .activeBlue {
+      border: 1px solid #f00;
+      color: #f00;
+      padding: 5px 10px;
+      margin: 0 10px 10px 0;
+
+      span {
+        display: block;
+        font-size: 14px;
+        cursor: pointer;
       }
     }
   }
-  .payForList li {
-    text-align: left;
-    padding: 20px;
-    border-bottom: 1px solid #f3f3f3;
-    font-size: 18px;
-    span,
-    p {
-      padding: 0 20px;
-    }
-  }
-  /deep/.el-dialog__footer {
-    text-align: center;
-  }
-  .qianzi {
-    text-align: right;
-    margin: 40px 200px 40px 0;
-  }
-  .activeBlue {
-    border: 1px solid #f00;
-    color: #f00;
-    padding: 5px 10px;
-    margin: 0 10px 10px 0;
-    span {
-      display: block;
-      font-size: 14px;
-      cursor: pointer;
-    }
-  }
-}
 </style>
 
 <style scoped>
-/* .el-form-item {
+  /* .el-form-item {
   margin-bottom: 35px !important;
 } */
-.el-date-editor.el-input,
-.el-date-editor.el-input__inner {
-  width: 256px;
-}
-div /deep/.el-checkbox {
-  font-size: 18px;
-}
-div /deep/.el-checkbox__inner {
-  width: 20px;
-  height: 20px;
-}
-div /deep/.el-checkbox__inner::after {
-  height: 11px;
-  left: 8px;
-  top: 2px;
-}
-div /deep/.el-checkbox__label {
-  font-size: 18px;
-  line-height: 20px;
-}
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 256px;
+  }
+
+  div /deep/.el-checkbox {
+    font-size: 18px;
+  }
+
+  div /deep/.el-checkbox__inner {
+    width: 20px;
+    height: 20px;
+  }
+
+  div /deep/.el-checkbox__inner::after {
+    height: 11px;
+    left: 8px;
+    top: 2px;
+  }
+
+  div /deep/.el-checkbox__label {
+    font-size: 18px;
+    line-height: 20px;
+  }
 </style>
-
-
