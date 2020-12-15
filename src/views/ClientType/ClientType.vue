@@ -19,11 +19,9 @@
                 <el-table-column prop="name" label="客户类型" align="center"></el-table-column>
                 <el-table-column prop="create_time" label="操作时间" align="center"></el-table-column>
                 <el-table-column prop="username" label="操作人" align="center"></el-table-column>
-                <el-table-column align="center" label="操作">
-                    <template slot-scope="scope">
-                        <el-button size="mini" @click="showDialogEdit(scope)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-                    </template>
+                <el-table-column align="center" v-slot="scope" label="操作">
+                    <el-button size="mini" @click="showDialogEdit(scope)">编辑</el-button>
+                    <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
                 </el-table-column>
             </el-table>
 

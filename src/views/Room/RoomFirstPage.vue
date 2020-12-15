@@ -19,7 +19,8 @@
             </template>
 
             <ul class="floorList">
-              <li v-for="v in f.floorItem" @click="setRoomState(v)" :key="v.id" :style="{ background: v.color }">
+              <li v-for="v in f.floorItem" @click="setRoomState(v)" :class="[v.id == roomID?'roomStyle':'']" :key="v.id"
+                :style="{ background: v.color }">
                 <div class="roomStatus">
                   <span>{{ v.room_no }}</span>
                   <span>{{ v.roomtype }}</span>
@@ -59,9 +60,9 @@
             <div class="roomType-choose">
               <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
                 <el-checkbox v-for="(v, i) in roomType" :key="i" :label="v.name">
-                  {{ v.name }} ({{ v.jing_count }}/{{ v.count }})</el-checkbox>
+                  {{ v.name }} ({{ v.jing_count }}/{{ v.count }})
+                </el-checkbox>
               </el-checkbox-group>
-
             </div>
           </div>
         </div>
@@ -88,7 +89,7 @@
           </div>
         </div> -->
       </div>
-      <el-dialog title="房态维护" :visible.sync="dialogVisible" width="30%">
+      <!-- <el-dialog title="房态维护" :visible.sync="dialogVisible" width="30%">
         <el-form ref="adddialogVisible" :model="formRoomFirstPage" label-width="100px">
           <el-row type="flex" justify="space-between">
             <el-col :span="11">
@@ -119,7 +120,7 @@
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="submitRoomState">确 定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
 
       <div class="aside-bottom">
         <div class="roomType">
@@ -304,8 +305,18 @@
       pushPage(data) {
         this.isShowRoute = true;
         // console.log(data.path);
+        let roomID = this.roomID
+        let RoomNum = this.formRoomFirstPage.addRoomNum
+        let query = {}
+        if (roomID && RoomNum) {
+          query = {
+            id: roomID,
+            room_no: RoomNum
+          }
+        }
         this.$router.push({
           path: data.path,
+          query
         });
       },
       getRows() {
@@ -448,33 +459,46 @@
       },
       // 修改房态
       setRoomState(v) {
-        this.dialogVisible = true
-        this.roomID = v.id
-        this.formRoomFirstPage.addRoomNum = v.room_no
-        this.formRoomFirstPage.onRoomFloor = v.floor
+        // this.dialogVisible = true
+
+        if (v.id === this.roomID) {
+          this.roomID = ""
+        } else {
+          this.roomID = v.id
+          this.formRoomFirstPage.addRoomNum = v.room_no
+          this.formRoomFirstPage.onRoomFloor = v.floor
+        }
+
         // console.log(v)
       },
-      submitRoomState() {
-        // console.log(typeof this.roomID)
-        let params = {
-          ids: this.roomID + "",
-          repair: this.roomStateValue
-        }
-        roomModify(params).then(res => {
-          res = typeof res == "string" ? JSON.parse(res) : res;
-          // console.log(res)
-          if (res.code == 0) {
-            this.getRows()
-            this.dialogVisible = false
-          } else {
-            this.message("error", res.message)
-          }
-        })
-      },
+      // submitRoomState() {
+      //   // console.log(typeof this.roomID)
+      //   let params = {
+      //     ids: this.roomID + "",
+      //     repair: this.roomStateValue
+      //   }
+      //   roomModify(params).then(res => {
+      //     res = typeof res == "string" ? JSON.parse(res) : res;
+      //     // console.log(res)
+      //     if (res.code == 0) {
+      //       this.getRows()
+      //       this.dialogVisible = false
+      //     } else {
+      //       this.message("error", res.message)
+      //     }
+      //   })
+      // },
     },
   };
 </script>
 <style lang="less" scoped>
+  .roomStyle {
+    transform: scale(1.1);
+    cursor: pointer;
+    box-shadow: #989898 5px 5px 5px;
+    transition: all 200ms;
+  }
+
   .el-aside {
     // border: 1px solid #f00;
 
@@ -649,13 +673,6 @@
                 padding: 0;
               }
             }
-          }
-
-          li:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-            box-shadow: #989898 5px 5px 5px;
-            transition: all 200ms;
           }
         }
       }

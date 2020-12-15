@@ -351,7 +351,7 @@
         } else
           this.disabledMember_card = false
         deep: true
-
+  
       }
 
     },
@@ -388,6 +388,12 @@
               res = typeof res == "string" ? JSON.parse(res) : res;
               // console.log(res)
               if (res.code == 0) {
+                if (!res.data) {
+                  return this.message("error", '添加失败请稍后再试')
+                }
+                this.$router.replace({
+                  path: '/RoomFirstPage'
+                })
                 this.message("success", res.message)
               } else {
                 this.message("error", res.message)
@@ -451,7 +457,6 @@
               } = res
               if (!data) {
                 this.formLabelAlign.member_card = ''
-                this.formLabelAlign.tel = ''
                 return this.message("error", '请输入正确的会员卡号')
               } else {
                 this.message("success", res.message)
@@ -460,7 +465,6 @@
               }
             } else {
               this.formLabelAlign.member_card = ''
-              this.formLabelAlign.tel = ''
               this.message("error", res.message)
             }
           })
