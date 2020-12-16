@@ -11,7 +11,7 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="房号：" prop="room_no">
-                  <el-input clearable v-model="formReplenish.room_no"></el-input>
+                  <el-input clearable v-model="formReplenish.room_no" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7"></el-col>
@@ -276,18 +276,18 @@ export default {
     return {
       // 表单参数
       formReplenish: {
-        roomCard: "",
-        clientType: "",
-        groupName: "",
+        room_no: this.$route.query.room_no,
+        type: "",
+        groupname: "",
         nationality: "",
-        IDtype: "",
-        phoneNum: "",
-        cardNum: "",
-        username: "",
-        IDcardNum: "",
-        IDaddress: "",
-        goOutTime: "",
-        goInTime: "",
+        zhengjian: "",
+        tel: "",
+        zhengjian_no: "",
+        name: "",
+        member_card: "",
+        address: "",
+        start_time: "",
+        end_time: "",
         nationality: "",
         payCardMoney: "",
         payWay: "",

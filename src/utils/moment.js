@@ -20,7 +20,7 @@ moment.locale('zh-cn', {
     meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
     meridiemHour: function (hour, meridiem) {
         if (hour === 12) {
-            hour = 0;
+            hour = 12;
         }
         if (meridiem === '凌晨' || meridiem === '早上' ||
             meridiem === '上午') {
