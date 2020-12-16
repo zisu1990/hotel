@@ -98,7 +98,7 @@
             </el-col>
           </el-row>
           <p class="chooseTitle">可选房型：</p>
-          <div class="chooseRoom" >
+          <div class="chooseRoom">
             <el-row :gutter="20" type="flex" justify="left">
               <el-col :span="8">
                 <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
@@ -112,9 +112,7 @@
                 <div class="floorItem" v-for="(v, i) in louceng" :key="i">
                   <p>{{ v.floor }}：</p>
                   <ul>
-                    <!-- :class="f.className"
-                    @click="chooseRoom(i, index, f)" -->
-                    <li class="fangjian" v-for="(f, index) in v.item" :key="index">
+                    <li class="fangjian" v-for="(f, index) in v.item" @click="chooseRoom(f)" :key="index">
                       <span>{{ f.room_no }}</span>
                       <span>{{ f.roomtype }}</span>
                     </li>
@@ -128,9 +126,9 @@
             <el-col :span="24">
               <el-table stripe :header-cell-style="tableStyle" :cell-style="tableStyle" :data="roomTableData"
                 style="width: 100%; margin-top: 10px" max-height="500px">
-                <el-table-column prop="homeName" label="房间类型" width="150px"></el-table-column>
-                <el-table-column prop="roomNum" label="房间号"></el-table-column>
-                <el-table-column prop="pric" label="房间单价(元)"></el-table-column>
+                <el-table-column prop="roomtype" label="房间类型" width="150px"></el-table-column>
+                <el-table-column prop="room_no" label="房间号"></el-table-column>
+                <el-table-column prop="price" label="房间单价(元)"></el-table-column>
 
                 <el-table-column label="操作">
                   <template v-slot="scope">
@@ -525,6 +523,7 @@
           this.roomType = ""
           this.louceng = ""
         }
+        console.log("kaishi"+ getAllTime(this.checkInForm.start_time)+"结束日期change"+getAllTime(v))
         if (this.checkInForm.start_time) {
           if (v < this.checkInForm.start_time) {
             this.message('warning', '预离时间不能小于遇到时间')
@@ -559,10 +558,6 @@
       // },
       handleReduce(i, v) {
         let roomTableData = this.roomTableData;
-        if (roomTableData.length == 1) {
-          this.$message.error("不可删除");
-          return;
-        }
         roomTableData.splice(i, 1);
       },
 
@@ -575,23 +570,36 @@
         this.payforDialogVisible = false;
         this.GateCardDialogVisible = false;
       },
-      // chooseRoom(id, i, item) {
-      //   // activeBlue
-      //   item.className = "activeBlue";
-      //   this.isActiveArr.push(item);
-      //   // {
-      //   //   homeName: "单人间",
-      //   //   roomNum: 8102,
-      //   //   pric: 200,
-      //   // }
-      //   let data = {
-      //     homeName: item.type,
-      //     roomNum: item.floorNo,
-      //     pric: 200
-      //   };
-      //   this.roomTableData.push(data);
-      //   console.log(this.isActiveArr);
-      // }
+      chooseRoom(v) {
+        // activeBlue
+        // item.className = "activeBlue";
+        // let data = {
+        //   homeName: v.roomType,
+        //   roomNum: item.floorNo,
+        //   pric: 200
+        // };
+        let roomTableData = this.roomTableData
+        let filt = roomTableData.filter(item => item.id === v.id)
+        if (filt.length) {
+          console.log()
+          console.log(roomTableData.indexOf(filt))
+          roomTableData.splice(filt)
+        }
+        roomTableData.push(v);
+        // let arrItem = {
+        //   id: v.id,
+        //   floor: v.floor
+        // }
+        // this.isActiveArr.push(arrItem);
+        // this.isActiveArr.push(item);
+        // {
+        //   homeName: "单人间",
+        //   roomNum: 8102,
+        //   pric: 200,
+        // }
+
+        // console.log(this.isActiveArr);
+      }
     }
   };
 </script>
