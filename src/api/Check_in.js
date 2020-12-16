@@ -14,3 +14,10 @@ export const zhengjianLists = params => post('/zhengjian/lists', params)
 
 // 客户类型
 export const orderYdroomtype = params => post('/order/ydroomtype', params)
+
+
+// 预订会员查询
+export const orderMemberinfo = params => post('/order/memberinfo', params)
+
+//充值方式
+export const paymethod = params => post('/paymethod/lists', params)

@@ -417,6 +417,9 @@
       },
       // 根据身份证查询是否会员
       handleChangeIsVIP() {
+         if(this.formLabelAlign.member_card == ''){
+          return
+        }
         if (this.formLabelAlign.tel) {
           orderMemberinfo({
             member_card: this.formLabelAlign.tel

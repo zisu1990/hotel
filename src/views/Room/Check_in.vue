@@ -46,7 +46,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="会员卡号：">
-                <el-input v-model="checkInForm.vipNumber" placeholder="请输入会员卡号" clearable :style="{ width: '100%' }">
+                <el-input v-model="checkInForm.vipNumber" @clear="handleClearInput" @blur="handleChangeIsVIP"
+                  placeholder="请输入会员卡号" clearable :style="{ width: '100%' }">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -112,7 +113,12 @@
                 <div class="floorItem" v-for="(v, i) in louceng" :key="i">
                   <p>{{ v.floor }}：</p>
                   <ul>
-                    <li class="fangjian" v-for="(f, index) in v.item" @click="chooseRoom(f)" :key="index">
+                    <!-- :class="setColor(f,index)" -->
+
+                    <li class="fangjian" v-for="(f, index) in v.item"
+                      :class="{'activeBlue':isActiveArr.indexOf(f.id)!=-1}" ref="roomSetCorlor" @click="chooseRoom(f)"
+                      :key="index">
+                      {{f.id}}
                       <span>{{ f.room_no }}</span>
                       <span>{{ f.roomtype }}</span>
                     </li>
@@ -124,13 +130,13 @@
           <p class="chooseTitle">已选客房：</p>
           <el-row>
             <el-col :span="24">
-              <el-table stripe :header-cell-style="tableStyle" :cell-style="tableStyle" :data="roomTableData"
-                style="width: 100%; margin-top: 10px" max-height="500px">
-                <el-table-column prop="roomtype" label="房间类型" width="150px"></el-table-column>
-                <el-table-column prop="room_no" label="房间号"></el-table-column>
-                <el-table-column prop="price" label="房间单价(元)"></el-table-column>
+              <el-table stripe show-summary :summary-method="getSumMoney" :header-cell-style="tableStyle"
+                :cell-style="tableStyle" :data="roomTableData" style="width: 100%; margin-top: 10px" max-height="500px">
+                <el-table-column align="center" prop="roomtype" label="房间类型" width="150px"></el-table-column>
+                <el-table-column align="center" prop="room_no" label="房间号"></el-table-column>
+                <el-table-column align="center" prop="price" label="房间单价(元)"></el-table-column>
 
-                <el-table-column label="操作">
+                <el-table-column align="center" label="操作">
                   <template v-slot="scope">
                     <el-button icon="el-icon-delete" circle type="danger"
                       @click="handleReduce(scope.$index, scope.row)"></el-button>
@@ -147,7 +153,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="押金（元）：">
+              <el-form-item label="押金（元）：" prop="deposit">
                 <el-input v-model="checkInForm.deposit" :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
@@ -165,11 +171,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="预付方式：">
+              <el-form-item prop="payfor" label="预付方式：">
                 <el-select v-model="checkInForm.payfor" placeholder="选择支付方式" :style="{ width: '100%' }">
-                  <el-option label="现金" value="1"></el-option>
-                  <el-option label="支付宝" value="2"></el-option>
-                  <el-option label="微信" value="3"></el-option>
+                  <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -183,9 +188,10 @@
           <el-row :gutter="20" type="flex" justify="left">
             <el-col :span="16" style="display: flex; align-content: center">
               <el-form-item label="会员卡支付：">
-                <el-select v-model="checkInForm.isCardPayfor" placeholder="选择支付方式" :style="{ width: '100%' }">
-                  <el-option label="会员卡支付" value="1"></el-option>
-                  <el-option label="否" value="2"></el-option>
+                <el-select :disabled="disabledMember_card" v-model="checkInForm.isCardPayfor" placeholder="选择支付方式"
+                  :style="{ width: '100%' }">
+                  <el-option label="是" value="是"></el-option>
+                  <el-option label="否" value="否"></el-option>
                 </el-select>
               </el-form-item>
               <span style="
@@ -197,7 +203,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="卡扣金额（元）：">
-                <el-input v-model="checkInForm.cardPayfor" :style="{ width: '100%' }"></el-input>
+                <el-input :disabled="disabledCardKkNum" v-model="checkInForm.cardPayfor" :style="{ width: '100%' }">
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -241,7 +248,9 @@
     nationalityIndex,
     customertypeLists,
     zhengjianLists,
-    orderYdroomtype
+    orderYdroomtype,
+    orderMemberinfo,
+    paymethod
   } from '@/api/Check_in.js'
   import {
     getAllTime,
@@ -269,6 +278,8 @@
       return {
         // 国籍列表
         nativeList: [],
+        // 支付方式
+        payForForhod: [],
         //客户类型
         keHuType: [],
         checkInForm: {
@@ -283,13 +294,13 @@
           end_time: "",
           start_time: "",
           datecount: "",
-          RoomSumMoney: 1000,
-          deposit: 200,
-          advancePay: 0,
+          RoomSumMoney: "",
+          deposit: "",
+          advancePay: "",
           payfor: "",
-          advanceMoney: 200,
+          advanceMoney: "",
           isCardPayfor: "",
-          cardPayfor: 500,
+          cardPayfor: "",
         },
         checkRoomType: [],
         checkInRef: {
@@ -372,16 +383,26 @@
             message: "请选择离店时间",
             trigger: "change"
           }],
+          deposit: [{
+            required: true,
+            message: "请输入押金金额",
+            trigger: "blur"
+          }],
+          payfor: [{
+            required: true,
+            message: "请选择预付方式",
+            trigger: "change"
+          }],
         },
+        // 是否是会员卡支付disabled
+        disabledMember_card: true,
+        // 卡扣金额disabled
+        disabledCardKkNum: true,
         // 选中房间
         isActiveArr: [],
 
         // 表格对应的数据
-        roomTableData: [{
-          homeName: "单人间",
-          roomNum: 8102,
-          pric: 200
-        }],
+        roomTableData: [],
         // 表格样式
         tableStyle: {
           textAlign: "center"
@@ -406,11 +427,62 @@
     mounted() {
       // console.log('tag', this.$route.query)
     },
+    // computed(){
+    //   setColor(){
+
+    //   }
+    // // },
+    // watch: {
+    //   isActiveArr(val) {
+    //     let roomSetCorlor = this.$refs.roomSetCorlor
+    //     console.log(roomSetCorlor.id)
+    //     val.forEach((v, i) => {})
+    //   },
+    // },
+    computed: {
+      Newis_card_pay() {
+        return this.checkInForm.isCardPayfor
+      },
+      Newmember_card() {
+        return this.checkInForm.cardPayfor
+      }
+    },
+    watch: {
+      Newis_card_pay(val) {
+        if (val == '否')
+          this.disabledCardKkNum = true
+        else
+          this.disabledCardKkNum = false
+        deep: true
+      },
+      Newmember_card(val) {
+        if (!val) {
+          this.disabledMember_card = true
+          this.checkInForm.is_card_pay = '否'
+        } else
+          this.disabledMember_card = false
+        deep: true
+      }
+    },
     methods: {
+      // setColor(f) {
+      //   let str = ''
+      //   try {
+      //     this.isActiveArr.forEach(v => {
+      //       if (f.id == v.id) {
+      //         str = 'activeBlue'
+      //       }
+      //     })
+      //     return str
+      //   } catch (e) {
+      //     return str
+      //   }
+      // },
       getRows() {
         this.getNativeList()
         this.getCustomerType()
         this.getCredentials()
+        this.getPaymethodList()
       },
       // 提交表单
       submitForm() {
@@ -421,6 +493,18 @@
             return false
           }
         })
+      },
+      //充值方式
+      getPaymethodList() {
+        paymethod().then(res => {
+          res = JSON.parse(res);
+          // console.log(res, "获取充值列表");
+          if (res.code === 0) {
+            this.payForForhod = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
       },
       //获取客户类型
       getCustomerType() {
@@ -497,7 +581,7 @@
           end_time: getAllTime(this.checkInForm.end_time)
         }).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             this.$forceUpdate()
             this.roomType = res.data
@@ -514,7 +598,7 @@
           str += element + ","
         });
         str = str.substring(0, str.length - 1)
-        console.log(str)
+        // console.log(str)
         return str
       },
       // 结束日期change
@@ -523,7 +607,7 @@
           this.roomType = ""
           this.louceng = ""
         }
-        console.log("kaishi"+ getAllTime(this.checkInForm.start_time)+"结束日期change"+getAllTime(v))
+        console.log("kaishi" + getAllTime(this.checkInForm.start_time) + "结束日期change" + getAllTime(v))
         if (this.checkInForm.start_time) {
           if (v < this.checkInForm.start_time) {
             this.message('warning', '预离时间不能小于遇到时间')
@@ -536,7 +620,7 @@
             end_time: getAllTime(v)
           }).then(res => {
             res = typeof res == "string" ? JSON.parse(res) : res;
-            console.log(res)
+            // console.log(res)
             if (res.code == 0) {
               this.roomType = res.data
               this.louceng = res.room_list
@@ -556,9 +640,45 @@
       //   roomTableData.sum += 1;
       //   roomTableData.suMoney += roomTableData.pric;
       // },
+      // 设置最后一行合计
+      getSumMoney({
+        columns,
+        data
+      }) {
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 1 || index === 3) {
+            return;
+          }
+
+          const values = data.map((item) => Number(item[column.property]));
+          if (!values.every((value) => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index];
+          } else {
+            sums[index] = "结算";
+          }
+        });
+        if (sums[2] != '结算') {
+          this.checkInForm.RoomSumMoney = sums[2]
+        }
+        return sums;
+      },
       handleReduce(i, v) {
         let roomTableData = this.roomTableData;
         roomTableData.splice(i, 1);
+        this.isActiveArr.forEach((item, i) => {
+          if (v.id === item) {
+            this.isActiveArr.splice(i, 1)
+          }
+        })
       },
 
       //打印
@@ -570,6 +690,78 @@
         this.payforDialogVisible = false;
         this.GateCardDialogVisible = false;
       },
+      // 根据身份证查询是否会员
+      handleChangeIsVIP() {
+        if (this.checkInForm.vipNumber == '') {
+          return
+        }
+        if (this.checkInForm.tel) {
+          orderMemberinfo({
+            member_card: this.checkInForm.vipNumber
+          }).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res)
+            if (res.code == 0) {
+              let {
+                data
+              } = res
+              // console.log(data)
+              if (!data) {
+                this.disabledMember_card = true
+                return this.message("error", '会员账号与手机号不匹配')
+              } else if (data) {
+                let card_no = data.card_no
+                console.log(card_no)
+                // this.message("success", res.message)
+                // this.formLabelAlign.member_card = data.card_no
+                // this.$forceUpdate()
+                if (card_no == this.checkInForm.vipNumber) {
+                  this.disabledMember_card = false
+                  this.message("success", 操作成功)
+                } else {
+                  this.disabledMember_card = true
+                  return this.message("error", '会员账号与手机号不匹配')
+                }
+              }
+            } else {
+              this.disabledMember_card = true
+              this.message("error", '会员账号与手机号不匹配')
+            }
+          })
+        } else {
+          orderMemberinfo({
+            member_card: this.checkInForm.vipNumber
+          }).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            if (res.code == 0) {
+              let {
+                data
+              } = res
+              if (!data) {
+                this.checkInForm.vipNumber = ''
+                this.disabledMember_card = true
+                return this.message("error", '请输入正确的会员卡号')
+              } else {
+                this.message("success", res.message)
+                this.checkInForm.tel = data.mobile
+                this.disabledMember_card = false
+                this.$forceUpdate()
+              }
+            } else {
+              this.disabledMember_card = true
+              this.checkInForm.vipNumber = ''
+              this.message("error", res.message)
+            }
+          })
+        }
+      },
+      // 清空会员手机
+      handleClearInput() {
+        this.checkInForm.vipNumber = ''
+        this.checkInForm.tel = ''
+        this.disabledMember_card = true
+        this.checkInForm.is_card_pay = '否'
+      },
       chooseRoom(v) {
         // activeBlue
         // item.className = "activeBlue";
@@ -579,13 +771,27 @@
         //   pric: 200
         // };
         let roomTableData = this.roomTableData
-        let filt = roomTableData.filter(item => item.id === v.id)
-        if (filt.length) {
-          console.log()
-          console.log(roomTableData.indexOf(filt))
-          roomTableData.splice(filt)
+        let len = -1
+        try {
+          roomTableData.forEach((item, index) => {
+            if (item.id == v.id) {
+              len = index
+              throw new Error("end")
+            } else {
+              len = -1
+            }
+          })
+        } catch (e) {}
+        if (len >= 0) {
+          roomTableData.splice(len, 1)
+          this.isActiveArr.splice(len, 1)
+          // console.log(this.isActiveArr)
+          this.$forceUpdate()
+          return
         }
         roomTableData.push(v);
+        this.isActiveArr.push(v.id);
+        this.$forceUpdate()
         // let arrItem = {
         //   id: v.id,
         //   floor: v.floor
@@ -727,22 +933,22 @@
       margin: 40px 200px 40px 0;
     }
 
-    .activeBlue {
-      border: 1px solid #f00;
-      color: #f00;
-      padding: 5px 10px;
-      margin: 0 10px 10px 0;
 
-      span {
-        display: block;
-        font-size: 14px;
-        cursor: pointer;
-      }
+  }
+
+  div /deep/.activeBlue {
+    border: 1px solid #f00 !important;
+    color: #f00 !important;
+    padding: 5px 10px !important;
+    margin: 0 10px 10px 0 !important;
+
+    span {
+      display: block !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
     }
   }
-</style>
 
-<style scoped>
   /* .el-form-item {
   margin-bottom: 35px !important;
 } */
