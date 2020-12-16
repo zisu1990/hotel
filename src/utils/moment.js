@@ -20,7 +20,7 @@ moment.locale('zh-cn', {
     meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
     meridiemHour: function (hour, meridiem) {
         if (hour === 12) {
-            hour = 12;
+            hour = 0;
         }
         if (meridiem === '凌晨' || meridiem === '早上' ||
             meridiem === '上午') {
@@ -95,7 +95,7 @@ moment.locale('zh-cn', {
     }
 })
 export function getAllTime(v) {
-    return moment(v).format("YYYY-MM-DD hh:mm:ss")
+    return moment(v).format("YYYY-MM-DD HH:mm:ss")
 }
 export function getDayTime(start, end) {
     return moment(end).from(moment(start), true)
