@@ -7,32 +7,21 @@
             <p class="title">补录住客</p>
           </el-row>
 
-          <el-form
-            ref="formReplenish"
-            label-width="130px"
-            :model="formReplenish"
-            :rules="rules"
-          >
+          <el-form ref="formReplenish" label-width="130px" :model="formReplenish" :rules="rules">
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="房号：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.roomCard"
-                  ></el-input>
+                <el-form-item label="房号：" prop="room_no">
+                  <el-input clearable v-model="formReplenish.room_no" disabled></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="7"> </el-col>
-              <el-col :span="7"> </el-col>
+              <el-col :span="7"></el-col>
+              <el-col :span="7"></el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="客户类型：">
-                  <el-select
-                    v-model="formReplenish.clientType"
-                    style="width: 100%"
-                  >
+                  <el-select v-model="formReplenish.type" style="width: 100%">
                     <el-option label="散客" value="sanke"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                   </el-select>
@@ -40,18 +29,12 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="团体名称：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.groupName"
-                  ></el-input>
+                  <el-input clearable v-model="formReplenish.groupname"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="国籍：">
-                  <el-select
-                    v-model="formReplenish.nationality"
-                    style="width: 100%"
-                  >
+                  <el-select v-model="formReplenish.nationality" style="width: 100%">
                     <el-option label="中国" value="中国"></el-option>
                     <el-option label="英国" value="英国"></el-option>
                   </el-select>
@@ -62,7 +45,7 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="证件类型：">
-                  <el-select v-model="formReplenish.IDtype" style="width: 62%">
+                  <el-select v-model="formReplenish.zhengjian" style="width: 62%">
                     <el-option label="农村" value="nongcun"></el-option>
                     <el-option label="城市" value="chengshi"></el-option>
                   </el-select>
@@ -70,86 +53,63 @@
                     type="primary"
                     size="small"
                     style="width: 35%; height: 40px; margin-left: 3%"
-                    >读身份证</el-button
-                  >
+                  >读身份证</el-button>
                 </el-form-item>
               </el-col>
 
               <el-col :span="7">
                 <el-form-item label="联系电话：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.phoneNum"
-                  ></el-input>
+                  <el-input clearable v-model="formReplenish.tel"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.cardNum"
-                  ></el-input>
+                  <el-input clearable v-model="formReplenish.cardNum"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="客主姓名：" prop="username">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.username"
-                  ></el-input>
+                <el-form-item label="客主姓名：" prop="name">
+                  <el-input clearable v-model="formReplenish.name"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="证件号：" prop="IDcardNum">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.IDcardNum"
-                  ></el-input>
+                <el-form-item label="证件号：" prop="zhengjian_no">
+                  <el-input clearable v-model="formReplenish.zhengjian_no"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-button
-                  style="width: 40%; margin-left: -150px"
-                  type="success"
-                  round
-                  >住客登记查询</el-button
-                >
+                <el-button style="width: 40%; margin-left: -150px" type="success" round>住客登记查询</el-button>
               </el-col>
             </el-row>
 
             <el-row>
               <el-form-item label="证件地址：">
-                <el-input
-                  clearable
-                  v-model="formReplenish.IDaddress"
-                ></el-input>
+                <el-input clearable v-model="formReplenish.address"></el-input>
               </el-form-item>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="入住时间：" prop="goInTime">
+                <el-form-item label="入住时间：" prop="start_time">
                   <el-date-picker
                     style="width: 100%"
-                    v-model="formReplenish.goInTime"
+                    v-model="formReplenish.start_time"
                     type="datetime"
                     placeholder="选择日期时间"
-                  >
-                  </el-date-picker>
+                  ></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
-                <el-form-item label="离店时间：" prop="goOutTime">
+                <el-form-item label="离店时间：" prop="end_time">
                   <el-date-picker
                     style="width: 60%"
-                    v-model="formReplenish.goOutTime"
+                    v-model="formReplenish.end_time"
                     type="datetime"
                     placeholder="选择日期时间"
-                  >
-                  </el-date-picker>
+                  ></el-date-picker>
                   <el-input
                     style="width: 40%"
                     v-model="formReplenish.nationality"
@@ -157,36 +117,23 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="4"> </el-col>
+              <el-col :span="4"></el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item class="settingImprest" label="已预付款(元)：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.haveImprest"
-                  ></el-input>
+                  <el-input clearable v-model="formReplenish.total_count"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item
-                  class="settingImprest"
-                  label="应交预付款(元)："
-                  prop="noHaveImprest"
-                >
-                  <el-input
-                    clearable
-                    v-model="formReplenish.noHaveImprest"
-                  ></el-input>
+                <el-form-item class="settingImprest" label="应交预付款(元)：" prop="noHaveImprest">
+                  <el-input clearable v-model="formReplenish.noHaveImprest"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡支付：">
-                  <el-select
-                    v-model="formReplenish.isVipPay"
-                    style="width: 100%"
-                  >
+                  <el-select v-model="formReplenish.is_card_pay" style="width: 100%">
                     <el-option label="是" value="1"></el-option>
                     <el-option label="否" value="0"></el-option>
                   </el-select>
@@ -197,15 +144,12 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.payCardMoney"
-                  ></el-input>
+                  <el-input clearable v-model="formReplenish.card_money"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="预付方式：" prop="payWay">
-                  <el-select v-model="formReplenish.payWay" style="width: 100%">
+                <el-form-item label="预付方式：" prop="paymethod">
+                  <el-select v-model="formReplenish.paymethod" style="width: 100%">
                     <el-option label="现金" value="xianjin"></el-option>
                     <el-option label="支付宝" value="zhifubao"></el-option>
                     <el-option label="微信" value="weixin"></el-option>
@@ -214,26 +158,15 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item prop="bookMoney" label="预付金额：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.bookMoney"
-                  ></el-input>
+                  <el-input clearable v-model="formReplenish.bookMoney"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row style="margin-top: 30px">
               <el-form-item>
-                <el-button style="width: 100px" @click="resetForm"
-                  >重置</el-button
-                >
-                <el-button
-                  style="width: 100px"
-                  size="medium"
-                  type="primary"
-                  @click="submitForm"
-                  >确认</el-button
-                >
+                <el-button style="width: 100px" @click="resetForm">重置</el-button>
+                <el-button style="width: 100px" size="medium" type="primary" @click="submitForm">确认</el-button>
               </el-form-item>
             </el-row>
           </el-form>
@@ -281,7 +214,7 @@ export default {
         71: "台湾",
         81: "香港",
         82: "澳门",
-        91: "国外 ",
+        91: "国外 "
       };
       var tip = "";
       var pass = true;
@@ -343,50 +276,55 @@ export default {
     return {
       // 表单参数
       formReplenish: {
-        roomCard: "",
-        clientType: "",
-        groupName: "",
+        room_no: this.$route.query.room_no,
+        type: "",
+        groupname: "",
         nationality: "",
-        IDtype: "",
-        phoneNum: "",
-        cardNum: "",
-        username: "",
-        IDcardNum: "",
-        IDaddress: "",
-        goOutTime: "",
-        goInTime: "",
+        zhengjian: "",
+        tel: "",
+        zhengjian_no: "",
+        name: "",
+        member_card: "",
+        address: "",
+        start_time: "",
+        end_time: "",
         nationality: "",
         payCardMoney: "",
         payWay: "",
-        bookMoney: "",
+        bookMoney: ""
       },
       //   表单规则
       rules: {
         goOutTime: [
-          { required: true, message: "请选择离店时间", trigger: "change" },
+          { required: true, message: "请选择离店时间", trigger: "change" }
         ],
         goInTime: [
-          { required: true, message: "请选择入住时间", trigger: "change" },
+          { required: true, message: "请选择入住时间", trigger: "change" }
         ],
         IDtype: [
-          { required: true, message: "请选择证件类型", trigger: "change" },
+          { required: true, message: "请选择证件类型", trigger: "change" }
         ],
         username: [
           { required: true, message: "请输入客户姓名", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
         ],
         IDcardNum: [{ validator: idCardValidity, trigger: "blur" }],
         payWay: [
-          { required: true, message: "请选择预订支付方式", trigger: "change" },
+          { required: true, message: "请选择预订支付方式", trigger: "change" }
         ],
-        bookMoney: [{ validator: bookMoney, trigger: "blur" }],
+        bookMoney: [{ validator: bookMoney, trigger: "blur" }]
       },
+      roomID:'',
     };
   },
+  // created(){
+  //   this.roomID=this.$route.query.id
+  //   console.log(this.roomID)
+  // },
   methods: {
     // 提交表单
     submitForm() {
-      this.$refs.formReplenish.validate((valid) => {
+      this.$refs.formReplenish.validate(valid => {
         if (valid) {
           alert("submit!");
         } else {
@@ -398,8 +336,8 @@ export default {
     // 重置表单
     resetForm() {
       this.$refs.formReplenish.resetFields();
-    },
-  },
+    }
+  }
 };
 </script>
 <style  lang="less" scoped>
