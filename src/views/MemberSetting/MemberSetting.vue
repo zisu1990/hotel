@@ -10,7 +10,7 @@
                 v-model="memberFormSearch.level"
                 placeholder="请选择"
                 @change="selectLevel($event)"
-                
+           
               >
                 <el-option
                   v-for="(item,index) in memberlevel"
@@ -48,16 +48,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="memberFormSearch.page"
-        :page-sizes="[10, 20, 30, 40,50,100]"
-        :page-size="memberFormSearch.page_size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      ></el-pagination>
 
       <el-dialog title="设置优惠条件" :visible.sync="editdialogVisible" width="30%">
         <el-form v-model="setForm" label-width="120px">
@@ -122,7 +112,7 @@ export default {
         page: 1
       },
       id: "",
-      total: 0,
+     
       // 会员等级列表
       memberlevel: [],
       memberTableData: [],
@@ -156,7 +146,7 @@ export default {
         if (res.code === 0) {
           this.memberlevel = res.data;
           this.memberTableData = res.data;
-           this.total = res.data.count;
+          
         } else {
           this.message("error", res.message);
         }
@@ -164,6 +154,7 @@ export default {
     },
 
     selectLevel(e) {
+      
       let params = {
         page: this.memberFormSearch.page,
         page_size: this.memberFormSearch.page_size,
@@ -174,7 +165,9 @@ export default {
         console.log(res, "查询等级列表");
         if (res.code === 0) {
           this.memberTableData = res.data.list;
+
           this.total = res.data.count;
+          
         } else {
           this.message("error", res.message);
         }
@@ -191,14 +184,6 @@ export default {
       this.setForm.discount=v.discount
     },
 
-    handleSizeChange(val) {
-      this.memberFormSearch.page_size = val;
-      this.memberLevelList();
-    },
-    handleCurrentChange(val) {
-      this.memberFormSearch.page = val;
-      this.memberLevelList();
-    }
   }
 };
 </script>
