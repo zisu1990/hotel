@@ -562,9 +562,12 @@
       },
       // 开始日期change
       pickerStart_time(v) {
+        this.roomType = ""
+        this.louceng = ""
         if (!v) {
           this.roomType = ""
           this.louceng = ""
+          return
         }
         if (this.checkInForm.end_time) {
           if (v > this.checkInForm.end_time) {
@@ -620,6 +623,8 @@
       },
       // 结束日期change
       pickerEnd_time(v) {
+        this.roomType = ""
+        this.louceng = ""
         if (!v) {
           this.roomType = ""
           this.louceng = ""
@@ -711,90 +716,85 @@
           let totolMoneny
           // 凌晨订房
           if (HHstart_time >= settingInfo.yzstart_time && HHstart_time < settingInfo.yzend_time) {
+            console.log('凌晨订房')
             //根据时间当天的房费
-            totolMoneny = sums[2] * settingInfo.yz_date + sums[2]
+            totolMoneny = sums[2] * Number(settingInfo.yz_date) + sums[2]
             // 当天
 
             if (diffDay == 0) {
+              console.log('凌晨订房-结束时间当天')
               // 非会员
               if (this.disabledMember_card) {
+                console.log('凌晨订房-结束时间当天-非会员')
                 // 下午退房时间之内按小时收费
                 if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
-                  let hh = Moment(checkInForm.end_time).format('HH')
-                  let mm = Moment(checkInForm.end_time).format('mm')
-                  let hh1 = settingInfo.tfend_time1.substring(0, 2)
-                  let mm2 = settingInfo.tfend_time1.substring(3, 2)
+                  console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费')
+                  let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                  let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 2))
                   if (hh1 - hh == 0) {
-                    this.checkInForm.chargeAmount = settingInfo.tf_money1
-                    totolMoneny += settingInfo.tf_money1
+                    console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-超过十几分钟')
+                    totolMoneny += Number(settingInfo.tf_money1)
                   } else {
                     if (mm > mm2) {
-                      this.checkInForm.chargeAmount = settingInfo.tf_money1 * ((hh1 - hh) + 1)
-                      totolMoneny += settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                      console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-几个小时')
+                      totolMoneny += settingInfo.Number(settingInfo.tf_money1) * ((hh1 - hh) + 1)
                     } else {
-                      this.checkInForm.chargeAmount = settingInfo.tf_money1 * (hh1 - hh)
-                      totolMoneny += settingInfo.tf_money1 * (hh1 - hh)
+                      console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-小时')
+                      totolMoneny += settingInfo.Number(settingInfo.tf_money1) * (hh1 - hh)
                     }
                   }
                 } else if (HHend_time > settingInfo.tfend_time2) {
-                  this.checkInForm.chargeAmount = sums[2] * settingInfo.tf_date
                   // 下午退房时间之内按天收费
-                  totolMoneny += sums[2] * settingInfo.tf_date
+                  totolMoneny += sums[2] * Number(settingInfo.tf_date)
                 }
               } else {
                 // 会员
                 if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
-                  let hh = Moment(checkInForm.end_time).format('HH')
-                  let mm = Moment(checkInForm.end_time).format('mm')
-                  let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
-                  let mm2 = settingInfo.membertf_end_time2.substring(3, 2)
+                  let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                  let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 2))
                   if (hh1 - hh == 0) {
-                    this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1
-                    totolMoneny += settingInfo.membertf_tf_money1
+                    totolMoneny += Number(settingInfo.membertf_tf_money1)
                   } else {
                     if (mm > mm2) {
-                      this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
-                      totolMoneny += settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh1 - hh) + 1)
                     } else {
-                      this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * (hh1 - hh)
-                      totolMoneny += settingInfo.membertf_tf_money1 * (hh1 - hh)
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh1 - hh)
                     }
                   }
                 } else {
-                  this.checkInForm.chargeAmount = sums[2] * settingInfo.membertf_tf_date
-                  totolMoneny += sums[2] * settingInfo.membertf_tf_date
+                  totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
                 }
               }
 
             } else {
               // console.log(HHend_time > settingInfo.tfend_time1)
               // console.log(HHend_time <= settingInfo.tfend_time2)
-              totolMoneny += sums[2] * (Number(diffDay) + 1)
+              totolMoneny += sums[2] * (Number(diffDay))
               if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
                 // 非会员
                 if (this.disabledMember_card) {
                   // 下午退房时间之内按小时收费
                   if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
-                    let hh = Moment(checkInForm.end_time).format('HH')
-                    let mm = Moment(checkInForm.end_time).format('mm')
-                    let hh1 = settingInfo.tfend_time1.substring(0, 2)
-                    let mm2 = settingInfo.tfend_time1.substring(3, 2)
+                    let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                    let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                    let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                    let mm2 = Number(settingInfo.tfend_time1.substring(3, 2))
                     if (hh1 - hh == 0) {
-                      this.checkInForm.chargeAmount = sums[2] * settingInfo.tf_money1
-                      totolMoneny += settingInfo.tf_money1
+                      totolMoneny += Number(settingInfo.tf_money1)
                     } else {
                       if (mm > mm2) {
-                        this.checkInForm.chargeAmount = settingInfo.tf_money1 * ((hh1 - hh) + 1)
-                        totolMoneny += settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                        totolMoneny += Number(settingInfo.tf_money1) * ((hh1 - hh) + 1)
                       } else {
-                        this.checkInForm.chargeAmount = settingInfo.tf_money1 * (hh1 - hh)
-                        totolMoneny += settingInfo.tf_money1 * (hh1 - hh)
+                        totolMoneny += Number(settingInfo.tf_money1) * (hh1 - hh)
                       }
                     }
                   } else if (HHend_time > settingInfo.tfend_time2) {
                     // 下午退房时间之内按天收费
-                    this.checkInForm.chargeAmount = sums[2] * settingInfo.tf_date
-                    totolMoneny += sums[2] * settingInfo.tf_date
+                    totolMoneny += sums[2] * Number(settingInfo.tf_date)
                   }
                 } else {
                   // 会员
@@ -804,20 +804,16 @@
                     let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
                     let mm2 = settingInfo.membertf_end_time2.substring(3, 2)
                     if (hh1 - hh == 0) {
-                      this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1
-                      totolMoneny += settingInfo.membertf_tf_money1
+                      totolMoneny += Number(settingInfo.membertf_tf_money1)
                     } else {
                       if (mm > mm2) {
-                        this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
-                        totolMoneny += settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                        totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh1 - hh) + 1)
                       } else {
-                        this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * (hh1 - hh)
-                        totolMoneny += settingInfo.membertf_tf_money1 * (hh1 - hh)
+                        totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh1 - hh)
                       }
                     }
                   } else {
-                    this.checkInForm.chargeAmount = sums[2] * settingInfo.membertf_tf_date
-                    totolMoneny += sums[2] * settingInfo.membertf_tf_date
+                    totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
                   }
                 }
                 //  totolMoneny = sums[2] * settingInfo.yz_date
@@ -828,52 +824,53 @@
           } else {
             // 正常时间订房
             if (diffDay == 0) {
-              totolMoneny = sums[2] * (diffDay + 1)
+              totolMoneny = sums[2] * (diffDay)
             } else {
               totolMoneny = sums[2] * (diffDay)
               // 非会员
               if (this.disabledMember_card) {
                 // 下午退房时间之内按小时收费
                 if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
-                  let hh = Moment(checkInForm.end_time).format('HH')
-                  let mm = Moment(checkInForm.end_time).format('mm')
-                  let hh1 = settingInfo.tfend_time1.substring(0, 2)
-                  let mm2 = settingInfo.tfend_time1.substring(3, 2)
+                  let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                  let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 2))
                   if (hh1 - hh == 0) {
-                    totolMoneny += settingInfo.tf_money1
+                    totolMoneny += Number(settingInfo.tf_money1)
                   } else {
                     if (mm > mm2) {
-                      totolMoneny += settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                      totolMoneny += Number(settingInfo.tf_money1) * ((hh1 - hh) + 1)
                     } else {
-                      totolMoneny += settingInfo.tf_money1 * (hh1 - hh)
+                      totolMoneny += Number(settingInfo.tf_money1) * (hh1 - hh)
                     }
                   }
                 } else if (HHend_time > settingInfo.tfend_time2) {
                   // 下午退房时间之内按天收费
-                  totolMoneny += sums[2] * settingInfo.tf_date
+                  totolMoneny += sums[2] * Number(settingInfo.tf_date)
                 }
               } else {
                 // 会员
                 if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
-                  let hh = Moment(checkInForm.end_time).format('HH')
-                  let mm = Moment(checkInForm.end_time).format('mm')
-                  let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
-                  let mm2 = settingInfo.membertf_end_time2.substring(3, 2)
+                  let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                  let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 2))
                   if (hh1 - hh == 0) {
-                    totolMoneny += settingInfo.membertf_tf_money1
+                    totolMoneny += Number(settingInfo.membertf_tf_money1)
                   } else {
                     if (mm > mm2) {
-                      totolMoneny += settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh1 - hh) + 1)
                     } else {
-                      totolMoneny += settingInfo.membertf_tf_money1 * (hh1 - hh)
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh1 - hh)
                     }
                   }
                 } else {
-                  totolMoneny += sums[2] * settingInfo.membertf_tf_date
+                  totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
                 }
               }
             }
           }
+          console.log(totolMoneny)
           this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2)
         }
         return sums;
