@@ -409,6 +409,7 @@
         arr = v.filter(v => v.sum != 0)
         arr.forEach(v => str += `${v.name},${v.sum};`)
         str = str.substring(0, str.length - 1)
+        console.log(str)
         return str
       },
       // 重置表单
