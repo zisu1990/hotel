@@ -21,3 +21,6 @@ export const orderMemberinfo = params => post('/order/memberinfo', params)
 
 //充值方式
 export const paymethod = params => post('/paymethod/lists', params)
+
+//计费设置详情接口
+export const settingInfo = params => post('/setting/info', params)

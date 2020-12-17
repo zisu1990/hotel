@@ -81,14 +81,14 @@
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="入住时间：" prop="start_time">
-                <el-date-picker @change="pickerStart_time" v-model="checkInForm.start_time" type="datetime"
-                  placeholder="选择日期"></el-date-picker>
+                <el-date-picker @change="pickerStart_time" format="yyyy-MM-dd HH:mm" v-model="checkInForm.start_time"
+                  type="datetime" placeholder="选择日期"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="离店时间：" prop="end_time">
-                <el-date-picker @change="pickerEnd_time" v-model="checkInForm.end_time" type="datetime"
-                  placeholder="选择日期"></el-date-picker>
+                <el-date-picker @change="pickerEnd_time" format="yyyy-MM-dd HH:mm" v-model="checkInForm.end_time"
+                  type="datetime" placeholder="选择日期"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -118,7 +118,6 @@
                     <li class="fangjian" v-for="(f, index) in v.item"
                       :class="{'activeBlue':isActiveArr.indexOf(f.id)!=-1}" ref="roomSetCorlor" @click="chooseRoom(f)"
                       :key="index">
-                      {{f.id}}
                       <span>{{ f.room_no }}</span>
                       <span>{{ f.roomtype }}</span>
                     </li>
@@ -153,25 +152,20 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="押金（元）：" prop="deposit">
-                <el-input v-model="checkInForm.deposit" :style="{ width: '100%' }"></el-input>
+              <el-form-item label="加收金额（元）：">
+                <el-input disabled v-model="checkInForm.chargeAmount" :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="已付预款（元）：">
-                <el-input v-model="checkInForm.advancePay" :style="{ width: '100%' }"></el-input>
+              <el-form-item label="优惠金额（元）：">
+                <el-input disabled v-model="checkInForm.couponMoney" :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row :gutter="20" type="flex" justify="left">
             <el-col :span="8">
-              <el-form-item label="应交预付款（元）：">
-                <el-input v-model="checkInForm.RoomSumMoney" disabled :style="{ width: '100%' }"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="payfor" label="预付方式：">
+              <el-form-item prop="payfor" label="付款方式：">
                 <el-select v-model="checkInForm.payfor" placeholder="选择支付方式" :style="{ width: '100%' }">
                   <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
                   </el-option>
@@ -179,8 +173,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="预付金额（元）：">
-                <el-input v-model="checkInForm.advanceMoney" :style="{ width: '100%' }"></el-input>
+              <el-form-item label="付款金额（元）：">
+                <el-input v-model="checkInForm.paymentAmount" :style="{ width: '100%' }"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="押金（元）：" prop="deposit">
+                <el-input v-model="checkInForm.deposit" :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -250,12 +249,14 @@
     zhengjianLists,
     orderYdroomtype,
     orderMemberinfo,
-    paymethod
+    paymethod,
+    settingInfo
   } from '@/api/Check_in.js'
   import {
     getAllTime,
-    getDayTime
+    getDayTime,
   } from '@/utils/moment.js'
+  import Moment from 'moment'
   export default {
     data() {
       var checkPhone = (rule, value, callback) => {
@@ -296,11 +297,12 @@
           datecount: "",
           RoomSumMoney: "",
           deposit: "",
-          advancePay: "",
+          couponMoney: "",
           payfor: "",
-          advanceMoney: "",
+          paymentAmount: "",
           isCardPayfor: "",
           cardPayfor: "",
+          chargeAmount: "",
         },
         checkRoomType: [],
         checkInRef: {
@@ -368,9 +370,8 @@
             message: "请输入证件地址",
             trigger: "blur"
           }, {
-            min: 2,
-            max: 5,
-            message: "长度在 2 到 5 个字符",
+            min: 5,
+            message: "请输入最少5 个字符",
             trigger: "blur"
           }],
           start_time: [{
@@ -407,7 +408,8 @@
         tableStyle: {
           textAlign: "center"
         },
-
+        // 计费详情
+        settingInfo: "",
         // 弹框住客登记、
         ResidentsDialogVisible: false,
         // 住客登记表格
@@ -483,9 +485,24 @@
         this.getCustomerType()
         this.getCredentials()
         this.getPaymethodList()
+        this.getMoneyWay()
+      },
+      // 计费设置
+      getMoneyWay() {
+        settingInfo().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.settingInfo = res.data
+          } else {
+            this.message("error", res.message)
+          }
+        })
       },
       // 提交表单
       submitForm() {
+        let checkInForm = this.checkInForm
+        console.log(checkInForm)
         this.$refs.checkInForm.validate(valite => {
           if (valite) {
 
@@ -535,7 +552,7 @@
       getCredentials() {
         zhengjianLists().then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             this.certificateOptions = res.data
           } else {
@@ -607,7 +624,7 @@
           this.roomType = ""
           this.louceng = ""
         }
-        console.log("kaishi" + getAllTime(this.checkInForm.start_time) + "结束日期change" + getAllTime(v))
+        // console.log("kaishi" + getAllTime(this.checkInForm.start_time) + "结束日期change" + getAllTime(v))
         if (this.checkInForm.start_time) {
           if (v < this.checkInForm.start_time) {
             this.message('warning', '预离时间不能小于遇到时间')
@@ -666,8 +683,198 @@
             sums[index] = "结算";
           }
         });
+
         if (sums[2] != '结算') {
-          this.checkInForm.RoomSumMoney = sums[2]
+          let checkInForm = this.checkInForm
+          let settingInfo = this.settingInfo
+          let HHstart_time = Moment(checkInForm.start_time).format('HH:mm')
+          let HHend_time = Moment(checkInForm.end_time).format('HH:mm')
+          let YYstart_time = Moment(checkInForm.start_time).format('YYYY-MM-DD')
+          let YYend_time = Moment(checkInForm.end_time).format('YYYY-MM-DD')
+          // let settingInfo = this.settingInfo
+          // let start_time = Moment(this.checkInForm.start_time).format('X')
+          // let end_time = Moment(this.checkInForm.end_time).format('X')
+          // let strDate = Moment.unix(start_time).format("YYYY MM DD HH:mm")
+          // let endDate = Moment.unix(end_time).format("YYYY MM DD HH:mm")
+
+          // // 夜间入住时间段
+          // let yzstart_time = Moment(settingInfo.yzstart_time).format('X')
+          // let yzend_time = Moment(settingInfo.yzend_time).format('X')
+
+          // console.log(yzend_time - yzstart_time)
+          // if (sums[2] != '结算' && start_time && end_time) {
+          //   if (end_time - start_time < yzend_time - yzstart_time) {
+
+          //   }
+          let diffDay = Moment(YYend_time).diff(Moment(YYstart_time), 'days')
+          // 需要支付的房费
+          let totolMoneny
+          // 凌晨订房
+          if (HHstart_time >= settingInfo.yzstart_time && HHstart_time < settingInfo.yzend_time) {
+            //根据时间当天的房费
+            totolMoneny = sums[2] * settingInfo.yz_date + sums[2]
+            // 当天
+
+            if (diffDay == 0) {
+              // 非会员
+              if (this.disabledMember_card) {
+                // 下午退房时间之内按小时收费
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                  let hh = Moment(checkInForm.end_time).format('HH')
+                  let mm = Moment(checkInForm.end_time).format('mm')
+                  let hh1 = settingInfo.tfend_time1.substring(0, 2)
+                  let mm2 = settingInfo.tfend_time1.substring(3, 2)
+                  if (hh1 - hh == 0) {
+                    this.checkInForm.chargeAmount = settingInfo.tf_money1
+                    totolMoneny += settingInfo.tf_money1
+                  } else {
+                    if (mm > mm2) {
+                      this.checkInForm.chargeAmount = settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                      totolMoneny += settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                    } else {
+                      this.checkInForm.chargeAmount = settingInfo.tf_money1 * (hh1 - hh)
+                      totolMoneny += settingInfo.tf_money1 * (hh1 - hh)
+                    }
+                  }
+                } else if (HHend_time > settingInfo.tfend_time2) {
+                  this.checkInForm.chargeAmount = sums[2] * settingInfo.tf_date
+                  // 下午退房时间之内按天收费
+                  totolMoneny += sums[2] * settingInfo.tf_date
+                }
+              } else {
+                // 会员
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                  let hh = Moment(checkInForm.end_time).format('HH')
+                  let mm = Moment(checkInForm.end_time).format('mm')
+                  let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
+                  let mm2 = settingInfo.membertf_end_time2.substring(3, 2)
+                  if (hh1 - hh == 0) {
+                    this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1
+                    totolMoneny += settingInfo.membertf_tf_money1
+                  } else {
+                    if (mm > mm2) {
+                      this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                      totolMoneny += settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                    } else {
+                      this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * (hh1 - hh)
+                      totolMoneny += settingInfo.membertf_tf_money1 * (hh1 - hh)
+                    }
+                  }
+                } else {
+                  this.checkInForm.chargeAmount = sums[2] * settingInfo.membertf_tf_date
+                  totolMoneny += sums[2] * settingInfo.membertf_tf_date
+                }
+              }
+
+            } else {
+              // console.log(HHend_time > settingInfo.tfend_time1)
+              // console.log(HHend_time <= settingInfo.tfend_time2)
+              totolMoneny += sums[2] * (Number(diffDay) + 1)
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                // 非会员
+                if (this.disabledMember_card) {
+                  // 下午退房时间之内按小时收费
+                  if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                    let hh = Moment(checkInForm.end_time).format('HH')
+                    let mm = Moment(checkInForm.end_time).format('mm')
+                    let hh1 = settingInfo.tfend_time1.substring(0, 2)
+                    let mm2 = settingInfo.tfend_time1.substring(3, 2)
+                    if (hh1 - hh == 0) {
+                      this.checkInForm.chargeAmount = sums[2] * settingInfo.tf_money1
+                      totolMoneny += settingInfo.tf_money1
+                    } else {
+                      if (mm > mm2) {
+                        this.checkInForm.chargeAmount = settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                        totolMoneny += settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                      } else {
+                        this.checkInForm.chargeAmount = settingInfo.tf_money1 * (hh1 - hh)
+                        totolMoneny += settingInfo.tf_money1 * (hh1 - hh)
+                      }
+                    }
+                  } else if (HHend_time > settingInfo.tfend_time2) {
+                    // 下午退房时间之内按天收费
+                    this.checkInForm.chargeAmount = sums[2] * settingInfo.tf_date
+                    totolMoneny += sums[2] * settingInfo.tf_date
+                  }
+                } else {
+                  // 会员
+                  if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                    let hh = Moment(checkInForm.end_time).format('HH')
+                    let mm = Moment(checkInForm.end_time).format('mm')
+                    let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
+                    let mm2 = settingInfo.membertf_end_time2.substring(3, 2)
+                    if (hh1 - hh == 0) {
+                      this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1
+                      totolMoneny += settingInfo.membertf_tf_money1
+                    } else {
+                      if (mm > mm2) {
+                        this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                        totolMoneny += settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                      } else {
+                        this.checkInForm.chargeAmount = settingInfo.membertf_tf_money1 * (hh1 - hh)
+                        totolMoneny += settingInfo.membertf_tf_money1 * (hh1 - hh)
+                      }
+                    }
+                  } else {
+                    this.checkInForm.chargeAmount = sums[2] * settingInfo.membertf_tf_date
+                    totolMoneny += sums[2] * settingInfo.membertf_tf_date
+                  }
+                }
+                //  totolMoneny = sums[2] * settingInfo.yz_date
+              }
+            }
+            // checkInForm.RoomSumMoney = sums[2] + sums[2] * settingInfo.yz_date
+            // checkInForm.chargeAmount = sums[2] * settingInfo.yz_date
+          } else {
+            // 正常时间订房
+            if (diffDay == 0) {
+              totolMoneny = sums[2] * (diffDay + 1)
+            } else {
+              totolMoneny = sums[2] * (diffDay)
+              // 非会员
+              if (this.disabledMember_card) {
+                // 下午退房时间之内按小时收费
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                  let hh = Moment(checkInForm.end_time).format('HH')
+                  let mm = Moment(checkInForm.end_time).format('mm')
+                  let hh1 = settingInfo.tfend_time1.substring(0, 2)
+                  let mm2 = settingInfo.tfend_time1.substring(3, 2)
+                  if (hh1 - hh == 0) {
+                    totolMoneny += settingInfo.tf_money1
+                  } else {
+                    if (mm > mm2) {
+                      totolMoneny += settingInfo.tf_money1 * ((hh1 - hh) + 1)
+                    } else {
+                      totolMoneny += settingInfo.tf_money1 * (hh1 - hh)
+                    }
+                  }
+                } else if (HHend_time > settingInfo.tfend_time2) {
+                  // 下午退房时间之内按天收费
+                  totolMoneny += sums[2] * settingInfo.tf_date
+                }
+              } else {
+                // 会员
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                  let hh = Moment(checkInForm.end_time).format('HH')
+                  let mm = Moment(checkInForm.end_time).format('mm')
+                  let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
+                  let mm2 = settingInfo.membertf_end_time2.substring(3, 2)
+                  if (hh1 - hh == 0) {
+                    totolMoneny += settingInfo.membertf_tf_money1
+                  } else {
+                    if (mm > mm2) {
+                      totolMoneny += settingInfo.membertf_tf_money1 * ((hh1 - hh) + 1)
+                    } else {
+                      totolMoneny += settingInfo.membertf_tf_money1 * (hh1 - hh)
+                    }
+                  }
+                } else {
+                  totolMoneny += sums[2] * settingInfo.membertf_tf_date
+                }
+              }
+            }
+          }
+          this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2)
         }
         return sums;
       },
