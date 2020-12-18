@@ -6,41 +6,19 @@
         <p>轻游酒店业务管理系统</p>
       </div>
       <!-- 登录表单区域 -->
-      <el-form
-        ref="loginFormRef"
-        label-width="0px"
-        class="login-form"
-        :model="loginForm"
-        :rules="loginFormRules"
-      >
+      <el-form ref="loginFormRef" label-width="0px" class="login-form" :model="loginForm" :rules="loginFormRules">
         <el-form-item prop="username">
-          <el-input
-            clearable
-            v-model="loginForm.username"
-            prefix-icon="el-icon-user-solid"
-            placeholder="请输入用户名"
-          ></el-input>
+          <el-input clearable v-model="loginForm.username" prefix-icon="el-icon-user-solid" placeholder="请输入用户名">
+          </el-input>
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input
-            clearable
-            v-model="loginForm.password"
-            type="password"
-            prefix-icon="el-icon-s-goods"
-            placeholder="请输入密码"
-            show-password
-            >></el-input
-          >
+          <el-input clearable v-model="loginForm.password" type="password" prefix-icon="el-icon-s-goods"
+            placeholder="请输入密码" show-password>></el-input>
         </el-form-item>
 
         <el-form-item class="codewarp">
-          <el-input
-            clearable
-            v-model="loginForm.code"
-            placeholder="请输入验证码"
-            class="code"
-          ></el-input>
+          <el-input clearable v-model="loginForm.code" placeholder="请输入验证码" class="code"></el-input>
           <div class="codeImg">
             <img :src="authCodeImg.img" alt srcset />
           </div>
@@ -60,183 +38,223 @@
 
 
 <script>
-import { loginVerify, loginCaptcha } from "@/api/Login";
-import { saveToken, getToken, removeToken } from "@/utils/token.js";
-export default {
-  name: "login",
-  data() {
-    return {
-      //登录表单
-      loginForm: {
-        username: "zhuliu",
-        password: "qy12345",
-        code: "",
-      },
+  import {
+    loginVerify,
+    loginCaptcha
+  } from "@/api/Login";
+  import {
+    saveToken,
+    getToken,
+    removeToken
+  } from "@/utils/token.js";
+  export default {
+    name: "login",
+    data() {
+      return {
+        //登录表单
+        loginForm: {
+          username: "zhuliu",
+          password: "qy12345",
+          code: "",
+        },
 
-      // 表单验证规则
-      loginFormRules: {
-        username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 10, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 15, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-      },
+        // 表单验证规则
+        loginFormRules: {
+          username: [{
+              required: true,
+              message: "请输入用户名",
+              trigger: "blur"
+            },
+            {
+              min: 2,
+              max: 10,
+              message: "长度在 3 到 5 个字符",
+              trigger: "blur"
+            },
+          ],
+          password: [{
+              required: true,
+              message: "请输入密码",
+              trigger: "blur"
+            },
+            {
+              min: 3,
+              max: 15,
+              message: "长度在 3 到 5 个字符",
+              trigger: "blur"
+            },
+          ],
+        },
 
-      // 验证码
-      authCodeImg: {},
-    };
-  },
-  created() {
-    this.getRows();
-  },
-  methods: {
-    getRows() {
-      if (getToken()) {
-        removeToken();
-      }
-      loginCaptcha({}).then((res) => {
-        res = JSON.parse(res);
-        if (res.code === 0) {
-          this.authCodeImg = res.data;
-        } else {
-          this.Message("error", res.message);
-        }
-      });
-    },
-    //登录
-    login() {
-      let params = {
-        app_type: 3,
-        username: this.loginForm.username,
-        password: this.loginForm.password,
-        captcha_code: this.loginForm.code,
-        captcha_id: this.authCodeImg.id,
+        // 验证码
+        authCodeImg: {},
       };
-      loginVerify(params).then((res) => {
-        res = JSON.parse(res);
-        if (res.code === 0) {
-          this.message("success", res.message);
-          saveToken(res.data.token);
-          this.$router.replace("/room");
-        } else {
-          this.updateAuthCodeImg();
-          this.message("error", res.message);
-        }
-      });
     },
-    updateAuthCodeImg() {
-      loginCaptcha({}).then((res) => {
-        res = JSON.parse(res);
-        if (res.code === 0) {
-          this.authCodeImg = res.data;
-        } else {
-          this.message("error", res.message);
-        }
-      });
+    created() {
+      this.getRows();
     },
-    //重置
-    // resetLoginForm() {
-    //   //console.log(this)
-    //   this.$refs.loginFormRef.resetFields();
-    // }
-  },
-};
+    mounted() {
+      let that = this
+      document.onkeydown = function (e) {
+        if (e.code == 'Enter' || e.code == 'NumpadEnter') {
+          that.login()
+        }
+      }
+    },
+    methods: {
+      getRows() {
+        if (getToken()) {
+          removeToken();
+        }
+        loginCaptcha({}).then((res) => {
+          res = JSON.parse(res);
+          if (res.code === 0) {
+            this.authCodeImg = res.data;
+          } else {
+            this.Message("error", res.message);
+          }
+        });
+      },
+      //登录
+      login() {
+        let params = {
+          app_type: 3,
+          username: this.loginForm.username,
+          password: this.loginForm.password,
+          captcha_code: this.loginForm.code,
+          captcha_id: this.authCodeImg.id,
+        };
+        loginVerify(params).then((res) => {
+          res = JSON.parse(res);
+          if (res.code === 0) {
+            this.message("success", res.message);
+            saveToken(res.data.token);
+            this.$router.replace("/room");
+          } else {
+            this.updateAuthCodeImg();
+            this.message("error", res.message);
+          }
+        });
+      },
+      updateAuthCodeImg() {
+        loginCaptcha({}).then((res) => {
+          res = JSON.parse(res);
+          if (res.code === 0) {
+            this.authCodeImg = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+      //重置
+      // resetLoginForm() {
+      //   //console.log(this)
+      //   this.$refs.loginFormRef.resetFields();
+      // }
+    },
+  };
 </script>
 
 
 
 
 <style lang="less" scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  background-image: url("../assets/image/bg.png");
-  background-size: cover;
-}
-.login-box {
-  width: 450px;
-  height: 570px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 70%;
-  transform: translate(-50%, -50%);
-  padding: 40px 22px;
-  box-sizing: border-box;
-  text-align: center;
-  .title {
-    font-size: 36px;
-    color: #fff;
-  }
-}
-
-.bts {
-  width: 100%;
-  .el-button {
-    width: 408px;
-    background: #1e50ae;
-    color: #fff;
-    line-height: 55px;
-    height: 55px;
-    padding: 0;
-    font-size: 28px;
-    border: 0;
-    border-radius: 10px;
-  }
-}
-.login-form {
-  padding-top: 42px;
-  width: 100%;
-  box-sizing: border-box;
-  /deep/.el-input__inner {
-    font-size: 20px;
-    color: #989898;
-    border-radius: 10px;
-    height: 55px;
-    line-height: 55px;
-    border-radius: 10px;
-  }
-  /deep/.el-input__icon {
-    height: 55px;
-    line-height: 55px;
-    font-size: 20px;
-  }
-  .codewarp {
-    position: relative;
+  .login-container {
     display: flex;
-    justify-content: space-bettew;
+    justify-content: center;
     align-items: center;
+    height: 100%;
+    background-image: url("../assets/image/bg.png");
+    background-size: cover;
+  }
 
-    .codeImg {
-      width: 144px;
-      height: 53px;
-      position: absolute;
-      top: 0;
-      left: 170px;
-      img {
-        width: 144px;
-        height: 53px;
-      }
-    }
-    .code {
-      position: relative;
-      width: 150px;
-    }
-    span {
-      cursor: pointer;
-      position: absolute;
-      right: -250px;
-      top: 8px;
-      font-size: 22px;
+  .login-box {
+    width: 450px;
+    height: 570px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    padding: 40px 22px;
+    box-sizing: border-box;
+    text-align: center;
+
+    .title {
+      font-size: 36px;
       color: #fff;
     }
   }
-}
-</style>
 
+  .bts {
+    width: 100%;
+
+    .el-button {
+      width: 408px;
+      background: #1e50ae;
+      color: #fff;
+      line-height: 55px;
+      height: 55px;
+      padding: 0;
+      font-size: 28px;
+      border: 0;
+      border-radius: 10px;
+    }
+  }
+
+  .login-form {
+    padding-top: 42px;
+    width: 100%;
+    box-sizing: border-box;
+
+    /deep/.el-input__inner {
+      font-size: 20px;
+      color: #989898;
+      border-radius: 10px;
+      height: 55px;
+      line-height: 55px;
+      border-radius: 10px;
+    }
+
+    /deep/.el-input__icon {
+      height: 55px;
+      line-height: 55px;
+      font-size: 20px;
+    }
+
+    .codewarp {
+      position: relative;
+      display: flex;
+      justify-content: space-bettew;
+      align-items: center;
+
+      .codeImg {
+        width: 144px;
+        height: 53px;
+        position: absolute;
+        top: 0;
+        left: 170px;
+
+        img {
+          width: 144px;
+          height: 53px;
+        }
+      }
+
+      .code {
+        position: relative;
+        width: 150px;
+      }
+
+      span {
+        cursor: pointer;
+        position: absolute;
+        right: -250px;
+        top: 8px;
+        font-size: 22px;
+        color: #fff;
+      }
+    }
+  }
+</style>

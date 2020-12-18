@@ -9,31 +9,21 @@
 
           <el-row align="middle" type="flex" justify="start">
             1、当天
-            <el-time-picker
-              is-range
-              arrow-control
-              v-model="formDevice.setTime"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              placeholder="选择时间范围"
-            ></el-time-picker>时入住客人加收
+            <el-time-picker is-range arrow-control v-model="formDevice.setTime" value-format="HH:mm:ss"
+              range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围"></el-time-picker>
+            时入住客人加收
             <el-input v-model="formDevice.yz_date" clearable></el-input>天房费；
           </el-row>
 
           <el-row align="middle" type="flex" justify="start">
             2、 退房超时
-            <el-time-picker
-              v-model="formDevice.tfend_time1"
-              placeholder="请选择时间"
-              style="width: 180px"
-            ></el-time-picker>每超过1小时加
+            <el-time-picker value-format="HH:mm:ss" v-model="formDevice.tfend_time1" placeholder="请选择时间"
+              style="width: 180px"></el-time-picker>
+            每超过1小时加
             <el-input v-model="formDevice.tf_money1" clearable></el-input>元房费；退房超过
-            <el-time-picker
-              v-model="formDevice.tfend_time2"
-              placeholder="请选择时间"
-              style="width: 180px"
-            ></el-time-picker>加收
+            <el-time-picker v-model="formDevice.tfend_time2" value-format="HH:mm:ss" placeholder="请选择时间"
+              style="width: 180px"></el-time-picker>
+            加收
             <el-input v-model="formDevice.tf_date" clearable></el-input>天房费；
           </el-row>
 
@@ -44,32 +34,21 @@
 
           <el-row align="middle" type="flex" justify="start">
             4、会员入住退房时间点超过
-            <el-time-picker
-              v-model="formDevice.membertf_end_time1"
-              placeholder="请选择时间"
-              style="width: 180px"
-            ></el-time-picker>，每小时加收
+            <el-time-picker v-model="formDevice.membertf_end_time1" value-format="HH:mm:ss" placeholder="请选择时间"
+              style="width: 180px">
+            </el-time-picker>，每小时加收
             <el-input v-model="formDevice.membertf_tf_money1" clearable></el-input>元房费；退房超过
-            <el-time-picker
-              v-model="formDevice.membertf_end_time2"
-              placeholder="请选择时间"
-              style="width: 180px"
-            ></el-time-picker>加收
+            <el-time-picker  value-format="HH:mm:ss" v-model="formDevice.membertf_end_time2" placeholder="请选择时间" style="width: 180px">
+            </el-time-picker>加收
             <el-input v-model="formDevice.membertf_tf_date" clearable></el-input>天房费；
           </el-row>
 
           <el-row align="middle" type="flex" justify="start">
             5、酒店LOGO：
             <!-- <el-button type="primary">点击上传</el-button> -->
-            <el-upload
-              style="border:1px dashed   #ddd"
-              class="avatar-uploader"
-              :multiple="false"
-              action="http://www.api.vip/api/setting/upload"
-              :show-file-list="false"
-              :before-upload="beforeAvatarUpload"
-              :http-request="selectPicUpload"
-            >
+            <el-upload style="border:1px dashed   #ddd" class="avatar-uploader" :multiple="false"
+              action="http://www.api.vip/api/setting/upload" :show-file-list="false" :before-upload="beforeAvatarUpload"
+              :http-request="selectPicUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon">上传</i>
             </el-upload>
@@ -82,19 +61,15 @@
 
           <el-row align="middle" type="flex" justify="start">
             7、酒店业务系统自动夜审时间设置
-            <el-time-picker v-model="formDevice.ys_time" placeholder="请选择时间"></el-time-picker>
+            <el-time-picker v-model="formDevice.ys_time" value-format="HH:mm:ss" placeholder="请选择时间"></el-time-picker>
           </el-row>
 
           <el-row align="middle" type="flex" justify="start">8、酒店业务员班次设置:</el-row>
 
           <el-row>
             <el-col>
-              <el-table
-                :data="tableData"
-                :header-cell-style="{ textAlign: 'center' }"
-                :cell-style="{ textAlign: 'center' }"
-                style="width: 100%"
-              >
+              <el-table :data="tableData" :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }" style="width: 100%">
                 <el-table-column prop="name" label="班次名">
                   <template v-slot="scope">
                     <el-input style="width: 200px" v-model="scope.row.name" placeholder="请输入班次"></el-input>
@@ -102,14 +77,8 @@
                 </el-table-column>
                 <el-table-column prop="date" label="班次工作时段">
                   <template v-slot="scope">
-                    <el-time-picker
-                      is-range
-                      v-model="scope.row.time"
-                      range-separator="至"
-                      start-placeholder="开始时间"
-                      end-placeholder="结束时间"
-                      placeholder="选择时间范围"
-                    ></el-time-picker>
+                    <el-time-picker is-range v-model="scope.row.time" range-separator="至" start-placeholder="开始时间"
+                      end-placeholder="结束时间" placeholder="选择时间范围"></el-time-picker>
                   </template>
                 </el-table-column>
                 <el-table-column prop="setting" label="操作">
@@ -134,222 +103,236 @@
   </el-container>
 </template>
 <script>
-import { getAllTime, getDayTime } from "@/utils/moment.js";
-import { SetLogo, SetBill, GetInfo } from "@/api/BillSetting";
-export default {
-  data() {
-    return {
-      formDevice: {
-        setTime: "",
-        yz_date: "",
-        tfend_time1: "", //非会员退房时间
-        tf_money1: "",
-        tfend_time2: "",
-        tf_date: "",
-        datecount: "",
-        membertf_end_time1: "",
-        membertf_tf_money1: "",
-        membertf_end_time2: "",
-        membertf_tf_date: "",
-        tel: "",
-        ys_time: ""
-      },
+  import {
+    getAllTime,
+    getDayTime
+  } from "@/utils/moment.js";
+  import {
+    SetLogo,
+    SetBill,
+    GetInfo
+  } from "@/api/BillSetting";
+  export default {
+    data() {
+      return {
+        formDevice: {
+          setTime: "",
+          yz_date: "",
+          tfend_time1: "", //非会员退房时间
+          tf_money1: "",
+          tfend_time2: "",
+          tf_date: "",
+          datecount: "",
+          membertf_end_time1: "",
+          membertf_tf_money1: "",
+          membertf_end_time2: "",
+          membertf_tf_date: "",
+          tel: "",
+          ys_time: ""
+        },
 
-      // 夜间入住时间段
-      start_time: "",
-      end_time: "",
+        // 夜间入住时间段
+        start_time: "",
+        end_time: "",
 
-      tableData: [
-        {
+        tableData: [{
           name: "早班",
           time: ""
-        }
-      ],
-      imageUrl: "",
-      logo: "",
+        }],
+        imageUrl: "",
+        logo: "",
 
-      // 值班时间段
-      banTime: "",
+        // 值班时间段
+        banTime: "",
 
-      // 值班信息
-      ban_info: "早班,7:30-15:30;晚班,15:30-23:30;夜班,23:30-7:30"
-    };
-  },
-  created() {
-    this.GetBillInfo();
-  },
-  methods: {
-    // 获取计费详情
-    GetBillInfo() {
-      GetInfo().then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res, "计费详情");
-        if (res.code === 0) {
-          this.formDevice = res.data;
-          this.imageUrl =
-            "https://api.anhuiqingyou.com/uploads/" + res.data.logo;
-          this.tableData = res.data.ban_info;
-        } else {
-          this.message("error", res.message);
-        }
-      });
-    },
-
-    // 上传logo
-    selectPicUpload(f) {
-      let fd = new FormData();
-      fd.append("file", f.file);
-      SetLogo(fd).then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res);
-        if (res.code == 0) {
-          this.imageUrl =
-            "https://api.anhuiqingyou.com/uploads/" + res.data[0][0];
-          this.logo = res.data[0][0];
-        } else {
-          this.message("error", res.message);
-        }
-      });
-    },
-
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isJPG && !isPNG) {
-        this.$message.error("上传头像图片只能是 JPG/png格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG || (isPNG && isLt2M);
-    },
-
-    // 增加
-    addClass(v) {
-      let tableData = this.tableData;
-      if (tableData.length >= 3) {
-        return this.$message({
-          message: "最多添加三个班次",
-          type: "error"
-        });
-      }
-      tableData.push({
-        name: "早班",
-        time: ""
-      });
-    },
-
-    // 减少
-    reduceClass(v) {
-      let tableData = this.tableData;
-      if (tableData.length <= 1) {
-        return this.$message({
-          message: "此班次不可删除",
-          type: "error"
-        });
-      }
-      tableData.splice(v.$index, 1);
-    },
-
-    // 提交表单
-    submitForm() {
-      let parmas = {
-        yzstart_time: getAllTime(this.formDevice.setTime[0]).substring(11),
-        yzend_time: getAllTime(this.formDevice.setTime[1]).substring(11),
-        yz_date: this.formDevice.yz_date,
-        tfend_time1: getAllTime(this.formDevice.tfend_time1).substring(11),
-        tf_money1: this.formDevice.tf_money1,
-        tfend_time2: getAllTime(this.formDevice.tfend_time2).substring(11),
-        tf_date: this.formDevice.tf_date,
-        datecount: this.formDevice.datecount,
-        membertf_end_time1: getAllTime(
-          this.formDevice.membertf_end_time1
-        ).substring(11),
-        membertf_tf_money1: this.formDevice.membertf_tf_money1,
-        membertf_end_time2: getAllTime(
-          this.formDevice.membertf_end_time2
-        ).substring(11),
-        membertf_tf_date: this.formDevice.membertf_tf_date,
-        ban_info: this.ban_info,
-        logo: this.logo,
-        tel: this.formDevice.tel,
-        ys_time: getAllTime(this.formDevice.ys_time).substring(11)
+        // 值班信息
+        ban_info: "早班,7:30-15:30;晚班,15:30-23:30;夜班,23:30-7:30"
       };
-      SetBill(parmas).then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res);
-        if (res.code === 0) {
-          this.message("success", res.message);
-        } else {
-          this.message("error", res.message);
-        }
-      });
     },
+    created() {
+      this.GetBillInfo();
+    },
+    methods: {
+      // 获取计费详情
+      GetBillInfo() {
+        GetInfo().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res, "计费详情");
+          if (res.code === 0) {
+            this.formDevice = res.data;
+            this.imageUrl =
+              "https://api.anhuiqingyou.com/uploads/" + res.data.logo;
+            this.tableData = res.data.ban_info;
+            this.formDevice.tfend_time1 = res.data.tfend_time1
+            let arrTime = []
+            arrTime.push(res.data.yzstart_time)
+            arrTime.push(res.data.yzend_time)
+            this.formDevice.setTime = arrTime
+            this.formDevice.tfend_time2 = res.data.tfend_time2
+            this.formDevice.membertf_end_time1 = res.data.membertf_end_time1
+             this.formDevice.membertf_end_time2 = res.data.membertf_end_time2
+             this.formDevice.ys_time =  res.data.ys_time
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
 
-  
-  }
-};
+      // 上传logo
+      selectPicUpload(f) {
+        let fd = new FormData();
+        fd.append("file", f.file);
+        SetLogo(fd).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res);
+          if (res.code == 0) {
+            this.imageUrl =
+              "https://api.anhuiqingyou.com/uploads/" + res.data[0][0];
+            this.logo = res.data[0][0];
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === "image/jpeg";
+        const isPNG = file.type === "image/png";
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isJPG && !isPNG) {
+          this.$message.error("上传头像图片只能是 JPG/png格式!");
+        }
+        if (!isLt2M) {
+          this.$message.error("上传头像图片大小不能超过 2MB!");
+        }
+        return isJPG || (isPNG && isLt2M);
+      },
+
+      // 增加
+      addClass(v) {
+        let tableData = this.tableData;
+        if (tableData.length >= 3) {
+          return this.$message({
+            message: "最多添加三个班次",
+            type: "error"
+          });
+        }
+        tableData.push({
+          name: "早班",
+          time: ""
+        });
+      },
+
+      // 减少
+      reduceClass(v) {
+        let tableData = this.tableData;
+        if (tableData.length <= 1) {
+          return this.$message({
+            message: "此班次不可删除",
+            type: "error"
+          });
+        }
+        tableData.splice(v.$index, 1);
+      },
+
+      // 提交表单
+      submitForm() {
+        let parmas = {
+          yzstart_time: getAllTime(this.formDevice.setTime[0]).substring(11),
+          yzend_time: getAllTime(this.formDevice.setTime[1]).substring(11),
+          yz_date: this.formDevice.yz_date,
+          tfend_time1: getAllTime(this.formDevice.tfend_time1).substring(11),
+          tf_money1: this.formDevice.tf_money1,
+          tfend_time2: getAllTime(this.formDevice.tfend_time2).substring(11),
+          tf_date: this.formDevice.tf_date,
+          datecount: this.formDevice.datecount,
+          membertf_end_time1: getAllTime(
+            this.formDevice.membertf_end_time1
+          ).substring(11),
+          membertf_tf_money1: this.formDevice.membertf_tf_money1,
+          membertf_end_time2: getAllTime(
+            this.formDevice.membertf_end_time2
+          ).substring(11),
+          membertf_tf_date: this.formDevice.membertf_tf_date,
+          ban_info: this.ban_info,
+          logo: this.logo,
+          tel: this.formDevice.tel,
+          ys_time: getAllTime(this.formDevice.ys_time).substring(11)
+        };
+        SetBill(parmas).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res);
+          if (res.code === 0) {
+            this.message("success", res.message);
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+
+
+    }
+  };
 </script>
 
 
 <style lang="less" scoped>
-.el-select {
-  width: 90px;
-}
-.el-input {
-  width: 100px;
-}
-.el-date-editor,
-.el-input,
-.el-select {
-  margin: 0 10px;
-}
-.el-row.is-align-middle {
-  margin-bottom: 20px;
-}
-.el-button {
-  margin: 0 10px;
-}
-.footer {
-  margin-top: 20px;
-  .el-button {
+  .el-select {
+    width: 90px;
+  }
+
+  .el-input {
     width: 100px;
   }
-}
-.el-upload {
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+
+  .el-date-editor,
+  .el-input,
+  .el-select {
+    margin: 0 10px;
   }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
+
+  .el-row.is-align-middle {
+    margin-bottom: 20px;
   }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
+
+  .el-button {
+    margin: 0 10px;
   }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
+
+  .footer {
+    margin-top: 20px;
+
+    .el-button {
+      width: 100px;
+    }
   }
-}
+
+  .el-upload {
+    .avatar-uploader .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+      border-color: #409eff;
+    }
+
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
+  }
 </style>
-
-
-
-
-
-
-
-
-
-   

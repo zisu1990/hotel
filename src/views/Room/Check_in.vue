@@ -100,6 +100,8 @@
           </el-row>
           <p class="chooseTitle">可选房型：</p>
           <div class="chooseRoom">
+            <div style="text-align:center;padding-bottom:20px;color:#999" v-show="!roomType.length">
+              ---------无房间---------</div>
             <el-row :gutter="20" type="flex" justify="left">
               <el-col :span="8">
                 <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
@@ -1182,6 +1184,7 @@
       }
 
       .chooseRoom {
+        min-height: 30px;
         background: #f9f9f9;
         padding: 20px 20px 0;
         margin: 10px 0 20px;
@@ -1193,7 +1196,7 @@
         }
 
         .chooseRoomRight {
-          height: 280px;
+          max-height: 280px;
           overflow-y: auto;
         }
 
