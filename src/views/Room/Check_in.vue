@@ -193,12 +193,12 @@
                   <el-option label="否" value="否"></el-option>
                 </el-select>
               </el-form-item>
-              <span style="
+              <span v-show="VIPInfo" style="
                   font-size: 14px;
                   color: #005ab9;
                   padding-top: 10px;
                   padding-left: 5px;
-                ">余额：300元</span>
+                ">余额：{{VIPInfo.balance}}元</span>
             </el-col>
             <el-col :span="8">
               <el-form-item label="卡扣金额（元）：">
@@ -405,6 +405,8 @@
         disabledMember_card: true,
         // 卡扣金额disabled
         disabledCardKkNum: true,
+        // 会员详情
+        VIPInfo: "",
         // 选中房间
         isActiveArr: [],
 
@@ -447,6 +449,9 @@
       },
       Newmember_card() {
         return this.checkInForm.cardPayfor
+      },
+      NewRoomSumMoney() {
+        return this.checkInForm.RoomSumMoney
       }
     },
     watch: {
@@ -464,6 +469,13 @@
         } else
           this.disabledMember_card = false
         deep: true
+      },
+      NewRoomSumMoney(val) {
+        if (!this.disabledMember_card && this.VIPInfo) {
+          let couponMoney = this.checkInForm.couponMoney ? this.checkInForm.couponMoney : 0
+          couponMoney += (val / Number(this.VIPInfo.discount / 100)) - val
+          this.checkInForm.couponMoney = couponMoney
+        }
       }
     },
     methods: {
@@ -540,7 +552,7 @@
               res = typeof res == "string" ? JSON.parse(res) : res;
               console.log(res)
               if (res.code == 0) {
-
+                this.message("success", res.message)
               } else {
                 this.message("error", res.message)
               }
@@ -559,7 +571,6 @@
         });
         str = str.substring(0, str.length - 1)
         console.log('tag', str)
-
         return str
       },
       //充值方式
@@ -976,13 +987,20 @@
             this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2)
             this.checkInForm.chargeAmount = chargeAmount
             this.checkInForm.couponMoney = couponMoney
+            if (!this.disabledMember_card) {
+              this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2) * (Number(this.VIPInfo.discount) / 100)
+            }
           }
         } else {
           this.checkInForm.RoomSumMoney = 0
           this.checkInForm.chargeAmount = 0
           this.checkInForm.couponMoney = 0
         }
+
+
         return sums;
+        // this.checkInForm.RoomSumMoney -= this.checkInForm.RoomSumMoney * (Number(this.VIPInfo.discount) / 100)
+        // this.checkInForm.couponMoney += this.checkInForm.RoomSumMoney * (Number(this.VIPInfo.discount) / 100)
       },
       handleReduce(i, v) {
         let roomTableData = this.roomTableData;
@@ -1018,6 +1036,7 @@
               let {
                 data
               } = res
+              this.VIPInfo = data
               // console.log(data)
               if (!data) {
                 this.disabledMember_card = true
@@ -1046,10 +1065,13 @@
             member_card: this.checkInForm.vipNumber
           }).then(res => {
             res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res)
+
             if (res.code == 0) {
               let {
                 data
               } = res
+              this.VIPInfo = data
               if (!data) {
                 this.checkInForm.vipNumber = ''
                 this.disabledMember_card = true
