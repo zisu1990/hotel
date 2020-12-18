@@ -17,6 +17,8 @@
               start-placeholder="开始时间"
               end-placeholder="结束时间"
               placeholder="选择时间范围"
+              value-format="HH:mm:ss"
+              @change="time($event)"
             ></el-time-picker>时入住客人加收
             <el-input v-model="formDevice.yz_date" clearable></el-input>天房费；
           </el-row>
@@ -27,6 +29,7 @@
               v-model="formDevice.tfend_time1"
               placeholder="请选择时间"
               style="width: 180px"
+              
             ></el-time-picker>每超过1小时加
             <el-input v-model="formDevice.tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
@@ -174,6 +177,10 @@ export default {
     this.GetBillInfo();
   },
   methods: {
+
+    time(e){
+      console.log(e)
+    },
     // 获取计费详情
     GetBillInfo() {
       GetInfo().then(res => {
@@ -184,6 +191,9 @@ export default {
           this.imageUrl =
             "https://api.anhuiqingyou.com/uploads/" + res.data.logo;
           this.tableData = res.data.ban_info;
+          this.formDevice.tfend_time1=res.data.tfend_time1
+          console.log(this.formDevice.tfend_time1)
+          this.$forceUpdate()
         } else {
           this.message("error", res.message);
         }
