@@ -21,6 +21,7 @@
                 v-model="guestInfoForm.keys"
                 placeholder="请输入住客姓名/身份证号/房间号"
                 clearable
+                @change="handelChange"
                 :style="{ width: '100%' }"
               ></el-input>
             </el-form-item>
@@ -109,7 +110,11 @@ export default {
         }
       });
     },
-
+    handelChange(){
+      if(!this.guestInfoForm.keys){
+        this.getGuestList();
+      }
+    }
  
   }
 };

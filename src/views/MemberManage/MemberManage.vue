@@ -22,6 +22,7 @@
                 v-model="memberForm.keys"
                 placeholder="请输入住客姓名/身份证号/手机号"
                 clearable
+                @change="handelChange"
                 :style="{ width: '100%' }"
               ></el-input>
             </el-form-item>
@@ -721,6 +722,11 @@ export default {
           this.message("error", res.message);
         }
       });
+    },
+    handelChange(){
+      if(!this.memberForm.keys){
+        this.getMemberList()
+      }
     }
   }
 };

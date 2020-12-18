@@ -77,6 +77,9 @@
           <el-menu-item index="/MemberSetting">
             <span>会员设置</span>
           </el-menu-item>
+          <el-menu-item index="/QuanManage">
+            <span>会员充值优惠设置</span>
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item index="/GuestInfo">

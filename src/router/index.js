@@ -38,6 +38,8 @@ import Log from '../views/Log/Log.vue';
 
 import MemberSetting from '../views/MemberSetting/MemberSetting.vue';
 
+import QuanManage from '../views/MemberSetting/QuanManage.vue';
+
 import GoodsManage from '../views/GoodsManage/GoodsManage.vue';
 
 import DataReport from '../views/DataReport/DataReport.vue';
@@ -173,6 +175,20 @@ const routes = [{
       }
     },
     {
+      path: '/MemberSetting', //会员设置
+      component: MemberSetting,
+      meta: {
+        title: '会员设置'
+      }
+    },
+    {
+      path: '/QuanManage', //优惠条件设置
+      component: QuanManage,
+      meta: {
+        title: '优惠条件设置'
+      }
+    },
+    {
       path: '/BillSetting', //计费设置
       component: BillSetting,
       meta: {
@@ -214,13 +230,7 @@ const routes = [{
         title: '操作日志'
       }
     },
-    {
-      path: '/MemberSetting', //会员设置
-      component: MemberSetting,
-      meta: {
-        title: '会员设置'
-      }
-    },
+
     {
       path: '/GoodsManage', //物件管理
       component: GoodsManage,

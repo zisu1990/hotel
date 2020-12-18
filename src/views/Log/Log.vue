@@ -4,7 +4,7 @@
     <el-main>
       <el-form :model="LogForm">
         <el-row>
-            <el-col :span="8">
+          <el-col :span="8">
             <el-form-item label="入住时间段：">
               <el-date-picker
                 v-model="LogForm.value1"
@@ -22,6 +22,7 @@
                 v-model="LogForm.name"
                 placeholder="请输入住客姓名/身份证号/房间号"
                 clearable
+                @change="handleChange"
                 :style="{ width: '100%' }"
               ></el-input>
             </el-form-item>
@@ -61,20 +62,19 @@ export default {
   data() {
     return {
       LogForm: {
-        value1:[],
+        value1: [],
         name: "",
         currentPage: 1,
-        pageSize: 10,
-        
+        pageSize: 10
       },
       LogTableData: [],
       total: 0,
-            start_time: "",
-      end_time: "",
+      start_time: "",
+      end_time: ""
     };
   },
   created() {
-    this.getLogList()
+    this.getLogList();
   },
   methods: {
     // 获取时间
@@ -86,19 +86,19 @@ export default {
       console.log(this.end_time);
     },
     getLogList() {
-        let params = {
-          name:this.LogForm.name,
+      let params = {
+        name: this.LogForm.name,
         start_time: this.start_time,
         end_time: this.end_time,
         page: this.LogForm.currentPage,
-        page_size: this.LogForm.pageSize,
-      }
+        page_size: this.LogForm.pageSize
+      };
       Log(params).then(res => {
-         res = typeof res == "string" ? JSON.parse(res) : res;
+        res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res, "日志列表");
         if (res.code === 0) {
           this.LogTableData = res.data.list;
-          this.total=res.data.count;
+          this.total = res.data.count;
         } else {
           this.message("error", res.message);
         }
@@ -113,6 +113,11 @@ export default {
     handleCurrentChange(val) {
       this.LogForm.currentPage = val;
       this.getLogList();
+    },
+    handleChange() {
+      if (!this.LogForm.name) {
+        this.getLogList();
+      }
     }
   }
 };

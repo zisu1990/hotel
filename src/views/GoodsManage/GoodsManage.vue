@@ -8,6 +8,7 @@
             v-model="queryParmas.name"
             placeholder="物件名称"
             clearable
+            @change="handleChange"
             :style="{width: '100%'}"
           ></el-input>
         </el-col>
@@ -209,6 +210,12 @@ export default {
       this.queryParmas.page=val;
        this.getGoodSList()
       console.log(`当前页: ${val}`);
+    },
+
+    handleChange(){
+        if(!this.queryParmas.name){
+           this.getGoodSList()
+        }
     }
   }
 };

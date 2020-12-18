@@ -27,24 +27,23 @@
         <el-table-column type="index" width="30" align="center"></el-table-column>
         <el-table-column prop="OddNumber" label="预订单号" width="100" align="center"></el-table-column>
         <el-table-column prop="type" label="客户类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="groupname" label="团体名称" width="80" align="center"></el-table-column>
+        <el-table-column prop="groupname" label="团体名称" show-overflow-tooltip width="80" align="center"></el-table-column>
         <el-table-column prop="name" label="预订人" width="80" align="center"></el-table-column>
         <el-table-column prop="tel" label="联系电话" align="center"></el-table-column>
-        <el-table-column prop="start_time" label="预到时间" align="center"></el-table-column>
-        <el-table-column prop="end_time" label="预离时间" align="center"></el-table-column>
-        <el-table-column prop="roomtype_info" label="房间类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="Sum" label="数量" width="50" align="center"></el-table-column>
+        <el-table-column prop="start_time" label="预到时间" show-overflow-tooltip align="center"></el-table-column>
+        <el-table-column prop="end_time" label="预离时间" show-overflow-tooltip align="center"></el-table-column>
         <el-table-column prop="paymethod" label="预付方式" width="80" align="center"></el-table-column>
         <el-table-column prop="pre_money" label="预付金额" width="80" align="center"></el-table-column>
         <el-table-column prop="member_card" label="会员卡号" align="center"></el-table-column>
         <el-table-column prop="nationality" label="国籍" width="60" align="center"></el-table-column>
-        <el-table-column prop="create_time" label="操作时间" align="center"></el-table-column>
+        <el-table-column prop="create_time" label="操作时间" show-overflow-tooltip  align="center"></el-table-column>
         <el-table-column prop="beizhu" label="备注" align="center"></el-table-column>
         <el-table-column prop="username" label="操作员" width="80" align="center"></el-table-column>
-        <el-table-column label="操作" align="center" width="150">
-          <template>
-            <el-button type="danger" size="small">取消</el-button>
-            <el-button type="primary" size="small" @click="CheckInDialogVisible=true">入住</el-button>
+        <el-table-column label="操作" align="center" width="250">
+          <template v-slot="scope">
+            <el-button type="danger" size="small" @click="handleCancel(scope.row.id)">取消</el-button>
+             <el-button type="primary" size="small">详情</el-button>
+            <el-button type="warning" size="small" @click="CheckInDialogVisible=true">入住</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -298,7 +297,8 @@
 
 <script>
   import {
-    orderIndex
+    orderIndex,
+    orderCancel
   } from '@/api/Booking.js'
   import {
     getAllTime
@@ -307,10 +307,7 @@
     data() {
       return {
         BookingForm: {
-          value1: [
-            new Date(2000, 10, 10, 10, 10),
-            new Date(2000, 10, 11, 10, 10)
-          ],
+          value1: [],
           name: "",
           tel: ""
         },
@@ -926,7 +923,29 @@
         this.pagination.currentPage = val;
         // console.log(`当前页: ${val}`);
         this.getRows();
-      }
+      },
+
+
+
+         //预订取消
+      handleCancel(id) {
+        this.confirm()
+          .then(() => {
+            orderCancel({
+              id
+            }).then((res) => {
+              res = JSON.parse(res);
+              // console.log(res)
+              if (res.code === 0) {
+                this.getRows();
+                this.message("success", "取消成功");
+              } else {
+                this.message("error", res.message);
+              }
+            });
+          })
+          .catch(() => {});
+      },
     }
   };
 </script>

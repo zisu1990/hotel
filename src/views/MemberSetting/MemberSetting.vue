@@ -10,7 +10,7 @@
                 v-model="memberFormSearch.level"
                 placeholder="请选择"
                 @change="selectLevel($event)"
-           
+              clearable
               >
                 <el-option
                   v-for="(item,index) in memberlevel"
@@ -28,9 +28,9 @@
       </el-form>
       <!-- <div class="btn">
         <el-row>
-          <el-button type="primary" @click="AddDialogVisible=true">增加</el-button>
+          <el-button type="primary" @click="AddDialogVisible=true">充值优惠设置</el-button>
         </el-row>
-      </div>-->
+      </div> -->
       <el-table :data="memberTableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="80" align="center"></el-table-column>
 
@@ -44,7 +44,7 @@
         <el-table-column prop="res" label="优惠内容" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template v-slot="scope">
-            <el-button type="primary" size="small" @click="editDialog(scope.row)">设置</el-button>
+            <el-button type="primary" size="small" @click="editDialog(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -154,7 +154,6 @@ export default {
     },
 
     selectLevel(e) {
-      
       let params = {
         page: this.memberFormSearch.page,
         page_size: this.memberFormSearch.page_size,
@@ -165,7 +164,9 @@ export default {
         console.log(res, "查询等级列表");
         if (res.code === 0) {
           this.memberTableData = res.data.list;
-
+          if(!this.memberFormSearch.level){
+            this.getMemberLevel()
+          }
           this.total = res.data.count;
           
         } else {

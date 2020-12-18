@@ -1,5 +1,4 @@
 //会员接口
-
 import {  post } from './http.js'
 
 // 会员列表查询接口
@@ -36,3 +35,8 @@ export const memberAccount = params => post('/memberaccount/add', params)
 //会员等级查询列表
 export const memberLevelList = params => post('/memberlevel/siteindex', params)
 
+
+//会员充值优惠查询
+export const memberDiscountList = params => post('/memberdiscount/index', params)
+// 增加会员充值优惠
+export const memberDiscountAdd = params => post('/memberdiscount/add', params)
