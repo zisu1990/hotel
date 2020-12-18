@@ -178,7 +178,7 @@ const routes = [{
       path: '/MemberSetting', //会员设置
       component: MemberSetting,
       meta: {
-        title: '会员设置'
+        title: '会员等级设置'
       }
     },
     {

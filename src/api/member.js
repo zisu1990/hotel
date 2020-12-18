@@ -38,5 +38,19 @@ export const memberLevelList = params => post('/memberlevel/siteindex', params)
 
 //会员充值优惠查询
 export const memberDiscountList = params => post('/memberdiscount/index', params)
+
+
 // 增加会员充值优惠
 export const memberDiscountAdd = params => post('/memberdiscount/add', params)
+
+// 会员充值删除
+export const memberDiscountDel= params => post('/memberdiscount/del', params)
+
+
+// 会员充值编辑
+export const memberDiscountEdit= params => post('/memberdiscount/edit', params)
+
+
+
+//会员充值赠送金额
+export const memberGiveMoney= params => post('/memberaccount/give_money', params)

@@ -41,61 +41,7 @@
         <el-table-column prop="company_name" label="所属企业" align="center"></el-table-column>
         <el-table-column prop="discount" label="享受折扣" align="center"></el-table-column>
         <el-table-column prop="create_time" label="录入时间" align="center"></el-table-column>
-        <el-table-column prop="res" label="优惠内容" align="center"></el-table-column>
-        <el-table-column label="操作" align="center" width="150">
-          <template v-slot="scope">
-            <el-button type="primary" size="small" @click="editDialog(scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
       </el-table>
-
-      <el-dialog title="设置优惠条件" :visible.sync="editdialogVisible" width="30%">
-        <el-form v-model="setForm" label-width="120px">
-          <el-form-item label="会员等级名称：">
-            <el-input v-model="setForm.name" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="所属企业：">
-            <el-input v-model="setForm.company_name" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="享受折扣：">
-            <el-row>
-              <el-col :span="6">
-                <el-input v-model="setForm.discount"></el-input>
-              </el-col>
-              <el-col :span="2">
-                <span>折</span>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item label="充值优惠：">
-            <el-row>
-              <el-col :span="2">
-                <span>充</span>
-              </el-col>
-              <el-col :span="6">
-                <el-input v-model="setForm.chong"></el-input>
-              </el-col>
-              <el-col :span="2">
-                <span>送</span>
-              </el-col>
-              <el-col :span="6">
-                <el-input v-model="setForm.song"></el-input>
-              </el-col>
-              <el-col :span="2">
-                <i class="el-icon-remove"></i>
-              </el-col>
-              <el-col :span="2">
-                <i class="el-icon-circle-plus"></i>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-form>
-
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="editdialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="editdialogVisible = false">确 定</el-button>
-        </span>
-      </el-dialog>
     </el-main>
   </el-container>
 </template>
@@ -116,15 +62,6 @@ export default {
       // 会员等级列表
       memberlevel: [],
       memberTableData: [],
-      setForm: {
-        name: "",
-        company_name: "",
-        chong: "",
-        song: "",
-        discount: "",
-       
-      },
-      editdialogVisible: false
     };
   },
 
@@ -176,14 +113,7 @@ export default {
     },
 
 
-    //设置弹框
-    editDialog(v) {
-      console.log(v)
-      this.editdialogVisible = true;
-      this.setForm.name=v.name;
-      this.setForm.company_name=v.company_name;
-      this.setForm.discount=v.discount
-    },
+ 
 
   }
 };

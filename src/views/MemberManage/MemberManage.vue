@@ -102,7 +102,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="memberForm.page"
-        :page-sizes="[2,5, 10, 20, 30,50,100]"
+        :page-sizes="[10, 20, 30,50,100]"
         :page-size="memberForm.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -290,12 +290,12 @@
             <el-row>
               <el-col :span="2">充</el-col>
               <el-col :span="7">
-                <el-input v-model="RechargeForm.money"></el-input>
+                <el-input v-model="RechargeForm.money" @input="getMoney()"></el-input>
               </el-col>
 
               <el-col :span="2">赠</el-col>
               <el-col :span="7">
-                <el-input v-model="RechargeForm.give_money"></el-input>
+                <el-input v-model="RechargeForm.give_money" disabled></el-input>
               </el-col>
               <el-col :span="1">元</el-col>
             </el-row>
@@ -323,7 +323,8 @@ import {
   deleteMember,
   paymethod,
   memberAccount,
-  memberStatus
+  memberStatus,
+  memberGiveMoney
 } from "@/api/member.js";
 
 export default {
@@ -727,7 +728,19 @@ export default {
       if(!this.memberForm.keys){
         this.getMemberList()
       }
-    }
+    },
+    getMoney(){
+      memberGiveMoney({money:this.RechargeForm.money}).then(res => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        // console.log(res,'22222222222222')
+        if (res.code == 0) {
+          this.RechargeForm.give_money=res.data
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
   }
 };
 </script>
@@ -743,6 +756,9 @@ export default {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
+  }
+  /deep/.el-dialog__footer{
+    text-align: center;
   }
 }
 </style>
