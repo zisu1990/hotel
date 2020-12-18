@@ -510,7 +510,7 @@
       pickerStart_time(v) {
         if (this.formLabelAlign.end_time) {
           if (v > this.formLabelAlign.end_time) {
-            this.message('warning', '遇到时间不能大于预离时间')
+            this.message('warning', '预到时间不能大于预离时间')
             this.formLabelAlign.start_time = ""
             return
           }
@@ -535,7 +535,7 @@
       pickerEnd_time(v) {
         if (this.formLabelAlign.start_time) {
           if (v < this.formLabelAlign.start_time) {
-            this.message('warning', '预离时间不能小于遇到时间')
+            this.message('warning', '预离时间不能小于预到时间')
             this.formLabelAlign.end_time = ""
             return
           }

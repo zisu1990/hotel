@@ -4,23 +4,25 @@
     <el-main>
       <el-form :model="LogForm">
         <el-row>
-          <el-col :span="6">
-            <el-form-item label="开始时间：">
-              <el-date-picker v-model="LogForm.start_time" type="datetime" placeholder="选择日期时间"></el-date-picker>
+            <el-col :span="8">
+            <el-form-item label="入住时间段：">
+              <el-date-picker
+                v-model="LogForm.value1"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                @change="getTime"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="结束时间：">
-              <el-date-picker v-model="LogForm.end_time" type="datetime" placeholder="选择日期时间"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
+          <el-col :offset="1" :span="6">
             <el-form-item>
               <el-input
                 v-model="LogForm.name"
-                placeholder="请输入操作员姓名"
+                placeholder="请输入住客姓名/身份证号/房间号"
                 clearable
-                :style="{width: '100%'}"
+                :style="{ width: '100%' }"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -54,27 +56,40 @@
 
 <script>
 import { Log } from "@/api/Log.js";
+import { getAllTime, getDayTime } from "@/utils/moment.js";
 export default {
   data() {
     return {
       LogForm: {
-        start_time: "",
-        end_time: "",
+        value1:[],
         name: "",
         currentPage: 1,
         pageSize: 10,
         
       },
       LogTableData: [],
-      total: 0
+      total: 0,
+            start_time: "",
+      end_time: "",
     };
   },
   created() {
     this.getLogList()
   },
   methods: {
+    // 获取时间
+    getTime() {
+      console.log(this.LogForm.value1);
+      this.start_time = getAllTime(this.LogForm.value1[0]);
+      this.end_time = getAllTime(this.LogForm.value1[1]);
+      console.log(this.start_time);
+      console.log(this.end_time);
+    },
     getLogList() {
         let params = {
+          name:this.LogForm.name,
+        start_time: this.start_time,
+        end_time: this.end_time,
         page: this.LogForm.currentPage,
         page_size: this.LogForm.pageSize,
       }

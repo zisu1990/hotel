@@ -4,29 +4,30 @@
     <el-main>
       <el-form :model="memberForm" label-width="100px">
         <el-row>
-          <el-col :span="6">
-            <el-form-item label="开始时间：">
-              <el-date-picker v-model="memberForm.start_time" type="datetime" placeholder="选择日期"></el-date-picker>
+          <el-col :span="8">
+            <el-form-item label="入住时间段：">
+              <el-date-picker
+                v-model="memberForm.value1"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                @change="getTime"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="办理时间：">
-              <el-date-picker v-model="memberForm.end_time" type="datetime" placeholder="选择日期"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
+          <el-col :offset="1" :span="6">
             <el-form-item>
               <el-input
                 v-model="memberForm.keys"
-                placeholder="请输入姓名/身份证号/手机号"
+                placeholder="请输入住客姓名/身份证号/手机号"
                 clearable
-                :style="{width: '100%'}"
+                :style="{ width: '100%' }"
               ></el-input>
             </el-form-item>
           </el-col>
-
           <el-col :span="2">
-            <el-button type="primary" @click="Querybtn()">查询</el-button>
+            <el-button type="primary" @click="getMemberList()">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -100,7 +101,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="memberForm.page"
-        :page-sizes="[5, 10, 20, 30,50,100]"
+        :page-sizes="[2,5, 10, 20, 30,50,100]"
         :page-size="memberForm.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -311,6 +312,7 @@
 
 
 <script>
+import { getAllTime, getDayTime } from "@/utils/moment.js";
 import {
   memberList,
   addMember,
@@ -353,8 +355,7 @@ export default {
 
     return {
       memberForm: {
-        start_time: "",
-        end_time: "",
+        value1: [],
         keys: "",
         page: 1,
         page_size: 10
@@ -444,43 +445,55 @@ export default {
         nationality: "",
         sex: ""
       },
-      member_id: "" //会员id
+      member_id: "", //会员id
+
+      start_time: "",
+      end_time: ""
     };
   },
   created() {
     this.getMemberList();
   },
   methods: {
-    //会员列表
+    // 获取时间
+    getTime() {
+      console.log(this.memberForm.value1);
+      this.start_time = getAllTime(this.memberForm.value1[0]);
+      this.end_time = getAllTime(this.memberForm.value1[1]);
+      console.log(this.start_time);
+      console.log(this.end_time);
+    },
+
+    // //会员列表
+    // getMemberList() {
+    //   let params = {
+    //     page: this.memberForm.page,
+    //     page_size: this.memberForm.page_size
+    //   };
+    //   memberList(params).then(res => {
+    //     res = typeof res == "string" ? JSON.parse(res) : res;
+    //     console.log(res, "会员列表");
+    //     if (res.code === 0) {
+    //       this.MemberTableData = res.data.list;
+    //       this.total = res.data.count;
+    //     }
+    //   });
+    // },
+
+    // 查询
     getMemberList() {
       let params = {
         page: this.memberForm.page,
-        page_size: this.memberForm.page_size
-      };
-      memberList(params).then(res => {
-        res = JSON.parse(res);
-        console.log(res, "会员列表");
-        if (res.code === 0) {
-          this.MemberTableData = res.data.list;
-          this.total = res.data.count;
-        }
-      });
-    },
-
-    // 查询
-    Querybtn() {
-      let params = {
-        page: this.memberForm.page,
         page_size: this.memberForm.page_size,
-        start_time: this.memberForm.start_time,
-        end_time: this.memberForm.end_time,
+        start_time: this.start_time,
+        end_time: this.end_time,
         keys: this.memberForm.keys
       };
       memberList(params).then(res => {
-        res = JSON.parse(res);
+        res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res, "会员查询列表");
         if (res.code === 0) {
-          this.MemberTableData = res.data.list;
+         this.MemberTableData = res.data.list;
           this.total = res.data.count;
         }
       });
@@ -725,21 +738,6 @@ export default {
     justify-content: flex-start;
     margin-bottom: 20px;
   }
-}
-
-/deep/.el-date-editor.el-input,
-.el-date-editor.el-input__inner {
-  width: 280px;
-}
-.select {
-  .el-form {
-    /deep/.el-select {
-      width: 100%;
-    }
-  }
-}
-/deep/.el-dialog__footer {
-  text-align: center;
 }
 </style>
 

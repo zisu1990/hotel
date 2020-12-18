@@ -3,7 +3,7 @@
     <el-main>
       <el-row style="margin-bottom: 20px">
         <el-col :span="6">
-          <el-input ref="upload" clearable @change="handleInput" v-model="formRoomManage.roomType"
+          <el-input ref="upload" clearable  v-model="formRoomManage.roomType"
             placeholder="请输入房间类型"></el-input>
         </el-col>
         <el-col :span="2">
@@ -404,6 +404,8 @@
           this.handleSearch();
         }
       },
+
+
       // roomModifystatus
       // 上传exsel
       submitUpload(file, fileList) {

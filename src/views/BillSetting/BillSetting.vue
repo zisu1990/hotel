@@ -24,14 +24,12 @@
           <el-row align="middle" type="flex" justify="start">
             2、 退房超时
             <el-time-picker
-              
               v-model="formDevice.tfend_time1"
               placeholder="请选择时间"
               style="width: 180px"
             ></el-time-picker>每超过1小时加
             <el-input v-model="formDevice.tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
-              
               v-model="formDevice.tfend_time2"
               placeholder="请选择时间"
               style="width: 180px"
@@ -47,14 +45,12 @@
           <el-row align="middle" type="flex" justify="start">
             4、会员入住退房时间点超过
             <el-time-picker
-            
               v-model="formDevice.membertf_end_time1"
               placeholder="请选择时间"
               style="width: 180px"
             ></el-time-picker>，每小时加收
             <el-input v-model="formDevice.membertf_tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
-            
               v-model="formDevice.membertf_end_time2"
               placeholder="请选择时间"
               style="width: 180px"
@@ -65,7 +61,8 @@
           <el-row align="middle" type="flex" justify="start">
             5、酒店LOGO：
             <!-- <el-button type="primary">点击上传</el-button> -->
-            <el-upload style="border:1px dashed   #ddd"
+            <el-upload
+              style="border:1px dashed   #ddd"
               class="avatar-uploader"
               :multiple="false"
               action="http://www.api.vip/api/setting/upload"
@@ -85,7 +82,7 @@
 
           <el-row align="middle" type="flex" justify="start">
             7、酒店业务系统自动夜审时间设置
-            <el-time-picker v-model="formDevice.ys_time"  placeholder="请选择时间"></el-time-picker>
+            <el-time-picker v-model="formDevice.ys_time" placeholder="请选择时间"></el-time-picker>
           </el-row>
 
           <el-row align="middle" type="flex" justify="start">8、酒店业务员班次设置:</el-row>
@@ -107,7 +104,6 @@
                   <template v-slot="scope">
                     <el-time-picker
                       is-range
-                      @change="getBanTime($event)"
                       v-model="scope.row.time"
                       range-separator="至"
                       start-placeholder="开始时间"
@@ -139,7 +135,7 @@
 </template>
 <script>
 import { getAllTime, getDayTime } from "@/utils/moment.js";
-import { SetLogo,SetBill,GetInfo} from "@/api/BillSetting";
+import { SetLogo, SetBill, GetInfo } from "@/api/BillSetting";
 export default {
   data() {
     return {
@@ -156,7 +152,7 @@ export default {
         membertf_end_time2: "",
         membertf_tf_date: "",
         tel: "",
-        ys_time: "",
+        ys_time: ""
       },
 
       // 夜间入住时间段
@@ -170,35 +166,34 @@ export default {
         }
       ],
       imageUrl: "",
-      logo:'',
+      logo: "",
+
       // 值班时间段
-      banTime:'',
+      banTime: "",
 
       // 值班信息
-      ban_info:'早班,7:30-15:30;晚班,15:30-23:30;夜班,23:30-7:30',
+      ban_info: "早班,7:30-15:30;晚班,15:30-23:30;夜班,23:30-7:30"
     };
   },
-  created(){
-    this.GetBillInfo()
+  created() {
+    this.GetBillInfo();
   },
   methods: {
-
     // 获取计费详情
-    GetBillInfo(){
-      GetInfo().then(res =>{
+    GetBillInfo() {
+      GetInfo().then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res,'计费详情')
-        if(res.code===0){
-          this.formDevice=res.data
-          this.imageUrl='https://api.anhuiqingyou.com/uploads/'+res.data.logo;
-          this.tableData=res.data.ban_info
-        }else {
+        console.log(res, "计费详情");
+        if (res.code === 0) {
+          this.formDevice = res.data;
+          this.imageUrl =
+            "https://api.anhuiqingyou.com/uploads/" + res.data.logo;
+          this.tableData = res.data.ban_info;
+        } else {
           this.message("error", res.message);
         }
-
-      })
+      });
     },
-
 
     // 上传logo
     selectPicUpload(f) {
@@ -208,30 +203,27 @@ export default {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res);
         if (res.code == 0) {
-          this.imageUrl='https://api.anhuiqingyou.com/uploads/'+res.data[0][0];
-          this.logo=res.data[0][0]
+          this.imageUrl =
+            "https://api.anhuiqingyou.com/uploads/" + res.data[0][0];
+          this.logo = res.data[0][0];
         } else {
           this.message("error", res.message);
         }
       });
     },
 
-  
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isPNG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
-
       if (!isJPG && !isPNG) {
         this.$message.error("上传头像图片只能是 JPG/png格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      return isJPG || isPNG && isLt2M ;
+      return isJPG || (isPNG && isLt2M);
     },
-
-
 
     // 增加
     addClass(v) {
@@ -260,39 +252,42 @@ export default {
       tableData.splice(v.$index, 1);
     },
 
+    // 提交表单
+    submitForm() {
+      let parmas = {
+        yzstart_time: getAllTime(this.formDevice.setTime[0]).substring(11),
+        yzend_time: getAllTime(this.formDevice.setTime[1]).substring(11),
+        yz_date: this.formDevice.yz_date,
+        tfend_time1: getAllTime(this.formDevice.tfend_time1).substring(11),
+        tf_money1: this.formDevice.tf_money1,
+        tfend_time2: getAllTime(this.formDevice.tfend_time2).substring(11),
+        tf_date: this.formDevice.tf_date,
+        datecount: this.formDevice.datecount,
+        membertf_end_time1: getAllTime(
+          this.formDevice.membertf_end_time1
+        ).substring(11),
+        membertf_tf_money1: this.formDevice.membertf_tf_money1,
+        membertf_end_time2: getAllTime(
+          this.formDevice.membertf_end_time2
+        ).substring(11),
+        membertf_tf_date: this.formDevice.membertf_tf_date,
+        ban_info: this.ban_info,
+        logo: this.logo,
+        tel: this.formDevice.tel,
+        ys_time: getAllTime(this.formDevice.ys_time).substring(11)
+      };
+      SetBill(parmas).then(res => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        console.log(res);
+        if (res.code === 0) {
+          this.message("success", res.message);
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
 
-
-      // 提交表单
-      submitForm(){
-          let parmas={
-            yzstart_time:getAllTime(this.formDevice.setTime[0]).substring(11),
-            yzend_time:getAllTime(this.formDevice.setTime[1]).substring(11),
-            yz_date:this.formDevice.yz_date,
-            tfend_time1:getAllTime(this.formDevice.tfend_time1).substring(11),
-            tf_money1:this.formDevice.tf_money1,
-            tfend_time2:getAllTime(this.formDevice.tfend_time2).substring(11),
-            tf_date:this.formDevice.tf_date,
-            datecount:this.formDevice.datecount,
-            membertf_end_time1:getAllTime(this.formDevice.membertf_end_time1).substring(11),
-            membertf_tf_money1:this.formDevice.membertf_tf_money1,
-            membertf_end_time2:getAllTime(this.formDevice.membertf_end_time2).substring(11),
-            membertf_tf_date:this.formDevice.membertf_tf_date,
-            ban_info:this.ban_info,
-            logo:this.logo,
-            tel:this.formDevice.tel,
-            ys_time:getAllTime(this.formDevice.ys_time).substring(11),
-          }
-         SetBill(parmas).then(res => {
-           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
-          if (res.code === 0) {
-           this.message("success", res.message)
-          } else {
-            this.message("error", res.message);
-          }
-        });
-      }
-
+  
   }
 };
 </script>
