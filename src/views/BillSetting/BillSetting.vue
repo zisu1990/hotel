@@ -38,7 +38,8 @@
               style="width: 180px">
             </el-time-picker>，每小时加收
             <el-input v-model="formDevice.membertf_tf_money1" clearable></el-input>元房费；退房超过
-            <el-time-picker  value-format="HH:mm:ss" v-model="formDevice.membertf_end_time2" placeholder="请选择时间" style="width: 180px">
+            <el-time-picker value-format="HH:mm:ss" v-model="formDevice.membertf_end_time2" placeholder="请选择时间"
+              style="width: 180px">
             </el-time-picker>加收
             <el-input v-model="formDevice.membertf_tf_date" clearable></el-input>天房费；
           </el-row>
@@ -170,8 +171,8 @@
             this.formDevice.setTime = arrTime
             this.formDevice.tfend_time2 = res.data.tfend_time2
             this.formDevice.membertf_end_time1 = res.data.membertf_end_time1
-             this.formDevice.membertf_end_time2 = res.data.membertf_end_time2
-             this.formDevice.ys_time =  res.data.ys_time
+            this.formDevice.membertf_end_time2 = res.data.membertf_end_time2
+            this.formDevice.ys_time = res.data.ys_time
           } else {
             this.message("error", res.message);
           }
