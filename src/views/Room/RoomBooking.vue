@@ -351,7 +351,7 @@
         } else
           this.disabledMember_card = false
         deep: true
-  
+
       }
 
     },
@@ -364,7 +364,7 @@
           if (valid) {
             let formLabelAlign = this.formLabelAlign
             if (!that.setTableRoomPrice(this.roomTableData)) {
-              this.message('error', '请选择预订房间')
+              return this.message('error', '请选择预订房间')
             }
             let params = {
               type: formLabelAlign.type,
@@ -418,7 +418,7 @@
       },
       // 根据身份证查询是否会员
       handleChangeIsVIP() {
-         if(this.formLabelAlign.member_card == ''){
+        if (this.formLabelAlign.member_card == '') {
           return
         }
         if (this.formLabelAlign.tel) {

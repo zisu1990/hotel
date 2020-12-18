@@ -24,3 +24,7 @@ export const paymethod = params => post('/paymethod/lists', params)
 
 //计费设置详情接口
 export const settingInfo = params => post('/setting/info', params)
+
+
+// 入住接口
+export const orderMoveinto = params => post('/order/moveinto', params)
