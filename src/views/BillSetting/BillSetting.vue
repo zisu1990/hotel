@@ -168,11 +168,6 @@ export default {
       imageUrl: "",
       logo: "",
 
-      // 值班时间段
-      banTime: "",
-
-      // 值班信息
-      ban_info: "早班,7:30-15:30;晚班,15:30-23:30;夜班,23:30-7:30"
     };
   },
   created() {
@@ -254,6 +249,17 @@ export default {
 
     // 提交表单
     submitForm() {
+
+        let ban_info="";
+        this.tableData.forEach(item =>{
+          let zaoTime=getAllTime(item.time[0]).substring(11)
+          let wanTime=getAllTime(item.time[1]).substring(11)
+          let time=zaoTime+"-"+wanTime
+          ban_info += `${item.name},${time};`;
+          ban_info = ban_info.substring(0, ban_info.length - 1);
+          console.log(ban_info)
+        });
+
       let parmas = {
         yzstart_time: getAllTime(this.formDevice.setTime[0]).substring(11),
         yzend_time: getAllTime(this.formDevice.setTime[1]).substring(11),
@@ -271,7 +277,7 @@ export default {
           this.formDevice.membertf_end_time2
         ).substring(11),
         membertf_tf_date: this.formDevice.membertf_tf_date,
-        ban_info: this.ban_info,
+        ban_info: ban_info,
         logo: this.logo,
         tel: this.formDevice.tel,
         ys_time: getAllTime(this.formDevice.ys_time).substring(11)
