@@ -18,7 +18,6 @@
               end-placeholder="结束时间"
               placeholder="选择时间范围"
               value-format="HH:mm:ss"
-              @change="time($event)"
             ></el-time-picker>时入住客人加收
             <el-input v-model="formDevice.yz_date" clearable></el-input>天房费；
           </el-row>
@@ -29,13 +28,14 @@
               v-model="formDevice.tfend_time1"
               placeholder="请选择时间"
               style="width: 180px"
-              
+               value-format="HH:mm:ss"
             ></el-time-picker>每超过1小时加
             <el-input v-model="formDevice.tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
               v-model="formDevice.tfend_time2"
               placeholder="请选择时间"
               style="width: 180px"
+               value-format="HH:mm:ss"
             ></el-time-picker>加收
             <el-input v-model="formDevice.tf_date" clearable></el-input>天房费；
           </el-row>
@@ -50,11 +50,13 @@
             <el-time-picker
               v-model="formDevice.membertf_end_time1"
               placeholder="请选择时间"
+               value-format="HH:mm:ss"
               style="width: 180px"
             ></el-time-picker>，每小时加收
             <el-input v-model="formDevice.membertf_tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
               v-model="formDevice.membertf_end_time2"
+               value-format="HH:mm:ss"
               placeholder="请选择时间"
               style="width: 180px"
             ></el-time-picker>加收
@@ -85,7 +87,7 @@
 
           <el-row align="middle" type="flex" justify="start">
             7、酒店业务系统自动夜审时间设置
-            <el-time-picker v-model="formDevice.ys_time" placeholder="请选择时间"></el-time-picker>
+            <el-time-picker v-model="formDevice.ys_time"  value-format="HH:mm:ss" placeholder="请选择时间"></el-time-picker>
           </el-row>
 
           <el-row align="middle" type="flex" justify="start">8、酒店业务员班次设置:</el-row>
@@ -106,6 +108,7 @@
                 <el-table-column prop="date" label="班次工作时段">
                   <template v-slot="scope">
                     <el-time-picker
+                     value-format="HH:mm:ss"
                       is-range
                       v-model="scope.row.time"
                       range-separator="至"
@@ -177,10 +180,6 @@ export default {
     this.GetBillInfo();
   },
   methods: {
-
-    time(e){
-      console.log(e)
-    },
     // 获取计费详情
     GetBillInfo() {
       GetInfo().then(res => {
@@ -188,12 +187,23 @@ export default {
         console.log(res, "计费详情");
         if (res.code === 0) {
           this.formDevice = res.data;
-          this.imageUrl =
-            "https://api.anhuiqingyou.com/uploads/" + res.data.logo;
+          this.imageUrl ="https://api.anhuiqingyou.com/uploads/" + res.data.logo;
+          this.logo="https://api.anhuiqingyou.com/uploads/" + res.data.logo;
           this.tableData = res.data.ban_info;
           this.formDevice.tfend_time1=res.data.tfend_time1
-          console.log(this.formDevice.tfend_time1)
-          this.$forceUpdate()
+            this.tableData = res.data.ban_info;
+            let arrTime = []
+            arrTime.push(res.data.yzstart_time)
+            arrTime.push(res.data.yzend_time)
+            this.formDevice.setTime = arrTime
+
+            
+            res.data.ban_info.forEach(item =>{
+              console.log(item.time)
+            
+            })
+            
+
         } else {
           this.message("error", res.message);
         }
@@ -262,8 +272,8 @@ export default {
 
         let ban_info="";
         this.tableData.forEach(item =>{
-          let zaoTime=getAllTime(item.time[0]).substring(11)
-          let wanTime=getAllTime(item.time[1]).substring(11)
+          let zaoTime=item.time[0]
+          let wanTime=item.time[1]
           let time=zaoTime+"-"+wanTime
           ban_info += `${item.name},${time};`;
           ban_info = ban_info.substring(0, ban_info.length - 1);
@@ -271,26 +281,24 @@ export default {
         });
 
       let parmas = {
-        yzstart_time: getAllTime(this.formDevice.setTime[0]).substring(11),
-        yzend_time: getAllTime(this.formDevice.setTime[1]).substring(11),
+        yzstart_time: this.formDevice.setTime[0],
+        yzend_time: this.formDevice.setTime[1],
         yz_date: this.formDevice.yz_date,
-        tfend_time1: getAllTime(this.formDevice.tfend_time1).substring(11),
+        tfend_time1: this.formDevice.tfend_time1,
         tf_money1: this.formDevice.tf_money1,
-        tfend_time2: getAllTime(this.formDevice.tfend_time2).substring(11),
+        tfend_time2: this.formDevice.tfend_time2,
         tf_date: this.formDevice.tf_date,
         datecount: this.formDevice.datecount,
-        membertf_end_time1: getAllTime(
+        membertf_end_time1: 
           this.formDevice.membertf_end_time1
-        ).substring(11),
+        ,
         membertf_tf_money1: this.formDevice.membertf_tf_money1,
-        membertf_end_time2: getAllTime(
-          this.formDevice.membertf_end_time2
-        ).substring(11),
+        membertf_end_time2: this.formDevice.membertf_end_time2,
         membertf_tf_date: this.formDevice.membertf_tf_date,
         ban_info: ban_info,
         logo: this.logo,
         tel: this.formDevice.tel,
-        ys_time: getAllTime(this.formDevice.ys_time).substring(11)
+        ys_time: this.formDevice.ys_time
       };
       SetBill(parmas).then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
