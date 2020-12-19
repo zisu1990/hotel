@@ -366,7 +366,7 @@ export default {
         room_id:this.$route.query.id
       }
       KeSearch(parmas).then( res =>{
-        res = JSON.parse(res);
+       res = typeof res == "string" ? JSON.parse(res) : res;
        console.log(res, "获取客主信息");
       })
     },
@@ -379,7 +379,7 @@ export default {
     //获取国籍列表
     getNativeList() {
       native().then(res => {
-        res = JSON.parse(res);
+        res = typeof res == "string" ? JSON.parse(res) : res;
         // console.log(res, "获取国籍列表");
         if (res.code === 0) {
           this.nativeList = res.data.list;
@@ -392,7 +392,7 @@ export default {
     //获取客户类型
     getCustomerType() {
       customerType().then(res => {
-        res = JSON.parse(res);
+        res = typeof res == "string" ? JSON.parse(res) : res;
         // console.log(res, "获取客户列表");
         if (res.code === 0) {
           this.keHuType = res.data;
