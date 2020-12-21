@@ -87,13 +87,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="离店时间：" prop="end_time">
-<<<<<<< Updated upstream
                 <el-date-picker @change="pickerEnd_time"  v-model="checkInForm.end_time"
                   type="datetime" placeholder="选择日期"></el-date-picker>
-=======
-                <el-date-picker @change="pickerEnd_time" v-model="checkInForm.end_time" type="datetime"
-                  placeholder="选择日期"></el-date-picker>
->>>>>>> Stashed changes
               </el-form-item>
             </el-col>
             <el-col :span="8">
