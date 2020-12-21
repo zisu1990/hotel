@@ -187,7 +187,7 @@ export default {
         console.log(res, "计费详情");
         if (res.code === 0) {
           this.formDevice = res.data;
-          this.imageUrl ="https://api.anhuiqingyou.com/uploads/" + res.data.logo;
+          this.imageUrl =res.data.logo;
           this.logo="https://api.anhuiqingyou.com/uploads/" + res.data.logo;
           this.tableData = res.data.ban_info;
           this.formDevice.tfend_time1=res.data.tfend_time1

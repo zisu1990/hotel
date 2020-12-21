@@ -87,7 +87,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="离店时间：" prop="end_time">
-                <el-date-picker @change="pickerEnd_time" format="yyyy-MM-dd HH:mm" v-model="checkInForm.end_time"
+                <el-date-picker @change="pickerEnd_time"  v-model="checkInForm.end_time"
                   type="datetime" placeholder="选择日期"></el-date-picker>
               </el-form-item>
             </el-col>
@@ -624,6 +624,9 @@
           }
         })
       },
+
+
+
       // 开始日期change
       pickerStart_time(v) {
         if (!v) {
@@ -684,8 +687,11 @@
         // console.log(str)
         return str
       },
+
+
       // 结束日期change
       pickerEnd_time(v) {
+        console.log(v)
         if (!v) {
           this.roomType = ""
           this.louceng = ""

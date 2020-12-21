@@ -10,7 +10,7 @@
           <el-form ref="formReplenish" label-width="130px" :model="formReplenish" :rules="rules">
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="房号：" prop="room_no">
+                <el-form-item label="房号：">
                   <el-input clearable v-model="formReplenish.room_no" disabled></el-input>
                 </el-form-item>
               </el-col>
@@ -20,32 +20,18 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="客户类型：" prop="type">
-                  <el-select v-model="formReplenish.type" style="width: 100%">
-                    <el-option
-                      v-for="(item,index) in keHuType"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.name"
-                    ></el-option>
-                  </el-select>
+                <el-form-item label="客户类型：">
+                  <el-input clearable v-model="formReplenish.type" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="团体名称：">
-                  <el-input clearable v-model="formReplenish.groupname"></el-input>
+                  <el-input clearable v-model="formReplenish.groupname" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="国籍：">
-                  <el-select v-model="formReplenish.nationality" style="width: 100%">
-                    <el-option
-                      v-for="(item,index) in nativeList"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.name"
-                    ></el-option>
-                  </el-select>
+                  <el-input clearable v-model="formReplenish.nationality" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -53,43 +39,31 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="证件类型：">
-                  <el-select v-model="formReplenish.zhengjian" style="width: 62%">
-                    <el-option
-                      v-for="(item, index) in certificateOptions"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.name"
-                    ></el-option>
-                  </el-select>
-                  <el-button
-                    type="primary"
-                    size="small"
-                    style="width: 35%; height: 40px; margin-left: 3%"
-                  >读身份证</el-button>
+                  <el-input clearable v-model="formReplenish.zhengjian" disabled></el-input>
                 </el-form-item>
               </el-col>
 
               <el-col :span="7">
                 <el-form-item label="联系电话：">
-                  <el-input clearable v-model="formReplenish.tel"></el-input>
+                  <el-input clearable v-model="formReplenish.tel" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input clearable v-model="formReplenish.cardNum"></el-input>
+                  <el-input clearable v-model="formReplenish.cardNum" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="客主姓名：" prop="name">
-                  <el-input clearable v-model="formReplenish.name"></el-input>
+                <el-form-item label="客主姓名：">
+                  <el-input clearable v-model="formReplenish.name" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="证件号：" prop="zhengjian_no">
-                  <el-input clearable v-model="formReplenish.zhengjian_no"></el-input>
+                <el-form-item label="证件号：">
+                  <el-input clearable v-model="formReplenish.zhengjian_no" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -99,17 +73,18 @@
 
             <el-row>
               <el-form-item label="证件地址：">
-                <el-input clearable v-model="formReplenish.address"></el-input>
+                <el-input clearable v-model="formReplenish.address" disabled></el-input>
               </el-form-item>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="入住时间：" prop="start_time">
+                <el-form-item label="入住时间：">
                   <el-date-picker
                     style="width: 100%"
                     v-model="formReplenish.start_time"
                     type="datetime"
+                    disabled
                     placeholder="选择日期时间"
                   ></el-date-picker>
                 </el-form-item>
@@ -121,10 +96,11 @@
                     v-model="formReplenish.end_time"
                     type="datetime"
                     placeholder="选择日期时间"
+                    @change="pickerEnd_time"
                   ></el-date-picker>
                   <el-input
                     style="width: 40%"
-                    v-model="formReplenish.nationality"
+                    v-model="formReplenish.datecount"
                     placeholder="请输入天数"
                   ></el-input>
                 </el-form-item>
@@ -135,14 +111,15 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item class="settingImprest" label="已交房费(元)：">
-                  <el-input clearable v-model="formReplenish.total_count"></el-input>
+                  <el-input clearable v-model="formReplenish.count_money" disabled></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="7">
-                <el-form-item class="settingImprest" label="补录房费(元)：" prop="bulu_money">
-                  <el-input clearable v-model="formReplenish.bulu_money"></el-input>
+                            <el-col :span="7">
+                <el-form-item class="settingImprest" label="押金(元)：">
+                  <el-input v-model="formReplenish.yajin_money" disabled></el-input>
                 </el-form-item>
               </el-col>
+
               <el-col :span="7">
                 <el-form-item label="会员卡支付：">
                   <el-select v-model="formReplenish.is_card_pay" style="width: 100%">
@@ -172,8 +149,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item prop="bookMoney" label="预付金额：">
-                  <el-input clearable v-model="formReplenish.bookMoney"></el-input>
+                <el-form-item class="settingImprest" label="补录房费(元)：" prop="bulu_money">
+                  <el-input clearable v-model="formReplenish.bulu_money"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -191,10 +168,10 @@
   </el-container>
 </template>
 <script>
+import { paymethod } from "@/api/member.js";
 import { KeSearch } from "@/api/Replenish.js";
-import { native, paymethod } from "@/api/member.js"; //国籍列表
-import { customerType } from "@/api/RoomBooking.js"; //客户类型
-import { zhengjianLists } from "@/api/Check_in.js"; //证件类型
+import { getAllTime, getDayTime } from "@/utils/moment.js";
+import Moment from "moment";
 export default {
   data() {
     const idCardValidity = (rule, code, callback) => {
@@ -301,6 +278,7 @@ export default {
         nationality: "",
         zhengjian: "",
         tel: "",
+        datecount: "",
         zhengjian_no: "",
         name: "",
         member_card: "",
@@ -310,26 +288,16 @@ export default {
         nationality: "",
         payCardMoney: "",
         payWay: "",
-        bookMoney: "",
-        bulu_money:''
+        count_money:"",
+        // bookMoney: "",
+        bulu_money: "",
+        yajin_money: ""
       },
       //   表单规则
       rules: {
         end_time: [
           { required: true, message: "请选择离店时间", trigger: "change" }
         ],
-        start_time: [
-          { required: true, message: "请选择入住时间", trigger: "change" }
-        ],
-        zhengjian: [
-          { required: true, message: "请选择证件类型", trigger: "change" }
-        ],
-        name: [
-          { required: true, message: "请输入客户姓名", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
-        ],
-        type: [{ required: true, message: "请选择客户类型", trigger: "blur" }],
-        zhengjian_no: [{ validator: idCardValidity, trigger: "blur" }],
         payWay: [
           { required: true, message: "请选择预订支付方式", trigger: "change" }
         ],
@@ -339,93 +307,59 @@ export default {
       // 房间Id
       roomID: "",
 
-      // 国籍列表
-      nativeList: [],
-      //客户类型
-      keHuType: [],
-      // 证件类型
-      certificateOptions: [],
+
       // 支付方式
       payForForhod: []
     };
   },
 
   created() {
-    this.getNativeList();
-    this.getCustomerType();
-    this.getCredentials();
-    this.getPaymethodList();
-    this.getKeInfo()
+    this.getKeInfo();
+    this.getPaymethodList()
   },
   methods: {
-
     // 查询客主信息
-    getKeInfo(){
-      let parmas={
-        room_no:this.$route.query.room_no,
-        room_id:this.$route.query.id
-      }
-      KeSearch(parmas).then( res =>{
-       res = typeof res == "string" ? JSON.parse(res) : res;
-       console.log(res, "获取客主信息");
-      })
-    },
-
-
-
-
-
-
-    //获取国籍列表
-    getNativeList() {
-      native().then(res => {
+    getKeInfo() {
+      let parmas = {
+        room_no: this.$route.query.room_no,
+        room_id: this.$route.query.id
+      };
+      KeSearch(parmas).then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
-        // console.log(res, "获取国籍列表");
+        console.log(res, "获取客主信息");
         if (res.code === 0) {
-          this.nativeList = res.data.list;
-        } else {
-          this.message("error", res.message);
+          this.formReplenish = res.data;
+          this.formReplenish.start_time=res.data.start_time;
         }
       });
     },
-
-    //获取客户类型
-    getCustomerType() {
-      customerType().then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        // console.log(res, "获取客户列表");
-        if (res.code === 0) {
-          this.keHuType = res.data;
-        } else {
-          this.message("error", res.message);
-        }
-      });
-    },
-
-    // 获取证件类型
-    getCredentials() {
-      zhengjianLists().then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        // console.log(res);
-        if (res.code == 0) {
-          this.certificateOptions = res.data;
-        } else {
-          this.message("error", res.message);
-        }
-      });
-    },
-
     //充值方式
     getPaymethodList() {
       paymethod().then(res => {
         res = JSON.parse(res);
-        // console.log(res, "获取充值列表");
+        console.log(res, "获取充值列表");
         if (res.code === 0) {
           this.payForForhod = res.data;
         } else {
           this.message("error", res.message);
         }
       });
+    },
+
+    pickerEnd_time(v){
+      console.log(v)
+      console.log(this.formReplenish.start_time)
+      let endtime = getAllTime(v)
+      if(this.formReplenish.start_time){
+        if(endtime < this.formReplenish.start_time){
+            this.message('warning', '预离时间不能小于预到时间')
+            this.formReplenish.end_time = ""
+            return
+        }
+        this.formReplenish.datecount = getDayTime(this.formReplenish.start_time,v)
+        console.log( this.formReplenish.datecount)
+      }
+
     },
 
     // 提交表单
