@@ -255,12 +255,19 @@ export default {
   },
   methods: {
     // 查询客主信息
-    getKeInfo() {
-      let parmas = {
-        room_no: this.$route.query.room_no,
-        room_id: this.$route.query.id
-      };
-      KeSearch(parmas).then(res => {
+    getKeInfo(){
+      let parmas={
+        room_no:this.$route.query.room_no,
+        room_id:this.$route.query.id
+      }
+      KeSearch(parmas).then( res =>{
+       res = typeof res == "string" ? JSON.parse(res) : res;
+       console.log(res, "获取客主信息");
+      })
+    },
+    //获取国籍列表
+    getNativeList() {
+      native().then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res, "获取客主信息");
         if (res.code === 0) {
