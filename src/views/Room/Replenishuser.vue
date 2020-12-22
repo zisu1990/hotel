@@ -122,9 +122,14 @@
 
               <el-col :span="7">
                 <el-form-item label="会员卡支付：">
-                  <el-select v-model="formReplenish.is_card_pay"  :disabled="disabledMember_card"  style="width: 100%"  >
-                    <el-option label="是" value="1"></el-option>
-                    <el-option label="否" value="0"></el-option>
+                  <el-select
+                    v-model="formReplenish.is_card_pay"
+                    :disabled="dis_is_card_pay"
+                    @change="memberCard"
+                    style="width: 100%"
+                  >
+                    <el-option label="是" value="是"></el-option>
+                    <el-option label="否" value="否"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -133,12 +138,16 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
-                  <el-input clearable v-model="formReplenish.card_money"></el-input>
+                  <el-input
+                    clearable
+                    v-model="formReplenish.card_money"
+                    :disabled="disabledMember_card"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="预付方式：" prop="paymethod">
-                  <el-select v-model="formReplenish.paymethod" style="width: 100%">
+                  <el-select v-model="formReplenish.paymethod" placeholder="请选择预付方式" style="width: 100%">
                     <el-option
                       v-for="(item,index) in payForForhod"
                       :key="index"
@@ -169,12 +178,11 @@
 </template>
 <script>
 import { paymethod } from "@/api/member.js";
-import { KeSearch,MemberMoneySearch} from "@/api/Replenish.js";
+import { KeSearch, MemberMoneySearch,BuLu } from "@/api/Replenish.js";
 import { getAllTime, getDayTime } from "@/utils/moment.js";
 import Moment from "moment";
 export default {
   data() {
-
     var bookMoney = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("输入金额不能为空"));
@@ -199,13 +207,13 @@ export default {
         datecount: "",
         zhengjian_no: "",
         name: "",
-        member_card: "",
+        member_card: "123",
         address: "",
         start_time: "",
         end_time: "",
         nationality: "",
         payCardMoney: "",
-        payWay: "",
+        paymethod: "",
         count_money: "",
         // bookMoney: "",
         bulu_money: "",
@@ -216,7 +224,7 @@ export default {
         end_time: [
           { required: true, message: "请选择离店时间", trigger: "change" }
         ],
-        payWay: [
+        paymethod: [
           { required: true, message: "请选择预订支付方式", trigger: "change" }
         ],
         bulu_money: [{ validator: bookMoney, trigger: "blur" }]
@@ -228,25 +236,27 @@ export default {
       // 支付方式
       payForForhod: [],
 
-      disabledMember_card:false,
+      disabledMember_card: false,
+      dis_is_card_pay: false
     };
   },
-  computed:{
-     Newmember_card() {
-        return this.formReplenish.card_money
-      },
+
+  computed: {
+    Is_member_Card() {
+      return this.formReplenish.member_card;
+    }
   },
 
-  watch:{
-    Newmember_card(val) {
-      console.log(val)
-        if (val) {
-          this.disabledMember_card = true
-          // this.formReplenish.is_card_pay = '否'
-        } else
-          this.disabledMember_card = false
-        deep: true
-      },
+  watch: {
+    Is_member_Card(val) {
+      if (val == "") {
+        this.disabledMember_card = true;
+        this.dis_is_card_pay = true;
+      } else {
+        this.disabledMember_card = false;
+        this.dis_is_card_pay = false;
+      }
+    }
   },
 
   created() {
@@ -254,25 +264,33 @@ export default {
     this.getPaymethodList();
   },
   methods: {
-    // 查询客主信息
-    getKeInfo(){
-      let parmas={
-        room_no:this.$route.query.room_no,
-        room_id:this.$route.query.id
+    memberCard(val) {
+      if (val == "否") {
+        this.disabledMember_card = true;
+      } else {
+        MemberMoneySearch({ member_card: this.formReplenish.member_card }).then(
+          res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res, "获取会员卡余额信息");
+            //  if(res.code===0){
+            //     this.formReplenish=res.data
+            //  }
+          }
+        );
+        this.disabledMember_card = false;
       }
-      KeSearch(parmas).then( res =>{
-       res = typeof res == "string" ? JSON.parse(res) : res;
-       console.log(res, "获取客主信息");
-      })
     },
-    //获取国籍列表
-    getNativeList() {
-      native().then(res => {
+    // 查询客主信息
+    getKeInfo() {
+      let parmas = {
+        room_no: this.$route.query.room_no,
+        room_id: this.$route.query.id
+      };
+      KeSearch(parmas).then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res, "获取客主信息");
         if (res.code === 0) {
           this.formReplenish = res.data;
-          this.formReplenish.start_time = res.data.start_time;
         }
       });
     },
@@ -291,11 +309,10 @@ export default {
       });
     },
 
-
-
+    // 选择结束时间
     pickerEnd_time(v) {
-      console.log(v);
-      console.log(this.formReplenish.start_time);
+      // console.log(v);
+      // console.log(this.formReplenish.start_time);
       let endtime = getAllTime(v);
       if (this.formReplenish.start_time) {
         if (endtime < this.formReplenish.start_time) {
@@ -307,15 +324,35 @@ export default {
           this.formReplenish.start_time,
           v
         );
-        console.log(this.formReplenish.datecount);
+        // console.log(this.formReplenish.datecount);
       }
     },
 
     // 提交表单
     submitForm() {
+      
       this.$refs.formReplenish.validate(valid => {
+        let parmas={
+        room_no:this.formReplenish.room_no,
+        paymethod:this.formReplenish.paymethod,
+        is_card_pay:this.formReplenish.is_card_pay,
+        end_time:this.formReplenish.end_time,
+        member_card:this.formReplenish.paymethod,
+        card_money:this.formReplenish.card_money,
+        other_pay_money:this.formReplenish.other_pay_money,
+        bulu_money:this.formReplenish.bulu_money,
+        datecount:this.formReplenish.datecount,
+        room_id:this.formReplenish.room_id,
+        discount_money:this.formReplenish.discount_money,
+        order_id:this.formReplenish.id,
+        count_money:this.formReplenish.count_money
+      }
         if (valid) {
-          alert("submit!");
+            BuLu(parmas).then(res => {
+              res = JSON.parse(res);
+              console.log(res, "补录成功");
+             
+            });
         } else {
           console.log("error submit!!");
           return false;
