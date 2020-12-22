@@ -832,7 +832,7 @@
                 }
               } else {
                 // 会员
-                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                   let hh = Number(Moment(checkInForm.end_time).format('HH'))
                   let mm = Number(Moment(checkInForm.end_time).format('mm'))
                   let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
@@ -867,12 +867,12 @@
               // console.log(HHend_time > settingInfo.tfend_time1)
               // console.log(HHend_time <= settingInfo.tfend_time2)
               totolMoneny += sums[2] * (Number(diffDay))
-              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                 // console.log(123)
                 // 非会员
                 if (this.disabledMember_card) {
                   // 下午退房时间之内按小时收费
-                  if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                  if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                     let hh = Number(Moment(checkInForm.end_time).format('HH'))
                     let mm = Number(Moment(checkInForm.end_time).format('mm'))
                     let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
@@ -888,17 +888,17 @@
                         totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
                       }
                     }
-                  } else if (HHend_time > settingInfo.tfend_time2) {
+                  } else if (HHend_time > settingInfo.membertf_end_time2) {
                     // 下午退房时间之内按天收费
                     totolMoneny += sums[2] * Number(settingInfo.tf_date)
                   }
                 } else {
                   // 会员
-                  if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                  if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                     let hh = Moment(checkInForm.end_time).format('HH')
                     let mm = Moment(checkInForm.end_time).format('mm')
                     let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
-                    let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                    let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
                     if (hh - hh1 == 0) {
                       if (mm > mm2) {
                         totolMoneny += Number(settingInfo.membertf_tf_money1)
@@ -956,11 +956,11 @@
                 } else {}
               } else {
                 // 会员
-                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                   let hh = Number(Moment(checkInForm.end_time).format('HH'))
                   let mm = Number(Moment(checkInForm.end_time).format('mm'))
-                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
-                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                  let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
                   if (hh - hh1 == 0) {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.membertf_tf_money1)
@@ -981,7 +981,7 @@
                         .membertf_tf_money1) * (hh - hh1)
                     }
                   }
-                } else if (HHend_time > settingInfo.tfend_time2) {
+                } else if (HHend_time > settingInfo.membertf_end_time2) {
                   totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
                   chargeAmount = sums[2] * Number(settingInfo.membertf_tf_date)
                   couponMoney = sums[2] * Number(settingInfo.tf_date) * Number(settingInfo.membertf_tf_date)
@@ -1210,7 +1210,7 @@
                 }
               } else {
                 // 会员
-                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                   let hh = Moment(checkInForm.end_time).format('HH')
                   let mm = Moment(checkInForm.end_time).format('mm')
                   let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
@@ -1268,7 +1268,7 @@
               } else {}
             } else {
               // 会员
-              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                 let hh = Number(Moment(checkInForm.end_time).format('HH'))
                 let mm = Number(Moment(checkInForm.end_time).format('mm'))
                 let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
@@ -1284,7 +1284,7 @@
                     totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
                   }
                 }
-              } else if (HHend_time > settingInfo.tfend_time2) {
+              } else if (HHend_time > settingInfo.membertf_end_time2) {
                 totolMoneny += v * Number(settingInfo.membertf_tf_date)
               }
             }

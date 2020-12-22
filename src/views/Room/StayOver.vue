@@ -115,7 +115,7 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="应付金额：">
+                <el-form-item label="待付金额：">
                   <el-input v-model="formReplenish.RoomSumMoney" disabled :style="{ width: '100%' }"></el-input>
                 </el-form-item>
               </el-col>
@@ -135,7 +135,7 @@
             </el-row>
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="预付方式：" prop="paymethod">
+                <el-form-item label="待付方式：" prop="paymethod">
                   <el-select v-model="formReplenish.paymethod" style="width: 100%">
                     <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
                     </el-option>
@@ -143,7 +143,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item prop="stayOverMoney" label="预付金额：">
+                <el-form-item prop="stayOverMoney" label="支付金额：">
                   <el-input clearable v-model="formReplenish.stayOverMoney"></el-input>
                 </el-form-item>
               </el-col>
@@ -166,11 +166,14 @@
   // formReplenish
   import {
     orderRoom_order,
+    settingInfo,
     orderMemberinfo,
-    settingInfo
+    orderXuzhu
   } from '@/api/StayOver'
   import {
-    getDayTime
+    getDayTime,
+    getAllTime,
+    isBefore
   } from '@/utils/moment.js'
   import {
     paymethod
@@ -202,6 +205,8 @@
         payForForhod: [],
         // 会员卡号是否禁用
         disabledMeber: true,
+        // 会员详情
+        VipInfo: {},
         // 计费详情
         settingInfo: {},
         rules: {
@@ -231,7 +236,6 @@
           this.roomInfo
         ).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
           if (res.code == 0) {
             let {
               data
@@ -257,6 +261,11 @@
       },
       // inputchange
       handlePickerChange(e) {
+        if (!isBefore(this.formReplenish.end_time, e)) {
+          this.message('error', '续住日期不能小于原离店日期')
+          this.formReplenish.goOutTime = ''
+          return
+        }
         let formReplenish = this.formReplenish
         let price = formReplenish.price
         let end_time = formReplenish.end_time
@@ -375,6 +384,7 @@
                 }
               }
             }
+            totolMoneny = (totolMoneny * Number(this.VipInfo.discount / 100)).toFixed(2)
           }
         } else {
           totolMoneny = price * (diffDay)
@@ -474,6 +484,7 @@
                 }
               }
             }
+            totolMoneny = (totolMoneny * Number(this.VipInfo.discount / 100)).toFixed(2)
           }
         }
         formReplenish.stayOverDay = getDayTime(e)
@@ -497,7 +508,30 @@
       submitForm() {
         this.$refs.formReplenish.validate((valid) => {
           if (valid) {
-            alert("submit!");
+            let params = {
+              room_no: this.roomInfo.room_no,
+              end_time: this.formReplenish.end_time,
+              now_end_time: this.formReplenish.goOutTime,
+              datecount: this.formReplenish.stayOverDay,
+              count_money: this.formReplenish.count_money,
+              xuzhu_money: this.formReplenish.RoomSumMoney,
+              is_card_pay: this.formReplenish.is_card_pay,
+              card_money: this.formReplenish.payCardMoney,
+              paymethod: this.formReplenish.paymethod,
+              other_pay_money: this.formReplenish.stayOverMoney,
+              room_id: this.roomInfo.room_id,
+              order_id: this.formReplenish.id,
+              member_card: this.formReplenish.member_card,
+            }
+            orderXuzhu(params).then(res => {
+              res = typeof res == "string" ? JSON.parse(res) : res;
+              console.log('续住接口', res)
+              if (res.code == 0) {
+
+              } else {
+                this.message("error", res.message)
+              }
+            })
           } else {
             console.log("error submit!!");
             return false;
@@ -519,6 +553,7 @@
             if (res.data) {
               this.disabledMeber = false
               this.formReplenish.is_card_pay = '否'
+              this.VipInfo = res.data
             }
           } else {
             this.message("error", res.message)

@@ -100,3 +100,6 @@ export function getAllTime(v) {
 export function getDayTime(start, end) {
     return moment(end).from(moment(start), true)
 }
+export function isBefore(start, end) {
+    return moment(start).isBefore(moment(end))
+}

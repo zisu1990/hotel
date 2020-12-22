@@ -8,3 +8,6 @@ export const orderMemberinfo = params => post('/order/memberinfo', params)
 
 //计费设置详情接口
 export const settingInfo = params => post('/setting/info', params)
+
+//提交表单
+export const orderXuzhu = params => post('/order/xuzhu', params)
