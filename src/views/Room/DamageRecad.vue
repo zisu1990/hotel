@@ -15,20 +15,17 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="房号：" prop="inputRules">
-                  <el-input clearable v-model="formDamageRecad.roomCardNum"></el-input>
+                  <el-input clearable v-model="formDamageRecad.room_no" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="客户名称：">
-                  <el-input clearable v-model="formDamageRecad.userName"></el-input>
+                  <el-input clearable v-model="formDamageRecad.name" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="客户类型：">
-                  <el-select v-model="formDamageRecad.clientType" style="width: 100%">
-                    <el-option label="散客" value="sanke"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
+                      <el-input clearable v-model="formDamageRecad.type" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -36,22 +33,12 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="入住时间：">
-                  <el-date-picker
-                    style="width: 100%"
-                    v-model="formDamageRecad.goInTime"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                  ></el-date-picker>
+                 <el-input clearable v-model="formDamageRecad.start_time" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="离店时间：">
-                  <el-date-picker
-                    style="width: 100%"
-                    v-model="formDamageRecad.goOutTime"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                  ></el-date-picker>
+<el-input clearable v-model="formDamageRecad.end_time" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7"></el-col>
@@ -154,7 +141,9 @@
     </el-main>
   </el-container>
 </template>
-    <script>
+<script>
+import { KeSearch } from "@/api/Replenish.js";
+import { GoodsList} from "@/api/GoodsManage";
 export default {
   data() {
     var inputRules = (rule, value, callback) => {
@@ -168,14 +157,7 @@ export default {
     };
     return {
       // 表单
-      formDamageRecad: {
-        roomCardNum: "",
-        userName: "",
-        clientType: "",
-        goOutTime: "",
-        goInTime: "",
-        damageName: ""
-      },
+      formDamageRecad: {},
       //   表单规则
       rules: {
         inputRules: [{ validator: inputRules, trigger: "blur" }],
@@ -209,10 +191,45 @@ export default {
           price: 200,
           money: ""
         }
-      ]
+      ],
+              // 房间id，房号
+        roomInfo: {},
     };
   },
+  created(){
+      this.roomInfo.room_no = this.$route.query.room_no
+      this.roomInfo.room_id = this.$route.query.id
+      this.getKeInfo()
+       this.getGoodSList()
+  },
   methods: {
+
+
+      // 查询客主信息
+    getKeInfo() {
+      KeSearch(this.roomInfo).then(res => {
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        console.log(res, "获取客主信息");
+        if (res.code === 0) {
+          this.formDamageRecad = res.data;
+        }
+      });
+    },
+
+    // 物件查询
+    getGoodSList() {
+      GoodsList(this.queryParmas).then(res => {
+        res = JSON.parse(res);
+        console.log(res, "物件列表");
+        if (res.code === 0) {
+          let wujian=res.data.list;
+          console.log(wujian)
+        } else {
+          this.message("error", res.message);
+        }
+      });
+    },
+
     //   表单增减
     handleAdd(i, v) {
       let tableData = this.tableData;
