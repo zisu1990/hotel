@@ -120,7 +120,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="房间单价：">
+                <el-form-item class="settingImprest" label="房间单价(元)：">
                   <el-input v-model="formReplenish.price" disabled></el-input>
                 </el-form-item>
               </el-col>
@@ -128,7 +128,7 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="应付金额：">
+                <el-form-item class="settingImprest" label="待付金额(元)：">
                   <el-input v-model="formReplenish.price" disabled></el-input>
                 </el-form-item>
               </el-col>
@@ -174,7 +174,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="预付房费(元)：" prop="bulu_money">
+                <el-form-item class="settingImprest" label="支付金额(元)：" prop="bulu_money">
                   <el-input clearable v-model="formReplenish.bulu_money"></el-input>
                 </el-form-item>
               </el-col>
