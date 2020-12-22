@@ -50,7 +50,7 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input clearable v-model="formReplenish.cardNum" disabled></el-input>
+                  <el-input clearable v-model="formReplenish.cardNum" :disabled="disabledMeber"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -110,22 +110,34 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="已交房费(元)：">
+                <el-form-item class="settingImprest" label="已付金额(元)：">
                   <el-input clearable v-model="formReplenish.count_money" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="押金(元)：">
+                <el-form-item class="settingImprest" label="已付押金(元)：">
                   <el-input v-model="formReplenish.yajin_money" disabled></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :span="7">
+                <el-form-item class="settingImprest" label="房间单价：">
+                  <el-input v-model="formReplenish.price" disabled></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
+            <el-row type="flex" justify="space-between">
+              <el-col :span="7">
+                <el-form-item class="settingImprest" label="应付金额：">
+                  <el-input v-model="formReplenish.price" disabled></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡支付：">
                   <el-select
                     v-model="formReplenish.is_card_pay"
-                    :disabled="dis_is_card_pay"
-                    @change="memberCard"
+                    :disabled="disabledMeber"
+                   
                     style="width: 100%"
                   >
                     <el-option label="是" value="是"></el-option>
@@ -133,21 +145,25 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
                   <el-input
                     clearable
                     v-model="formReplenish.card_money"
-                    :disabled="disabledMember_card"
+                    :disabled="disabledMeber"
                   ></el-input>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="预付方式：" prop="paymethod">
-                  <el-select v-model="formReplenish.paymethod" placeholder="请选择预付方式" style="width: 100%">
+                  <el-select
+                    v-model="formReplenish.paymethod"
+                    placeholder="请选择预付方式"
+                    style="width: 100%"
+                  >
                     <el-option
                       v-for="(item,index) in payForForhod"
                       :key="index"
@@ -158,9 +174,11 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="补录房费(元)：" prop="bulu_money">
+                <el-form-item class="settingImprest" label="预付房费(元)：" prop="bulu_money">
                   <el-input clearable v-model="formReplenish.bulu_money"></el-input>
                 </el-form-item>
+              </el-col>
+                     <el-col :span="7">
               </el-col>
             </el-row>
 
@@ -178,7 +196,8 @@
 </template>
 <script>
 import { paymethod } from "@/api/member.js";
-import { KeSearch, MemberMoneySearch,BuLu } from "@/api/Replenish.js";
+import { KeSearch, BuLu } from "@/api/Replenish.js";
+import {orderMemberinfo} from '@/api/StayOver'
 import { getAllTime, getDayTime } from "@/utils/moment.js";
 import Moment from "moment";
 export default {
@@ -197,28 +216,7 @@ export default {
     };
     return {
       // 表单参数
-      formReplenish: {
-        room_no: this.$route.query.room_no,
-        type: "",
-        groupname: "",
-        nationality: "",
-        zhengjian: "",
-        tel: "",
-        datecount: "",
-        zhengjian_no: "",
-        name: "",
-        member_card: "123",
-        address: "",
-        start_time: "",
-        end_time: "",
-        nationality: "",
-        payCardMoney: "",
-        paymethod: "",
-        count_money: "",
-        // bookMoney: "",
-        bulu_money: "",
-        yajin_money: ""
-      },
+      formReplenish: {},
       //   表单规则
       rules: {
         end_time: [
@@ -236,50 +234,19 @@ export default {
       // 支付方式
       payForForhod: [],
 
-      disabledMember_card: false,
-      dis_is_card_pay: false
+      // 会员卡号是否禁用
+      disabledMeber: true,
     };
   },
 
-  computed: {
-    Is_member_Card() {
-      return this.formReplenish.member_card;
-    }
-  },
-
-  watch: {
-    Is_member_Card(val) {
-      if (val == "") {
-        this.disabledMember_card = true;
-        this.dis_is_card_pay = true;
-      } else {
-        this.disabledMember_card = false;
-        this.dis_is_card_pay = false;
-      }
-    }
-  },
 
   created() {
+     this.formReplenish.room_no = this.$route.query.room_no
+      this.formReplenish.room_id = this.$route.query.id
     this.getKeInfo();
     this.getPaymethodList();
   },
   methods: {
-    memberCard(val) {
-      if (val == "否") {
-        this.disabledMember_card = true;
-      } else {
-        MemberMoneySearch({ member_card: this.formReplenish.member_card }).then(
-          res => {
-            res = typeof res == "string" ? JSON.parse(res) : res;
-            console.log(res, "获取会员卡余额信息");
-            //  if(res.code===0){
-            //     this.formReplenish=res.data
-            //  }
-          }
-        );
-        this.disabledMember_card = false;
-      }
-    },
     // 查询客主信息
     getKeInfo() {
       let parmas = {
@@ -291,10 +258,10 @@ export default {
         console.log(res, "获取客主信息");
         if (res.code === 0) {
           this.formReplenish = res.data;
+          this.searchVip(res.data.tel)
         }
       });
     },
-
 
     //充值方式
     getPaymethodList() {
@@ -330,29 +297,27 @@ export default {
 
     // 提交表单
     submitForm() {
-      
       this.$refs.formReplenish.validate(valid => {
-        let parmas={
-        room_no:this.formReplenish.room_no,
-        paymethod:this.formReplenish.paymethod,
-        is_card_pay:this.formReplenish.is_card_pay,
-        end_time:this.formReplenish.end_time,
-        member_card:this.formReplenish.paymethod,
-        card_money:this.formReplenish.card_money,
-        other_pay_money:this.formReplenish.other_pay_money,
-        bulu_money:this.formReplenish.bulu_money,
-        datecount:this.formReplenish.datecount,
-        room_id:this.formReplenish.room_id,
-        discount_money:this.formReplenish.discount_money,
-        order_id:this.formReplenish.id,
-        count_money:this.formReplenish.count_money
-      }
+        let parmas = {
+          room_no: this.formReplenish.room_no,
+          paymethod: this.formReplenish.paymethod,
+          is_card_pay: this.formReplenish.is_card_pay,
+          end_time: this.formReplenish.end_time,
+          member_card: this.formReplenish.paymethod,
+          card_money: this.formReplenish.card_money,
+          other_pay_money: this.formReplenish.other_pay_money,
+          bulu_money: this.formReplenish.bulu_money,
+          datecount: this.formReplenish.datecount,
+          room_id: this.formReplenish.room_id,
+          discount_money: this.formReplenish.discount_money,
+          order_id: this.formReplenish.id,
+          count_money: this.formReplenish.count_money
+        };
         if (valid) {
-            BuLu(parmas).then(res => {
-              res = JSON.parse(res);
-              console.log(res, "补录成功");
-             
-            });
+          BuLu(parmas).then(res => {
+            res = JSON.parse(res);
+            console.log(res, "补录成功");
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -362,7 +327,26 @@ export default {
     // 重置表单
     resetForm() {
       this.$refs.formReplenish.resetFields();
-    }
+    },
+
+          
+      // 查询是否是会员
+      searchVip(member_card) {
+        orderMemberinfo({
+          member_card
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          // console.log(res,'会员余额')
+          if (res.code == 0) {
+            if (res.data) {
+              this.disabledMeber = false
+              this.formReplenish.is_card_pay = '否'
+            }
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      }
   }
 };
 </script>
