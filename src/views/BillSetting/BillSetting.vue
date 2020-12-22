@@ -18,6 +18,7 @@
               end-placeholder="结束时间"
               placeholder="选择时间范围"
               value-format="HH:mm:ss"
+              @change="handlePickerChange"
             ></el-time-picker>时入住客人加收
             <el-input v-model="formDevice.yz_date" clearable></el-input>天房费；
           </el-row>
@@ -266,7 +267,9 @@ export default {
       }
       tableData.splice(v.$index, 1);
     },
-
+  handlePickerChange(){
+    this.$forceUpdate()
+  },
     // 提交表单
     submitForm() {
 
