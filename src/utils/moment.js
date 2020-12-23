@@ -98,7 +98,11 @@ export function getAllTime(v) {
     return moment(v).format("YYYY-MM-DD HH:mm:ss")
 }
 export function getDayTime(start, end) {
-    return moment(end).diff(moment(start), 'days') || 1 + '天'
+    let str = moment(end).diff(moment(start), 'days')
+    if (!str) {
+        str = '1'
+    }
+    return str + '天'
 }
 export function isBefore(start, end) {
     return moment(start).isBefore(moment(end))
