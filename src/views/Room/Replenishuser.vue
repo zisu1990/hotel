@@ -262,10 +262,14 @@
       },
       // inputchange
       handlePickerChange(e) {
-        console.log(e)
+        if(!e){
+          this.formReplenish.RoomSumMoney = '0'
+        }
+       
         if (!isBefore(this.formReplenish.start_time, e)) {
           this.message('error', '补录日期不能小于原离店日期')
-          this.formReplenish.goOutTime = ''
+                   this.formReplenish.goOutTime = ''
+          this.formReplenish.RoomSumMoney = '0'
           return
         }
         let formReplenish = this.formReplenish
@@ -289,9 +293,9 @@
         // 正常时间订房
         if (diffDay == 0) {
           // 非会员
-          console.log(HHend_time > settingInfo.tfend_time1)
-          console.log(HHend_time <= settingInfo.tfend_time2)
-          console.log(HHend_time1 <= settingInfo.tfend_time1)
+          // console.log(HHend_time > settingInfo.tfend_time1)
+          // console.log(HHend_time <= settingInfo.tfend_time2)
+          // console.log(HHend_time1 <= settingInfo.tfend_time1)
           if (this.disabledMeber) {
             // 下午退房时间之内按小时收费
             if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2 && HHend_time1 <=
@@ -489,7 +493,7 @@
             totolMoneny = (totolMoneny * Number(this.VipInfo.discount / 100)).toFixed(2)
           }
         }
-        formReplenish.stayOverDay = getDayTime(e)
+        formReplenish.stayOverDay = getDayTime(this.formReplenish.start_time, e)
         formReplenish.RoomSumMoney = totolMoneny
         this.$forceUpdate()
 
