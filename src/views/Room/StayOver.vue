@@ -49,7 +49,7 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input :disabled="disabledMeber" v-model="formReplenish.member_card"></el-input>
+                  <el-input disabled v-model="formReplenish.member_card"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -127,9 +127,15 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="7">
+              <el-col :span="7" style="position: relative;">
                 <el-form-item label="卡扣金额：">
-                  <el-input :disabled="disabledMeber" clearable v-model="formReplenish.payCardMoney"></el-input>
+                  <el-input :disabled="disabledCardKkNum" clearable v-model="formReplenish.payCardMoney"></el-input>
+                  <span style="
+                  font-size: 14px;
+                  color: #005ab9;
+                   position: absolute;
+                   right:-100px;
+                ">{{getBalance}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -208,8 +214,12 @@
         payForForhod: [],
         // 会员卡号是否禁用
         disabledMeber: true,
+        // 卡扣是否禁用
+        disabledCardKkNum: true,
         // 会员详情
-        VipInfo: {},
+        VipInfo: {
+          balance: ""
+        },
         // 计费详情
         settingInfo: {},
         rules: {
@@ -231,6 +241,34 @@
         },
       };
     },
+    computed: {
+      Newis_card_pay() {
+        return this.formReplenish.is_card_pay
+      },
+      Newmember_card() {
+        return this.formReplenish.payCardMoney
+      },
+      getBalance() {
+        return this.VipInfo.balance ? '余额' + this.VipInfo.balance + '元' : ''
+      }
+    },
+    watch: {
+      Newis_card_pay(val) {
+        if (val == '否')
+          this.disabledCardKkNum = true
+        else
+          this.disabledCardKkNum = false
+        deep: true
+      },
+      Newmember_card(val) {
+        if (!val) {
+          this.disabledMeber = true
+          this.formReplenish.is_card_pay = '否'
+        } else
+          this.disabledMeber = false
+        deep: true
+      },
+    },
     created() {
       this.roomInfo.room_no = this.$route.query.room_no
       this.roomInfo.room_id = this.$route.query.id
@@ -248,6 +286,7 @@
             let {
               data
             } = res
+            console.log(res)
             this.formReplenish = data
             this.searchVip(data.tel)
           } else {
@@ -525,7 +564,7 @@
             let params = {
               room_no: this.roomInfo.room_no,
               end_time: this.formReplenish.end_time,
-              now_end_time: this.formReplenish.goOutTime,
+              now_end_time: getAllTime(this.formReplenish.goOutTime),
               datecount: this.formReplenish.stayOverDay,
               count_money: this.formReplenish.count_money,
               xuzhu_money: this.formReplenish.RoomSumMoney + '',
@@ -535,13 +574,13 @@
               other_pay_money: this.formReplenish.stayOverMoney,
               room_id: this.roomInfo.room_id,
               order_id: this.formReplenish.id,
-              member_card: this.formReplenish.member_card,
+              member_card: this.formReplenish.member_card ? this.formReplenish.tel : '',
             }
             orderXuzhu(params).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
               // console.log('续住接口', res)
               if (res.code == 0) {
-
+                this.message("success", res.message)
               } else {
                 this.message("error", res.message)
               }
