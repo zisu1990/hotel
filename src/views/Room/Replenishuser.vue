@@ -4,34 +4,34 @@
       <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
-            <p class="title">补录住客</p>
+            <p class="title">续住登记</p>
           </el-row>
 
           <el-form ref="formReplenish" label-width="130px" :model="formReplenish" :rules="rules">
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="房号：">
-                  <el-input clearable v-model="formReplenish.room_no" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.room_no"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="7"></el-col>
-              <el-col :span="7"></el-col>
+              <el-col :span="7"> </el-col>
+              <el-col :span="7"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="客户类型：">
-                  <el-input clearable v-model="formReplenish.type" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.type"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="团体名称：">
-                  <el-input clearable v-model="formReplenish.groupname" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.groupname"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="国籍：">
-                  <el-input clearable v-model="formReplenish.nationality" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.nationality"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -39,18 +39,17 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="证件类型：">
-                  <el-input clearable v-model="formReplenish.zhengjian" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.zhengjian"></el-input>
                 </el-form-item>
               </el-col>
-
               <el-col :span="7">
                 <el-form-item label="联系电话：">
-                  <el-input clearable v-model="formReplenish.tel" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.tel"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡号：">
-                  <el-input clearable v-model="formReplenish.cardNum" :disabled="disabledMeber"></el-input>
+                  <el-input :disabled="disabledMeber" v-model="formReplenish.member_card"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -58,12 +57,12 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="客主姓名：">
-                  <el-input clearable v-model="formReplenish.name" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.name"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="证件号：">
-                  <el-input clearable v-model="formReplenish.zhengjian_no" disabled></el-input>
+                  <el-input disabled v-model="formReplenish.zhengjian_no"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -73,73 +72,56 @@
 
             <el-row>
               <el-form-item label="证件地址：">
-                <el-input clearable v-model="formReplenish.address" disabled></el-input>
+                <el-input disabled v-model="formReplenish.address"></el-input>
               </el-form-item>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="入住时间：">
-                  <el-date-picker
-                    style="width: 100%"
-                    v-model="formReplenish.start_time"
-                    type="datetime"
-                    disabled
-                    placeholder="选择日期时间"
-                  ></el-date-picker>
+                <el-form-item label="入住日期：">
+                  <el-date-picker disabled style="width: 100%" v-model="formReplenish.start_time" type="datetime"
+                    placeholder="选择日期时间">
+                  </el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
-                <el-form-item label="离店时间：" prop="end_time">
-                  <el-date-picker
-                    style="width: 60%"
-                    v-model="formReplenish.end_time"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                    @change="pickerEnd_time"
-                  ></el-date-picker>
-                  <el-input
-                    style="width: 40%"
-                    v-model="formReplenish.datecount"
-                    placeholder="请输入天数"
-                  ></el-input>
+                <el-form-item label="离店日期：">
+                  <el-date-picker style="width: 60%" @change="handlePickerChange($event)"
+                    v-model="formReplenish.goOutTime" type="datetime" placeholder="选择日期时间">
+                  </el-date-picker>
+                  <el-input style="width: 40%" v-model="formReplenish.stayOverDay" readonly></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="4"></el-col>
+              <el-col :span="4"> </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="已付金额(元)：">
-                  <el-input clearable v-model="formReplenish.count_money" disabled></el-input>
+                <el-form-item class="settingImprest" label="已付金额：">
+                  <el-input disabled v-model="formReplenish.count_money"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="已付押金(元)：">
-                  <el-input v-model="formReplenish.yajin_money" disabled></el-input>
+                <el-form-item class="settingImprest" label="已付押金：">
+                  <el-input disabled v-model="formReplenish.yajin_money"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="房间单价(元)：">
-                  <el-input v-model="formReplenish.price" disabled></el-input>
+                <el-form-item label="房间单价：">
+                  <el-input v-model="formReplenish.price" disabled :style="{ width: '100%' }"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="待付金额(元)：">
-                  <el-input v-model="formReplenish.price" disabled></el-input>
+                <el-form-item label="待付金额：">
+                  <el-input v-model="formReplenish.RoomSumMoney" disabled :style="{ width: '100%' }"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡支付：">
-                  <el-select
-                    v-model="formReplenish.is_card_pay"
-                    :disabled="disabledMeber"
-                   
-                    style="width: 100%"
-                  >
+                  <el-select :disabled="disabledMeber" v-model="formReplenish.is_card_pay" style="width: 100%">
                     <el-option label="是" value="是"></el-option>
                     <el-option label="否" value="否"></el-option>
                   </el-select>
@@ -147,41 +129,27 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
-                  <el-input
-                    clearable
-                    v-model="formReplenish.card_money"
-                    :disabled="disabledMeber"
-                  ></el-input>
+                  <el-input :disabled="disabledMeber" clearable v-model="formReplenish.payCardMoney"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="预付方式：" prop="paymethod">
-                  <el-select
-                    v-model="formReplenish.paymethod"
-                    placeholder="请选择预付方式"
-                    style="width: 100%"
-                  >
-                    <el-option
-                      v-for="(item,index) in payForForhod"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.name"
-                    ></el-option>
+                <el-form-item label="待付方式：" prop="paymethod">
+                  <el-select v-model="formReplenish.paymethod" style="width: 100%">
+                    <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
+                    </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item class="settingImprest" label="支付金额(元)：" prop="bulu_money">
-                  <el-input clearable v-model="formReplenish.bulu_money"></el-input>
+                <el-form-item prop="stayOverMoney" label="支付金额：">
+                  <el-input clearable v-model="formReplenish.stayOverMoney"></el-input>
                 </el-form-item>
               </el-col>
-                     <el-col :span="7">
+              <el-col :span="7">
               </el-col>
             </el-row>
-
             <el-row style="margin-top: 30px">
               <el-form-item>
                 <el-button style="width: 100px" @click="resetForm">重置</el-button>
@@ -195,170 +163,409 @@
   </el-container>
 </template>
 <script>
-import { paymethod } from "@/api/member.js";
-import { KeSearch, BuLu } from "@/api/Replenish.js";
-import {orderMemberinfo} from '@/api/StayOver'
-import { getAllTime, getDayTime } from "@/utils/moment.js";
-import Moment from "moment";
-export default {
-  data() {
-    var bookMoney = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("输入金额不能为空"));
-      }
-      setTimeout(() => {
-        if (!Number.isInteger(+value)) {
-          callback(new Error("请输入数字值"));
-        } else {
-          callback();
+  // formReplenish
+  import {
+    orderRoom_order,
+    settingInfo,
+    orderMemberinfo,
+  } from '@/api/StayOver'
+  import{BuLu} from '@/api/Replenish'
+  import {
+    getDayTime,
+    getAllTime,
+    isBefore
+  } from '@/utils/moment.js'
+  import {
+    paymethod
+  } from "@/api/member.js";
+  import Moment from 'moment'
+  export default {
+    data() {
+      var bookMoney = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error("预订金额不能为空"));
         }
-      }, 100);
-    };
-    return {
-      // 表单参数
-      formReplenish: {},
-      //   表单规则
-      rules: {
-        end_time: [
-          { required: true, message: "请选择离店时间", trigger: "change" }
-        ],
-        paymethod: [
-          { required: true, message: "请选择预订支付方式", trigger: "change" }
-        ],
-        bulu_money: [{ validator: bookMoney, trigger: "blur" }]
-      },
-
-      // 房间Id
-      roomID: "",
-
-      // 支付方式
-      payForForhod: [],
-
-      // 会员卡号是否禁用
-      disabledMeber: true,
-    };
-  },
-
-
-  created() {
-     this.formReplenish.room_no = this.$route.query.room_no
-      this.formReplenish.room_id = this.$route.query.id
-    this.getKeInfo();
-    this.getPaymethodList();
-  },
-  methods: {
-    // 查询客主信息
-    getKeInfo() {
-      let parmas = {
-        room_no: this.$route.query.room_no,
-        room_id: this.$route.query.id
+        setTimeout(() => {
+          if (!Number.isInteger(+value)) {
+            callback(new Error("请输入数字值"));
+          } else {
+            callback();
+          }
+        }, 100);
       };
-      KeSearch(parmas).then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res, "获取客主信息");
-        if (res.code === 0) {
-          this.formReplenish = res.data;
-          this.searchVip(res.data.tel)
-        }
-      });
-    },
 
-    //充值方式
-    getPaymethodList() {
-      paymethod().then(res => {
-        res = JSON.parse(res);
-        console.log(res, "获取充值列表");
-        if (res.code === 0) {
-          this.payForForhod = res.data;
+      return {
+        // 表单参数
+        formReplenish: {},
+        //   表单规则
+        rules: {},
+        // 房间id，房号
+        roomInfo: {},
+        // 支付方式
+        payForForhod: [],
+        // 会员卡号是否禁用
+        disabledMeber: true,
+        // 会员详情
+        VipInfo: {},
+        // 计费详情
+        settingInfo: {},
+        rules: {
+          stayOverMoney: [{
+              required: true,
+              message: "请输入预付金额",
+              trigger: "blur"
+            },
+            {
+              validator: bookMoney,
+              trigger: "blur"
+            }
+          ]
+        },
+      };
+    },
+    created() {
+      this.roomInfo.room_no = this.$route.query.room_no
+      this.roomInfo.room_id = this.$route.query.id
+      this.getRows()
+    },
+    methods: {
+      getRows() {
+        this.getPaymethodList()
+        this.getMoneyWay()
+        orderRoom_order(
+          this.roomInfo
+        ).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res,'11111111111111111')
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+            this.formReplenish = data
+            this.searchVip(data.tel)
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      //充值方式
+      getPaymethodList() {
+        paymethod().then(res => {
+          res = JSON.parse(res);
+          console.log(res, "获取充值列表");
+          if (res.code === 0) {
+            this.payForForhod = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+      // inputchange
+      handlePickerChange(e) {
+        console.log(e)
+        if (!isBefore(this.formReplenish.start_time, e)) {
+          this.message('error', '补录日期不能小于原离店日期')
+          this.formReplenish.goOutTime = ''
+          return
+        }
+        let formReplenish = this.formReplenish
+        let price = formReplenish.price
+        let end_time = formReplenish.start_time
+        let settingInfo = this.settingInfo
+        let HHend_time = Moment(e).format('HH:mm')
+        let YYend_time = Moment(e).format('YYYY-MM-DD')
+        let HHend_time1 = Moment(formReplenish.start_time).format('HH:mm')
+        let YYend_time1 = Moment(formReplenish.start_time).format('YYYY-MM-DD')
+        let hh = Number(Moment(formReplenish.start_time).format('HH'))
+        let mm = Number(Moment(formReplenish.start_time).format('mm'))
+        let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+        let mm1 = Number(settingInfo.tfend_time1.substring(3, 5))
+        let VIPhh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+        let VIPmm1 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+        let hh2 = Number(Moment(e).format('HH'))
+        let mm2 = Number(Moment(e).format('mm'))
+        let totolMoneny = 0
+        let diffDay = Moment(e).diff(Moment(YYend_time1), 'days')
+        // 正常时间订房
+        if (diffDay == 0) {
+          // 非会员
+          console.log(HHend_time > settingInfo.tfend_time1)
+          console.log(HHend_time <= settingInfo.tfend_time2)
+          console.log(HHend_time1 <= settingInfo.tfend_time1)
+          if (this.disabledMeber) {
+            // 下午退房时间之内按小时收费
+            if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2 && HHend_time1 <=
+              settingInfo.tfend_time1) {
+              // console.log('正常时间订房-下午退房时间之内按小时收费')
+              if (hh2 - hh1 == 0) {
+                if (mm2 > mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1)
+                } else {}
+              } else {
+                if (mm2 > mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1) * ((hh2 - hh1) + 1)
+                } else
+                  totolMoneny += Number(settingInfo.tf_money1) * (hh2 - hh1)
+              }
+            } else if (HHend_time > settingInfo.tfend_time2 && HHend_time1 < settingInfo.tfend_time1) {
+              // 下午退房时间之内按天收费
+              totolMoneny += price * Number(settingInfo.tf_date)
+            } else if (HHend_time > settingInfo.tfend_time2 && HHend_time1 > settingInfo.tfend_time1 && HHend_time1 <=
+              settingInfo.tfend_time2) {
+              let oldsum = 0
+              if (hh - hh1 == 0) {
+                if (mm > mm1) {
+                  oldsum += Number(settingInfo.tf_money1)
+                }
+              } else {
+                if (mm > mm1) {
+                  oldsum += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                } else
+                  oldsum += Number(settingInfo.tf_money1) * (hh - hh1)
+              }
+              totolMoneny += (price * Number(settingInfo.tf_date)) - (oldsum)
+            } else if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2 && HHend_time1 >
+              settingInfo.tfend_time1) {
+              if (hh2 - hh1 == 0) {
+                if (mm2 > mm1 && mm < mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1)
+                }
+              } else {
+                if (mm2 > mm1 && mm < mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1) * ((hh2 - hh1) + 1)
+                } else {
+                  totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                }
+              }
+            }
+          } else {
+            // 会员
+            if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2 &&
+              HHend_time1 <= settingInfo.membertf_end_time1) {
+              // console.log('正常时间订房-下午退房时间之内按小时收费')
+              if (hh2 - VIPhh1 == 0) {
+                if (mm2 > VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1)
+                } else {}
+              } else {
+                if (mm2 > VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh2 - VIPhh1) + 1)
+                } else
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh2 - VIPhh1)
+              }
+            } else if (HHend_time > settingInfo.membertf_end_time2 && HHend_time1 < settingInfo.membertf_end_time1) {
+              // 下午退房时间之内按天收费
+              totolMoneny += price * Number(settingInfo.tf_date)
+            } else if (HHend_time > settingInfo.membertf_end_time2 && HHend_time1 > settingInfo.membertf_end_time1 &&
+              HHend_time1 <=
+              settingInfo.membertf_end_time2) {
+              let oldsum = 0
+              if (hh - VIPhh1 == 0) {
+                if (mm > VIPmm1) {
+                  oldsum += Number(settingInfo.membertf_tf_money1)
+                }
+              } else {
+                if (mm > VIPmm1) {
+                  oldsum += Number(settingInfo.membertf_tf_money1) * ((hh - VIPhh1) + 1)
+                } else
+                  oldsum += Number(settingInfo.membertf_tf_money1) * (hh - VIPhh1)
+              }
+              totolMoneny += (price * Number(settingInfo.tf_date)) - (oldsum)
+            } else if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2 &&
+              HHend_time1 >
+              settingInfo.membertf_end_time1) {
+              if (hh2 - VIPhh1 == 0) {
+                if (mm2 > VIPmm1 && mm < VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1)
+                }
+              } else {
+                if (mm2 > VIPmm1 && mm < VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh2 - VIPhh1) + 1)
+                } else {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - VIPhh1)
+                }
+              }
+            }
+            totolMoneny = (totolMoneny * Number(this.VipInfo.discount / 100)).toFixed(2)
+          }
         } else {
-          this.message("error", res.message);
+          totolMoneny = price * (diffDay)
+          // 非会员
+          if (this.disabledMeber) {
+            // 下午退房时间之内按小时收费
+            if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2 && HHend_time1 <=
+              settingInfo.tfend_time1) {
+              // console.log('正常时间订房-下午退房时间之内按小时收费')
+              if (hh2 - hh1 == 0) {
+                if (mm2 > mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1)
+                } else {}
+              } else {
+                if (mm2 > mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1) * ((hh2 - hh1) + 1)
+                } else
+                  totolMoneny += Number(settingInfo.tf_money1) * (hh2 - hh1)
+              }
+            } else if (HHend_time > settingInfo.tfend_time2 && HHend_time1 < settingInfo.tfend_time1) {
+              // 下午退房时间之内按天收费
+              totolMoneny += price * Number(settingInfo.tf_date)
+            } else if (HHend_time > settingInfo.tfend_time2 && HHend_time1 > settingInfo.tfend_time1 && HHend_time1 <=
+              settingInfo.tfend_time2) {
+              let oldsum = 0
+              if (hh - hh1 == 0) {
+                if (mm > mm1) {
+                  oldsum += Number(settingInfo.tf_money1)
+                }
+              } else {
+                if (mm > mm1) {
+                  oldsum += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                } else
+                  oldsum += Number(settingInfo.tf_money1) * (hh - hh1)
+              }
+              totolMoneny += (price * Number(settingInfo.tf_date)) - (oldsum)
+            } else if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2 && HHend_time1 >
+              settingInfo.tfend_time1) {
+              if (hh2 - hh1 == 0) {
+                if (mm2 > mm1 && mm < mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1)
+                }
+              } else {
+                if (mm2 > mm1 && mm < mm1) {
+                  totolMoneny += Number(settingInfo.tf_money1) * ((hh2 - hh1) + 1)
+                } else {
+                  totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                }
+              }
+            }
+          } else {
+            // 会员
+            if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2 &&
+              HHend_time1 <
+              settingInfo.membertf_end_time1) {
+              // console.log('正常时间订房-下午退房时间之内按小时收费')
+              if (hh2 - VIPhh1 == 0) {
+                if (mm2 > VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1)
+                } else {}
+              } else {
+                if (mm2 > VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh2 - VIPhh1) + 1)
+                } else
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh2 - VIPhh1)
+              }
+            } else if (HHend_time > settingInfo.membertf_end_time2 && HHend_time1 < settingInfo.membertf_end_time1) {
+              // 下午退房时间之内按天收费
+              totolMoneny += price * Number(settingInfo.tf_date)
+            } else if (HHend_time > settingInfo.membertf_end_time2 && HHend_time1 > settingInfo.membertf_end_time1 &&
+              HHend_time1 <=
+              settingInfo.membertf_end_time2) {
+              let oldsum = 0
+              if (hh - VIPhh1 == 0) {
+                if (mm > VIPmm1) {
+                  oldsum += Number(settingInfo.membertf_tf_money1)
+                }
+              } else {
+                if (mm > VIPmm1) {
+                  oldsum += Number(settingInfo.membertf_tf_money1) * ((hh - VIPhh1) + 1)
+                } else
+                  oldsum += Number(settingInfo.membertf_tf_money1) * (hh - VIPhh1)
+              }
+              totolMoneny += (price * Number(settingInfo.tf_date)) - (oldsum)
+            } else if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2 &&
+              HHend_time1 >
+              settingInfo.membertf_end_time1) {
+              if (hh2 - VIPhh1 == 0) {
+                if (mm2 > VIPmm1 && mm < VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1)
+                }
+              } else {
+                if (mm2 > VIPmm1 && mm < VIPmm1) {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh2 - VIPhh1) + 1)
+                } else {
+                  totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - VIPhh1)
+                }
+              }
+            }
+            totolMoneny = (totolMoneny * Number(this.VipInfo.discount / 100)).toFixed(2)
+          }
         }
-      });
-    },
+        formReplenish.stayOverDay = getDayTime(e)
+        formReplenish.RoomSumMoney = totolMoneny
+        this.$forceUpdate()
 
-    // 选择结束时间
-    pickerEnd_time(v) {
-      // console.log(v);
-      // console.log(this.formReplenish.start_time);
-      let endtime = getAllTime(v);
-      if (this.formReplenish.start_time) {
-        if (endtime < this.formReplenish.start_time) {
-          this.message("warning", "预离时间不能小于预到时间");
-          this.formReplenish.end_time = "";
-          return;
-        }
-        this.formReplenish.datecount = getDayTime(
-          this.formReplenish.start_time,
-          v
-        );
-        // console.log(this.formReplenish.datecount);
-      }
-    },
-
-    // 提交表单
-    submitForm() {
-      this.$refs.formReplenish.validate(valid => {
-        let parmas = {
-          room_no: this.formReplenish.room_no,
-          paymethod: this.formReplenish.paymethod,
-          is_card_pay: this.formReplenish.is_card_pay,
-          end_time: this.formReplenish.end_time,
-          member_card: this.formReplenish.paymethod,
-          card_money: this.formReplenish.card_money,
-          other_pay_money: this.formReplenish.other_pay_money,
-          bulu_money: this.formReplenish.bulu_money,
-          datecount: this.formReplenish.datecount,
-          room_id: this.formReplenish.room_id,
-          discount_money: this.formReplenish.discount_money,
-          order_id: this.formReplenish.id,
-          count_money: this.formReplenish.count_money
-        };
-        if (valid) {
-          BuLu(parmas).then(res => {
-            res = JSON.parse(res);
-            console.log(res, "补录成功");
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    // 重置表单
-    resetForm() {
-      this.$refs.formReplenish.resetFields();
-    },
-
-          
+      },
+      // 计费设置
+      getMoneyWay() {
+        settingInfo().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.settingInfo = res.data
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      // 提交表单
+      submitForm() {
+        this.$refs.formReplenish.validate((valid) => {
+          if (valid) {
+            let params = {
+              room_no: this.roomInfo.room_no,
+              paymethod: this.formReplenish.paymethod,
+              is_card_pay: this.formReplenish.is_card_pay,
+              end_time: this.formReplenish.goOutTime,
+              member_card: this.formReplenish.member_card,
+              card_money: this.formReplenish.payCardMoney,
+              other_pay_money: this.formReplenish.stayOverMoney,
+              bulu_money: this.formReplenish.RoomSumMoney,
+              room_id: this.roomInfo.room_id,
+              datecount: this.formReplenish.stayOverDay,
+              count_money: this.formReplenish.count_money,
+              order_id: this.formReplenish.id,
+            }
+            BuLu(params).then(res => {
+              res = typeof res == "string" ? JSON.parse(res) : res;
+              console.log('补录接口', res)
+              if (res.code == 0) {
+                  // this.$route.push('RoomFirstPage')
+              } else {
+                this.message("error", res.message)
+              }
+            })
+          } else {
+            console.log("error submit!!");
+            return false;
+          }
+        });
+      },
+      // 重置表单
+      resetForm() {
+        this.$refs.formReplenish.resetFields();
+      },
       // 查询是否是会员
       searchVip(member_card) {
         orderMemberinfo({
           member_card
         }).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          // console.log(res,'会员余额')
+          console.log(res)
           if (res.code == 0) {
             if (res.data) {
               this.disabledMeber = false
               this.formReplenish.is_card_pay = '否'
+              this.VipInfo = res.data
             }
           } else {
             this.message("error", res.message)
           }
         })
       }
-  }
-};
+    },
+  };
 </script>
-<style  lang="less" scoped>
-.el-main {
-  background: #fff;
-}
-.title {
-  font-size: 26px;
-  width: 100%;
-  margin-bottom: 40px;
-  margin-top: 20px;
-  color: #005ab9;
-}
+<style scoped lang="less">
+  .el-main {
+    background: #fff;
+  }
 </style>
