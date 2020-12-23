@@ -142,7 +142,7 @@
   </el-container>
 </template>
 <script>
-import { KeSearch } from "@/api/Replenish.js";
+import { KeSearch } from "@/api/DamageRecad.js";
 import { GoodsList} from "@/api/GoodsManage";
 export default {
   data() {
