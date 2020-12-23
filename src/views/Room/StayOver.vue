@@ -85,7 +85,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="10">
-                <el-form-item label="续住日期：">
+                <el-form-item prop="goOutTime" label="续住日期：">
                   <el-date-picker style="width: 60%" @change="handlePickerChange($event)"
                     v-model="formReplenish.goOutTime" type="datetime" placeholder="选择日期时间">
                   </el-date-picker>
@@ -186,6 +186,9 @@
           return callback(new Error("预订金额不能为空"));
         }
         setTimeout(() => {
+          if (Number(value) == 0) {
+            callback(new Error("支付金额不能为零"));
+          }
           if (!Number.isInteger(+value)) {
             callback(new Error("请输入数字值"));
           } else {
@@ -219,7 +222,12 @@
               validator: bookMoney,
               trigger: "blur"
             }
-          ]
+          ],
+          goOutTime: [{
+            required: true,
+            message: "请选择续住日期",
+            trigger: "change"
+          }]
         },
       };
     },
@@ -251,7 +259,7 @@
       getPaymethodList() {
         paymethod().then(res => {
           res = JSON.parse(res);
-          console.log(res, "获取充值列表");
+          // console.log(res, "获取充值列表");
           if (res.code === 0) {
             this.payForForhod = res.data;
           } else {
@@ -259,11 +267,16 @@
           }
         });
       },
+
       // inputchange
       handlePickerChange(e) {
+        if (!e) {
+          this.formReplenish.RoomSumMoney = '0'
+        }
         if (!isBefore(this.formReplenish.end_time, e)) {
           this.message('error', '续住日期不能小于原离店日期')
           this.formReplenish.goOutTime = ''
+          this.formReplenish.RoomSumMoney = '0'
           return
         }
         let formReplenish = this.formReplenish
@@ -287,9 +300,9 @@
         // 正常时间订房
         if (diffDay == 0) {
           // 非会员
-          console.log(HHend_time > settingInfo.tfend_time1)
-          console.log(HHend_time <= settingInfo.tfend_time2)
-          console.log(HHend_time1 <= settingInfo.tfend_time1)
+          // console.log(HHend_time > settingInfo.tfend_time1)
+          // console.log(HHend_time <= settingInfo.tfend_time2)
+          // console.log(HHend_time1 <= settingInfo.tfend_time1)
           if (this.disabledMeber) {
             // 下午退房时间之内按小时收费
             if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2 && HHend_time1 <=
@@ -487,7 +500,8 @@
             totolMoneny = (totolMoneny * Number(this.VipInfo.discount / 100)).toFixed(2)
           }
         }
-        formReplenish.stayOverDay = getDayTime(e)
+        console.log(this.formReplenish.end_time)
+        formReplenish.stayOverDay = getDayTime(this.formReplenish.end_time, e)
         formReplenish.RoomSumMoney = totolMoneny
         this.$forceUpdate()
 
@@ -496,7 +510,7 @@
       getMoneyWay() {
         settingInfo().then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             this.settingInfo = res.data
           } else {
@@ -514,7 +528,7 @@
               now_end_time: this.formReplenish.goOutTime,
               datecount: this.formReplenish.stayOverDay,
               count_money: this.formReplenish.count_money,
-              xuzhu_money: this.formReplenish.RoomSumMoney,
+              xuzhu_money: this.formReplenish.RoomSumMoney + '',
               is_card_pay: this.formReplenish.is_card_pay,
               card_money: this.formReplenish.payCardMoney,
               paymethod: this.formReplenish.paymethod,
@@ -525,7 +539,7 @@
             }
             orderXuzhu(params).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
-              console.log('续住接口', res)
+              // console.log('续住接口', res)
               if (res.code == 0) {
 
               } else {
@@ -533,7 +547,7 @@
               }
             })
           } else {
-            console.log("error submit!!");
+            // console.log("error submit!!");
             return false;
           }
         });
@@ -548,7 +562,7 @@
           member_card
         }).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             if (res.data) {
               this.disabledMeber = false

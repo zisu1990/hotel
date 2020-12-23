@@ -87,8 +87,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="离店时间：" prop="end_time">
-                <el-date-picker @change="pickerEnd_time"  v-model="checkInForm.end_time"
-                  type="datetime" placeholder="选择日期"></el-date-picker>
+                <el-date-picker @change="pickerEnd_time" v-model="checkInForm.end_time" type="datetime"
+                  placeholder="选择日期"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -258,6 +258,7 @@
   import {
     getAllTime,
     getDayTime,
+    isBefore
   } from '@/utils/moment.js'
   import Moment from 'moment'
   export default {
@@ -549,6 +550,7 @@
               paymethod: checkInForm.payfor,
               other_pay_money: checkInForm.paymentAmount,
               jia_money: checkInForm.chargeAmount,
+              fangfei: checkInForm.fangfei
             }
             orderMoveinto(params).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
@@ -569,7 +571,7 @@
         console.log(v)
         let str = ""
         v.forEach(item => {
-          str += `${item.id},${item.roomtype},${item.room_no},${item.price},${item.floor};`
+          str += `${item.id},${item.roomtype},${item.room_no},${item.price},${item.floor},${item.kx_count};`
         });
         str = str.substring(0, str.length - 1)
         console.log('tag', str)
@@ -629,6 +631,12 @@
 
       // 开始日期change
       pickerStart_time(v) {
+        if (!isBefore(new Date(), v)) {
+          this.message('warning', '入住时间不能小于当前时间')
+          this.checkInForm.start_time = ""
+          return
+        }
+
         if (!v) {
           this.roomType = ""
           this.louceng = ""
@@ -701,6 +709,9 @@
           if (v < this.checkInForm.start_time) {
             this.message('warning', '预离时间不能小于遇到时间')
             this.checkInForm.end_time = ""
+            this.roomType = ""
+            this.louceng = ""
+            this.roomTableData = []
             return
           }
           this.checkInForm.datecount = getDayTime(this.checkInForm.start_time, v)
@@ -755,7 +766,9 @@
             sums[index] = "结算";
           }
         });
-
+        if (sums[3] != '结算') {
+          this.checkInForm.fangfei = sums[3]
+        }
         if (sums[2] != '结算') {
           let checkInForm = this.checkInForm
           let settingInfo = this.settingInfo
@@ -1290,7 +1303,6 @@
             }
           }
         }
-        console.log(totolMoneny)
         return totolMoneny
       },
       // 清空会员手机
