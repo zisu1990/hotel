@@ -528,7 +528,8 @@
               res = typeof res == "string" ? JSON.parse(res) : res;
               console.log('补录接口', res)
               if (res.code == 0) {
-                  // this.$route.push('RoomFirstPage')
+                this.message('success','补录成功')
+                  this.$router.push('RoomFirstPage')
               } else {
                 this.message("error", res.message)
               }
