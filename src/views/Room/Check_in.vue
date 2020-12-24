@@ -40,7 +40,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系电话：" prop="tel">
-                <el-input v-model="checkInForm.tel" placeholder="请输入联系电话" clearable :style="{ width: '100%' }">
+                <el-input @clear="checkInForm.vipNumber=''" v-model="checkInForm.tel" @blur="handleTelBlur()" placeholder="请输入联系电话" clearable
+                  :style="{ width: '100%' }">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -1149,6 +1150,27 @@
             }
           })
         }
+      },
+      // 通过手机号查询会员
+      handleTelBlur() {
+        orderMemberinfo({
+          member_card: this.checkInForm.tel
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+
+            if (data) {
+              this.checkInForm.vipNumber = data.card_no
+              // this.checkInForm.vipNumber=
+            } else {
+              this.checkInForm.vipNumber = ''
+            }
+          }
+        })
       },
       // 处理房价
       setRoomPrice(val) {

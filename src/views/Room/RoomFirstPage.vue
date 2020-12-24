@@ -211,6 +211,8 @@
         }],
         // 房间id
         roomID: "",
+        // 选择的房间状态
+        chooseState: "",
         formRoomFirstPage: {
           addRoomNum: "",
           onRoomFloor: "",
@@ -283,7 +285,7 @@
             str = "住脏房";
             break;
           case 5:
-            str = "预定发";
+            str = "预定房";
             break;
           case 6:
             str = "维修房";
@@ -304,6 +306,7 @@
     methods: {
       pushPage(data) {
         this.isShowRoute = true;
+        // console.log(data)
         // console.log(data.path);
         let roomID = this.roomID
         let RoomNum = this.formRoomFirstPage.addRoomNum
@@ -315,6 +318,14 @@
             path: data.path,
           });
         } else {
+          if (this.chooseState != 3) {
+            this.roomID = ""
+            this.formRoomFirstPage.addRoomNum = ""
+            this.formRoomFirstPage.onRoomFloor = ""
+            this.chooseState = ""
+            this.message('error', '请选择有效的房间')
+            return
+          }
           if (roomID && RoomNum) {
             query = {
               id: roomID,
@@ -470,12 +481,15 @@
       },
       // 修改房态
       setRoomState(v) {
+        console.log(v)
         if (v.id === this.roomID) {
           this.roomID = ""
           this.formRoomFirstPage.addRoomNum = ""
           this.formRoomFirstPage.onRoomFloor = ""
+          this.chooseState = ""
         } else {
           this.roomID = v.id
+          this.chooseState = v.state
           this.formRoomFirstPage.addRoomNum = v.room_no
           this.formRoomFirstPage.onRoomFloor = v.floor
         }

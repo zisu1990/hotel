@@ -55,17 +55,18 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="离店时间：">
-                  <el-input disabled v-model="formRoomChange.end_time"></el-input>
+                <el-form-item label="已付金额(元)：">
+                  <el-input disabled v-model="formRoomChange.count_money"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="已付金额(元)：">
-                  <el-input disabled v-model="formRoomChange.count_money"></el-input>
+                <el-form-item label="原房价(元)：">
+                  <el-input disabled v-model="formRoomChange.price"></el-input>
                 </el-form-item>
+
               </el-col>
               <el-col :span="7">
                 <el-form-item label="原客房类型：">
@@ -75,28 +76,6 @@
               <el-col :span="7">
                 <el-form-item label="原房间号：">
                   <el-input disabled v-model="formRoomChange.room_no"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
-
-              <el-col :span="7">
-                <el-form-item label="原房价(元)：">
-                  <el-input disabled v-model="formRoomChange.price"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="7">
-                <el-form-item label="会员卡支付：">
-                  <el-select :disabled="disabledMeber" v-model="formRoomChange.isVipPay" style="width: 100%">
-                    <el-option label="是" value="是"></el-option>
-                    <el-option label="否" value="否"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="7">
-                <el-form-item label="应交换房金额：">
-                  <el-input disabled v-model="formRoomChange.huan_money"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -131,6 +110,8 @@
               </el-row>
             </div>
 
+
+
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="新客房类型：" prop="newRoomType">
@@ -151,6 +132,20 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
+                <el-form-item label="离店时间：">
+                  <el-input disabled v-model="formRoomChange.end_time"></el-input>
+                </el-form-item>
+
+              </el-col>
+              <el-col :span="7">
+                <el-form-item label="会员卡支付：">
+                  <el-select :disabled="disabledMeber" v-model="formRoomChange.isVipPay" style="width: 100%">
+                    <el-option label="是" value="是"></el-option>
+                    <el-option label="否" value="否"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="7">
                 <el-form-item label="卡扣金额：">
                   <el-input :disabled="disabledCardKkNum" v-model="formRoomChange.cardKkNum"></el-input>
                   <span style="
@@ -159,6 +154,14 @@
                    position: absolute;
                    right:-100px;
                 ">{{getBalance}}</span>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="7">
+                <el-form-item label="应交换房金额：">
+                  <el-input disabled v-model="formRoomChange.huan_money"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -170,7 +173,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="预付订金额：" prop="bookMoney">
+                <el-form-item label="待付金额：" prop="bookMoney">
                   <el-input clearable v-model="formRoomChange.bookMoney"></el-input>
                 </el-form-item>
               </el-col>
@@ -178,8 +181,8 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="优惠金额：" prop="bookMoney">
-                  <el-input clearable v-model="formRoomChange.VIPyouhui"></el-input>
+                <el-form-item label="优惠金额：">
+                  <el-input disabled v-model="formRoomChange.VIPyouhui"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -350,12 +353,13 @@
             // console.log('formRoomChange', formRoomChange)
             // console.log('changeRoomInfo', this.formRoomChange)
             // console.log('VipInfo', this.VipInfo)
+            console.log('room_id', changeRoomInfo)
             let params = {
               count_money: formRoomChange.count_money,
               paymethod: formRoomChange.paymethod,
               is_card_pay: formRoomChange.isVipPay,
               end_time: formRoomChange.end_time,
-              member_card: formRoomChange.member_card,
+              member_card: formRoomChange.tel,
               card_money: formRoomChange.cardKkNum,
               other_pay_money: formRoomChange.bookMoney,
               huan_money: formRoomChange.huan_money,
@@ -367,7 +371,7 @@
               new_room_no: formRoomChange.newRoomNum,
               new_room_price: formRoomChange.newRoomPrice,
               new_floor: changeRoomInfo.floor,
-              new_room_id: changeRoomInfo.room_id,
+              new_room_id: changeRoomInfo.id,
               room_id: formRoomChange.room_id,
               discount_money: formRoomChange.VIPyouhui,
               order_id: formRoomChange.id,
@@ -442,7 +446,16 @@
       // 点击房间处理房间信息
       chooseRoom(v) {
         if (v.id == this.isActiveArr) {
-          return this.isActiveArr = ""
+          this.formRoomChange.newRoomType = ''
+          this.formRoomChange.newRoomNum = ''
+          this.formRoomChange.newRoomPrice = ''
+          this.formRoomChange.huan_money = ''
+          this.formRoomChange.bookMoney = ''
+          this.formRoomChange.VIPyouhui = ''
+          this.formRoomChange.cardKkNum = ''
+          this.changeRoomInfo = ''
+          this.isActiveArr = ""
+          return
         }
         this.isActiveArr = v.id
         this.chooseRoomInfo = v
@@ -458,8 +471,12 @@
             this.formRoomChange.newRoomNum = data.room_no
             this.formRoomChange.newRoomPrice = data.price
             this.changeRoomInfo = data
-            this.formRoomChange.huan_money = this.VipNewMoney(data.price, this.formRoomChange.price)
-            this.formRoomChange.VIPyouhui = (data.price - this.formRoomChange.huan_money).toFixed(2)
+            if (!this.disabledMeber) {
+              this.formRoomChange.huan_money = this.VipNewMoney(data.price, this.formRoomChange.price)
+              this.formRoomChange.VIPyouhui = (data.price - this.formRoomChange.huan_money).toFixed(2)
+            } else {
+              this.formRoomChange.huan_money = (Number(data.price) - Number(this.formRoomChange.price)).toFixed(2)
+            }
             this.$forceUpdate()
           } else {
             this.message("error", res.message)
