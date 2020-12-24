@@ -28,7 +28,7 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7" style="display: flex; align-content: center">
                 <el-form-item label="证件类型：">
-                  <el-input disabled v-model="formRoomChange.nationality"></el-input>
+                  <el-input disabled v-model="formRoomChange.zhengjian"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -55,15 +55,13 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-              </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
-              <el-col :span="7">
                 <el-form-item label="离店时间：">
                   <el-input disabled v-model="formRoomChange.end_time"></el-input>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="已付金额(元)：">
                   <el-input disabled v-model="formRoomChange.count_money"></el-input>
@@ -74,14 +72,15 @@
                   <el-input disabled v-model="formRoomChange.roomtype"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="原房间号：">
                   <el-input disabled v-model="formRoomChange.room_no"></el-input>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+
               <el-col :span="7">
                 <el-form-item label="原房价(元)：">
                   <el-input disabled v-model="formRoomChange.price"></el-input>
@@ -89,31 +88,41 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="会员卡支付：">
-                  <el-select v-model="formRoomChange.isVipPay" style="width: 100%">
+                  <el-select :disabled="disabledMeber" v-model="formRoomChange.isVipPay" style="width: 100%">
                     <el-option label="是" value="是"></el-option>
                     <el-option label="否" value="否"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col :span="7">
+
+              </el-col>
             </el-row>
 
             <p class="chooseTitle">可选房型：</p>
             <div class="chooseRoom">
+              <div style="text-align:center;padding-bottom:20px;color:#999" v-show="!roomType.length">
+                ---------无房间---------</div>
               <el-row :gutter="20" type="flex" justify="left">
                 <el-col :span="8">
-                  <el-check-group v-model="roomType">
-                    <el-checkbox v-for="(v, i) in roomType" :key="i" :name="v.roomtype">
-                      {{ v.roomtype }}({{ v.sheng }}/{{ v.sum }})</el-checkbox>
-                  </el-check-group>
+                  <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
+                    <el-checkbox v-for="(v, i) in roomType" :key="i" :label="v.name">
+                      {{ v.name }}({{ v.kx_count }}/{{ v.count }})
+                    </el-checkbox>
+                  </el-checkbox-group>
                 </el-col>
 
                 <el-col :span="16" class="chooseRoomRight">
                   <div class="floorItem" v-for="(v, i) in louceng" :key="i">
                     <p>{{ v.floor }}：</p>
                     <ul>
-                      <li v-for="(f, id) in v.listItem" :key="id">
-                        <span>{{ f.floorNo }}</span>
-                        <span>{{ f.type }}</span>
+                      <!-- :class="setColor(f,index)" -->
+
+                      <li class="fangjian" v-for="(f, index) in v.item"
+                        :class="{'activeBlue':isActiveArr.indexOf(f.id)!=-1}" ref="roomSetCorlor" @click="chooseRoom(f)"
+                        :key="index">
+                        <span>{{ f.room_no }}</span>
+                        <span>{{ f.roomtype }}</span>
                       </li>
                     </ul>
                   </div>
@@ -145,7 +154,13 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
-                  <el-input clearable v-model="formRoomChange.cardKkNum"></el-input>
+                  <el-input :disabled="disabledCardKkNum" v-model="formRoomChange.cardKkNum"></el-input>
+                  <span style="
+                  font-size: 14px;
+                  color: #005ab9;
+                   position: absolute;
+                   right:-100px;
+                ">{{getBalance}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
@@ -195,7 +210,9 @@
 </template>
 <script>
   import {
-    orderRoom_order
+    orderRoom_order,
+    orderMemberinfo,
+    orderYdroomtype
   } from '@/api/RoomChange.js';
   export default {
     data() {
@@ -213,372 +230,56 @@
       };
 
       return {
-        formRoomChange: {
-          clientType: "",
-          groupName: "",
-          nationality: "",
-          IDtype: "",
-          phoneNum: "",
-          cardNum: "",
-          username: "",
-          IDcardNum: "",
-          goInTime: "",
-          haveImprest: "",
-          oldRoomType: "",
-          oldRoomNum: "",
-          oldRoomPrice: "",
-          newRoomType: "",
-          newRoomNum: "",
-          newRoomPrice: "",
-          newRoomNum: "",
-          isVipPay: "",
-          cardKkNum: "",
-          payWay: "",
-          bookMoney: "",
-          remark: "",
-        },
+        formRoomChange: {},
+        // 会员信息
+        VipInfo: {},
+        // 是否是会员支付
+        disabledMeber: true,
+        // 卡扣金额是否禁用
+        disabledCardKkNum: true,
         //   表单规则
         rules: {},
-        roomType: [{
-            roomtype: "单人间",
-            sheng: 10,
-            sum: 30,
-          },
-          {
-            roomtype: "标间",
-            sheng: 10,
-            sum: 30,
-          },
-          {
-            roomtype: "三人间",
-            sheng: 10,
-            sum: 30,
-          },
-          {
-            roomtype: "五人间",
-            sheng: 10,
-            sum: 30,
-          },
-          {
-            roomtype: "十人间",
-            sheng: 10,
-            sum: 30,
-          },
-          {
-            roomtype: "钟点房",
-            sheng: 10,
-            sum: 30,
-          },
-        ],
-        louceng: [{
-            floor: "1楼",
-            listItem: [{
-                id: 1,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 2,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 3,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 4,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 5,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 6,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 7,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 8,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 9,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 10,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 11,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 12,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 13,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 14,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-            ],
-          },
-          {
-            floor: "2楼",
-            listItem: [{
-                id: 24,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 25,
-                floorNo: 8102,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 26,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 27,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 28,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 29,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 30,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 31,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 32,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 33,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-            ],
-          },
-          {
-            floor: "3楼",
-            listItem: [{
-                id: 15,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 16,
-                floorNo: 8102,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 17,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 18,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 19,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 20,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 21,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 22,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 23,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 34,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 35,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-              {
-                id: 36,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png",
-              },
-            ],
-          },
-        ],
         // 房间id，房号
         roomInfo: {},
+        checkRoomType: [],
+        // 选中房间
+        isActiveArr: [],
+        roomType: [],
+        louceng: [],
       };
     },
     created() {
       this.roomInfo.room_no = this.$route.query.room_no
       this.roomInfo.room_id = this.$route.query.id
       this.getRows()
+    },
+    computed: {
+      Newis_card_pay() {
+        return this.formRoomChange.isVipPay
+      },
+      Newmember_card() {
+        return this.formRoomChange.cardKkNum
+      },
+      getBalance() {
+        return this.VipInfo.balance ? '余额' + this.VipInfo.balance + '元' : ''
+      }
+    },
+    watch: {
+      Newis_card_pay(val) {
+        if (val == '否')
+          this.disabledCardKkNum = true
+        else
+          this.disabledCardKkNum = false
+        deep: true
+      },
+      Newmember_card(val) {
+        if (!val) {
+          this.disabledMeber = true
+          this.formRoomChange.isVipPay = '否'
+        } else
+          this.disabledMeber = false
+        deep: true
+      },
     },
     methods: {
       getRows() {
@@ -592,6 +293,7 @@
               data
             } = res
             this.formRoomChange = data
+            this.searchVip(data.tel)
           } else {
             this.message("error", res.message)
           }
@@ -612,6 +314,53 @@
       resetForm() {
         this.$refs.formRoomChange.resetFields();
       },
+      // 可选房型查询
+      handleChangeRoomType() {
+        orderYdroomtype({
+          start_time: getAllTime(this.checkInForm.start_time),
+          roomtype: this.setCheckRoomTypeStr(this.checkRoomType),
+          end_time: getAllTime(this.checkInForm.end_time)
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          // console.log(res)
+          if (res.code == 0) {
+            this.$forceUpdate()
+            this.roomType = res.data
+            this.louceng = res.room_list
+          } else {
+            this.$forceUpdate()
+            this.message("error", res.message)
+          }
+        })
+      },
+      setCheckRoomTypeStr(v) {
+        let str = ""
+        v.forEach(element => {
+          str += element + ","
+        });
+        str = str.substring(0, str.length - 1)
+        // console.log(str)
+        return str
+      },
+
+      // 查询是否是会员
+      searchVip(member_card) {
+        orderMemberinfo({
+          member_card
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          // console.log(res)
+          if (res.code == 0) {
+            if (res.data) {
+              this.disabledMeber = false
+              this.VipInfo = res.data
+              this.formRoomChange.member_card = res.data.card_no
+            }
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      }
     },
   };
 </script>
@@ -622,6 +371,7 @@
 
   .chooseTitle {
     text-align: left;
+
   }
 
   .chooseRoom {

@@ -12,7 +12,7 @@ export const customertypeLists = params => post('/customertype/lists', params)
 export const zhengjianLists = params => post('/zhengjian/lists', params)
 
 
-// 客户类型
+// 可选房型查询
 export const orderYdroomtype = params => post('/order/ydroomtype', params)
 
 
