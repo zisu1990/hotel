@@ -206,8 +206,8 @@
           return callback(new Error("房费总金额不能为空"));
         }
         setTimeout(() => {
-          if (!Number.isInteger(+value)) {
-            callback(new Error("请输入数字值"));
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
           } else {
             callback();
           }
@@ -218,13 +218,14 @@
           return callback(new Error("预订金额不能为空"));
         }
         setTimeout(() => {
-          if (!Number.isInteger(+value)) {
-            callback(new Error("请输入数字值"));
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
           } else {
             callback();
           }
         }, 100);
       };
+
 
       return {
         // 表单值
