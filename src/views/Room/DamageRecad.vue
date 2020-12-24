@@ -14,7 +14,7 @@
           >
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="房号：" prop="inputRules">
+                <el-form-item label="房号：" >
                   <el-input clearable v-model="formDamageRecad.room_no" disabled></el-input>
                 </el-form-item>
               </el-col>
@@ -25,7 +25,7 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="客户类型：">
-                      <el-input clearable v-model="formDamageRecad.type" disabled></el-input>
+                  <el-input clearable v-model="formDamageRecad.type" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -33,12 +33,12 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="入住时间：">
-                 <el-input clearable v-model="formDamageRecad.start_time" disabled></el-input>
+                  <el-input clearable v-model="formDamageRecad.start_time" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="离店时间：">
-<el-input clearable v-model="formDamageRecad.end_time" disabled></el-input>
+                  <el-input clearable v-model="formDamageRecad.end_time" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7"></el-col>
@@ -71,16 +71,17 @@
                       </el-select>
                     </template>
                   </el-table-column>
+                  <el-table-column prop="price" label="单价(元)">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.price" placeholder="请输入单价" disabled  clearable></el-input>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="num" label="数量">
                     <template v-slot="scope">
                       <el-input placeholder="请输入数量" clearable v-model="scope.row.num"></el-input>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="price" label="单价">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.price" placeholder="请输入单价" clearable></el-input>
-                    </template>
-                  </el-table-column>
+
                   <el-table-column prop="money" label="损赔金额">
                     <template v-slot="scope">
                       <el-input v-model="scope.row.money" placeholder="请输入损赔金额" clearable></el-input>
@@ -96,7 +97,7 @@
                       ></el-button>
                       <el-button
                         type="primary"
-                        icon="el-icon-edit-outline"
+                        icon="el-icon-plus"
                         circle
                         @click="handleAdd(scope.$index, scope.row)"
                       ></el-button>
@@ -108,17 +109,15 @@
 
             <el-row type="flex" style="margin-top: 20px" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="结算方式" prop="payWay">
-                  <el-select v-model="formDamageRecad.payWay" style="width: 100%">
-                    <el-option label="现金" value="xianjin"></el-option>
-                    <el-option label="支付宝" value="zhifubao"></el-option>
-                    <el-option label="微信" value="weixin"></el-option>
+                <el-form-item label="结算方式" prop="paymethod">
+                  <el-select v-model="formDamageRecad.paymethod" style="width: 100%">
+                     <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="结算金额" prop="clooseMoney">
-                  <el-input placeholder="请输入结算金额" v-model="formDamageRecad.clooseMoney"></el-input>
+                <el-form-item label="结算金额" prop="money">
+                  <el-input placeholder="请输入结算金额" v-model="formDamageRecad.money"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7"></el-col>
@@ -143,13 +142,14 @@
 </template>
 <script>
 import { KeSearch } from "@/api/DamageRecad.js";
-import { GoodsList} from "@/api/GoodsManage";
+import { GoodsList } from "@/api/GoodsManage";
+import {paymethod} from '@/api/Check_in.js'
 export default {
   data() {
     var inputRules = (rule, value, callback) => {
       setTimeout(() => {
         if (!Number.isInteger(+value)) {
-          callback(new Error("请输入数字值"));
+          callback(new Error("请输入金额"));
         } else {
           callback();
         }
@@ -160,10 +160,10 @@ export default {
       formDamageRecad: {},
       //   表单规则
       rules: {
-        inputRules: [{ validator: inputRules, trigger: "blur" }],
+        money: [{ validator: inputRules, trigger: "blur" }],
 
-        payWay: [
-          { required: true, message: "请选择预订支付方式", trigger: "change" }
+        paymethod: [
+          { required: true, message: "请选择支付方式", trigger: "change" }
         ]
       },
       //   表格
@@ -192,20 +192,21 @@ export default {
           money: ""
         }
       ],
-              // 房间id，房号
-        roomInfo: {},
+      // 房间id，房号
+      roomInfo: {},
+      // 支付方式
+      payForForhod: [],
     };
   },
-  created(){
-      this.roomInfo.room_no = this.$route.query.room_no
-      this.roomInfo.room_id = this.$route.query.id
-      this.getKeInfo()
-       this.getGoodSList()
+  created() {
+    this.roomInfo.room_no = this.$route.query.room_no;
+    this.roomInfo.room_id = this.$route.query.id;
+    this.getKeInfo();
+    this.getGoodSList();
+    this.getPaymethodList()
   },
   methods: {
-
-
-      // 查询客主信息
+    // 查询客主信息
     getKeInfo() {
       KeSearch(this.roomInfo).then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
@@ -221,14 +222,27 @@ export default {
       GoodsList(this.queryParmas).then(res => {
         res = JSON.parse(res);
         console.log(res, "物件列表");
-        if (res.code === 0) {
-          let wujian=res.data.list;
-          console.log(wujian)
-        } else {
-          this.message("error", res.message);
-        }
+        // if (res.code === 0) {
+   
+        // } else {
+        //   this.message("error", res.message);
+        // }
       });
     },
+
+
+    //支付方式
+      getPaymethodList() {
+        paymethod().then(res => {
+          res = JSON.parse(res);
+          // console.log(res, "获取充值列表");
+          if (res.code === 0) {
+            this.payForForhod = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
 
     //   表单增减
     handleAdd(i, v) {

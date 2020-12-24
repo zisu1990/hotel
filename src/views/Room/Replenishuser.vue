@@ -4,7 +4,7 @@
       <el-row>
         <el-col :offset="3" :span="18">
           <el-row>
-            <p class="title">续住登记</p>
+            <p class="title">补录住客</p>
           </el-row>
 
           <el-form ref="formReplenish" label-width="130px" :model="formReplenish" :rules="rules">

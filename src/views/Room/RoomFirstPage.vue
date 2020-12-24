@@ -283,7 +283,7 @@
             str = "住脏房";
             break;
           case 5:
-            str = "预定发";
+            str = "预定房";
             break;
           case 6:
             str = "维修房";
