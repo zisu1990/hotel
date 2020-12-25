@@ -129,7 +129,13 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
-                  <el-input :disabled="disabledMeber" clearable v-model="formReplenish.payCardMoney"></el-input>
+                  <el-input :disabled="disabledCardKkNum" clearable v-model="formReplenish.payCardMoney"></el-input>
+                  <span style="
+                  font-size: 14px;
+                  color: #005ab9;
+                   position: absolute;
+                   right:-100px;
+                ">{{getBalance}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -209,6 +215,12 @@
         VipInfo: {},
         // 计费详情
         settingInfo: {},
+                // 卡扣是否禁用
+        disabledCardKkNum: true,
+        // 会员详情
+        VipInfo: {
+          balance: ""
+        },
         rules: {
           stayOverMoney: [{
               required: true,
@@ -227,6 +239,34 @@
       this.roomInfo.room_no = this.$route.query.room_no
       this.roomInfo.room_id = this.$route.query.id
       this.getRows()
+    },
+     computed: {
+      Newis_card_pay() {
+        return this.formReplenish.is_card_pay
+      },
+      Newmember_card() {
+        return this.formReplenish.payCardMoney
+      },
+      getBalance() {
+        return this.VipInfo.balance ? '余额' + this.VipInfo.balance + '元' : ''
+      }
+    },
+    watch: {
+      Newis_card_pay(val) {
+        if (val == '否')
+          this.disabledCardKkNum = true
+        else
+          this.disabledCardKkNum = false
+        deep: true
+      },
+      Newmember_card(val) {
+        if (!val) {
+          this.disabledMeber = true
+          this.formReplenish.is_card_pay = '否'
+        } else
+          this.disabledMeber = false
+        deep: true
+      },
     },
     methods: {
       getRows() {
