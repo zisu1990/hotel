@@ -19,13 +19,13 @@
             </template>
 
             <ul class="floorList">
-              <li v-for="v in f.floorItem" @click="setRoomState(v)" :class="[v.id == roomID?'roomStyle':'']" :key="v.id"
-                :style="{ background: v.color }">
+              <li v-for="v in f.floorItem" @click.prevent.stop="setRoomState(v)"
+                :class="[v.id == roomID?'roomStyle':'']" :key="v.id" :style="{ background: v.color }">
                 <div class="roomStatus">
                   <span>{{ v.room_no }}</span>
                   <span>{{ v.roomtype }}</span>
                 </div>
-                <p>{{ v.state | updataStatus }}</p>
+                <p>{{ v.name }}</p>
               </li>
             </ul>
           </el-collapse-item>
@@ -267,6 +267,15 @@
     created() {
       this.getRows();
     },
+    mounted() {
+      let that = this
+      document.onclick = function () {
+        that.roomID = ""
+        that.formRoomFirstPage.addRoomNum = ""
+        that.formRoomFirstPage.onRoomFloor = ""
+        that.chooseState = ""
+      }
+    },
     filters: {
       updataStatus(v) {
         // console.log(v)
@@ -481,7 +490,7 @@
       },
       // 修改房态
       setRoomState(v) {
-        console.log(v)
+        // console.log(v)
         if (v.id === this.roomID) {
           this.roomID = ""
           this.formRoomFirstPage.addRoomNum = ""

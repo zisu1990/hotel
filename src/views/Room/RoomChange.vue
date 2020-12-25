@@ -350,7 +350,7 @@
             if (!this.isActiveArr) {
               return this.message('warning', '请选择房间')
             }
-            // console.log('formRoomChange', formRoomChange)
+            console.log('formRoomChange', formRoomChange)
             // console.log('changeRoomInfo', this.formRoomChange)
             // console.log('VipInfo', this.VipInfo)
             console.log('room_id', changeRoomInfo)
