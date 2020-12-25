@@ -55,17 +55,18 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="离店时间：">
-                  <el-input disabled v-model="formRoomChange.end_time"></el-input>
+                <el-form-item label="已付金额(元)：">
+                  <el-input disabled v-model="formRoomChange.count_money"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="已付金额(元)：">
-                  <el-input disabled v-model="formRoomChange.count_money"></el-input>
+                <el-form-item label="原房价(元)：">
+                  <el-input disabled v-model="formRoomChange.price"></el-input>
                 </el-form-item>
+
               </el-col>
               <el-col :span="7">
                 <el-form-item label="原客房类型：">
@@ -76,26 +77,6 @@
                 <el-form-item label="原房间号：">
                   <el-input disabled v-model="formRoomChange.room_no"></el-input>
                 </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row type="flex" justify="space-between">
-
-              <el-col :span="7">
-                <el-form-item label="原房价(元)：">
-                  <el-input disabled v-model="formRoomChange.price"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="7">
-                <el-form-item label="会员卡支付：">
-                  <el-select :disabled="disabledMeber" v-model="formRoomChange.isVipPay" style="width: 100%">
-                    <el-option label="是" value="是"></el-option>
-                    <el-option label="否" value="否"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="7">
-
               </el-col>
             </el-row>
 
@@ -118,9 +99,8 @@
                     <ul>
                       <!-- :class="setColor(f,index)" -->
 
-                      <li class="fangjian" v-for="(f, index) in v.item"
-                        :class="{'activeBlue':isActiveArr.indexOf(f.id)!=-1}" ref="roomSetCorlor" @click="chooseRoom(f)"
-                        :key="index">
+                      <li class="fangjian" v-for="(f, index) in v.item" :class="{'activeBlue':isActiveArr==f.id}"
+                        ref="roomSetCorlor" @click="chooseRoom(f)" :key="index">
                         <span>{{ f.room_no }}</span>
                         <span>{{ f.roomtype }}</span>
                       </li>
@@ -130,28 +110,41 @@
               </el-row>
             </div>
 
+
+
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="新客房类型：" prop="newRoomType">
-                  <el-select v-model="formRoomChange.newRoomType" style="width: 100%">
-                    <el-option label="三人间" value="three"></el-option>
-                    <el-option label="两人间" value="two"></el-option>
-                  </el-select>
+                  <el-input disabled v-model="formRoomChange.newRoomType"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="新房号(元)：" prop="newRoomNum">
-                  <el-input clearable v-model="formRoomChange.newRoomNum"></el-input>
+                  <el-input disabled v-model="formRoomChange.newRoomNum"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
                 <el-form-item label="新房价(元)：" prop="newRoomPrice">
-                  <el-input clearable v-model="formRoomChange.newRoomPrice"></el-input>
+                  <el-input disabled v-model="formRoomChange.newRoomPrice"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="space-between">
+              <el-col :span="7">
+                <el-form-item label="离店时间：">
+                  <el-input disabled v-model="formRoomChange.end_time"></el-input>
+                </el-form-item>
+
+              </el-col>
+              <el-col :span="7">
+                <el-form-item label="会员卡支付：">
+                  <el-select :disabled="disabledMeber" v-model="formRoomChange.isVipPay" style="width: 100%">
+                    <el-option label="是" value="是"></el-option>
+                    <el-option label="否" value="否"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
               <el-col :span="7">
                 <el-form-item label="卡扣金额：">
                   <el-input :disabled="disabledCardKkNum" v-model="formRoomChange.cardKkNum"></el-input>
@@ -163,19 +156,40 @@
                 ">{{getBalance}}</span>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="预付款方式：" prop="payWay">
-                  <el-select v-model="formRoomChange.payWay" style="width: 100%">
-                    <el-option label="现金" value="xianjin"></el-option>
-                    <el-option label="支付宝" value="zhifubao"></el-option>
-                    <el-option label="微信" value="weixin"></el-option>
+                <el-form-item label="应交换房金额：">
+                  <el-input disabled v-model="formRoomChange.huan_money"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="7">
+                <el-form-item label="待付方式：" prop="paymethod">
+                  <el-select v-model="formRoomChange.paymethod" style="width: 100%">
+                    <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
+                    </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="预付订金额：" prop="bookMoney">
+                <el-form-item label="待付金额：" prop="bookMoney">
                   <el-input clearable v-model="formRoomChange.bookMoney"></el-input>
                 </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="7">
+                <el-form-item label="优惠金额：">
+                  <el-input disabled v-model="formRoomChange.VIPyouhui"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="7">
+
+              </el-col>
+              <el-col :span="7">
+
               </el-col>
             </el-row>
 
@@ -212,17 +226,23 @@
   import {
     orderRoom_order,
     orderMemberinfo,
-    orderYdroomtype
+    orderYdroomtype,
+    paymethod,
+    roomInfo,
+    orderHuan
   } from '@/api/RoomChange.js';
+  import {
+    getAllTime
+  } from '@/utils/moment.js'
   export default {
     data() {
       var bookMoney = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error("预付定金额不能为空"));
+          return callback(new Error("预订金额不能为空"));
         }
         setTimeout(() => {
-          if (!Number.isInteger(+value)) {
-            callback(new Error("请输入数字值"));
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
           } else {
             callback();
           }
@@ -238,14 +258,34 @@
         // 卡扣金额是否禁用
         disabledCardKkNum: true,
         //   表单规则
-        rules: {},
+        rules: {
+          paymethod: [{
+            required: true,
+            message: "请选择待付方式",
+            trigger: "change"
+          }],
+          bookMoney: [{
+              required: true,
+              message: "请输入预付订金",
+              trigger: "blur"
+            },
+            {
+              validator: bookMoney,
+              trigger: "blur"
+            }
+          ]
+        },
+        // 支付方式
+        payForForhod: [],
         // 房间id，房号
         roomInfo: {},
         checkRoomType: [],
         // 选中房间
-        isActiveArr: [],
+        isActiveArr: '',
         roomType: [],
         louceng: [],
+        chooseRoomInfo: "",
+        changeRoomInfo: ""
       };
     },
     created() {
@@ -283,17 +323,19 @@
     },
     methods: {
       getRows() {
+        this.getPaymethodList()
         orderRoom_order(
           this.roomInfo
         ).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res)
+          // console.log(res)
           if (res.code == 0) {
             let {
               data
             } = res
             this.formRoomChange = data
             this.searchVip(data.tel)
+            this.roomList(data.start_time, data.end_time, )
           } else {
             this.message("error", res.message)
           }
@@ -303,7 +345,46 @@
       submitForm() {
         this.$refs.formRoomChange.validate((valid) => {
           if (valid) {
-            alert("submit!");
+            let formRoomChange = this.formRoomChange
+            let changeRoomInfo = this.changeRoomInfo
+            if (!this.isActiveArr) {
+              return this.message('warning', '请选择房间')
+            }
+            console.log('formRoomChange', formRoomChange)
+            // console.log('changeRoomInfo', this.formRoomChange)
+            // console.log('VipInfo', this.VipInfo)
+            console.log('room_id', changeRoomInfo)
+            let params = {
+              count_money: formRoomChange.count_money,
+              paymethod: formRoomChange.paymethod,
+              is_card_pay: formRoomChange.isVipPay,
+              end_time: formRoomChange.end_time,
+              member_card: formRoomChange.tel,
+              card_money: formRoomChange.cardKkNum,
+              other_pay_money: formRoomChange.bookMoney,
+              huan_money: formRoomChange.huan_money,
+              beizhu: formRoomChange.remark,
+              roomtype: formRoomChange.roomtype,
+              room_no: formRoomChange.room_no,
+              price: formRoomChange.price,
+              new_room_type: formRoomChange.newRoomType,
+              new_room_no: formRoomChange.newRoomNum,
+              new_room_price: formRoomChange.newRoomPrice,
+              new_floor: changeRoomInfo.floor,
+              new_room_id: changeRoomInfo.id,
+              room_id: formRoomChange.room_id,
+              discount_money: formRoomChange.VIPyouhui,
+              order_id: formRoomChange.id,
+            }
+            orderHuan(params).then(res => {
+              res = typeof res == "string" ? JSON.parse(res) : res;
+              console.log(res)
+              if (res.code == 0) {
+                this.message("success", res.message)
+              } else {
+                this.message("error", res.message)
+              }
+            })
           } else {
             console.log("error submit!!");
             return false;
@@ -317,9 +398,9 @@
       // 可选房型查询
       handleChangeRoomType() {
         orderYdroomtype({
-          start_time: getAllTime(this.checkInForm.start_time),
+          start_time: getAllTime(this.formRoomChange.start_time),
           roomtype: this.setCheckRoomTypeStr(this.checkRoomType),
-          end_time: getAllTime(this.checkInForm.end_time)
+          end_time: getAllTime(this.formRoomChange.end_time)
         }).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
           // console.log(res)
@@ -333,6 +414,26 @@
           }
         })
       },
+      // 房间
+      roomList(st, et) {
+        orderYdroomtype({
+          start_time: getAllTime(st),
+          end_time: getAllTime(et)
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          // console.log(res)
+          if (res.code == 0) {
+            this.roomType = res.data
+            this.louceng = res.room_list
+            this.$forceUpdate()
+
+          } else {
+            this.message("error", res.message)
+            this.$forceUpdate()
+
+          }
+        })
+      },
       setCheckRoomTypeStr(v) {
         let str = ""
         v.forEach(element => {
@@ -342,7 +443,66 @@
         // console.log(str)
         return str
       },
-
+      // 点击房间处理房间信息
+      chooseRoom(v) {
+        if (v.id == this.isActiveArr) {
+          this.formRoomChange.newRoomType = ''
+          this.formRoomChange.newRoomNum = ''
+          this.formRoomChange.newRoomPrice = ''
+          this.formRoomChange.huan_money = ''
+          this.formRoomChange.bookMoney = ''
+          this.formRoomChange.VIPyouhui = ''
+          this.formRoomChange.cardKkNum = ''
+          this.changeRoomInfo = ''
+          this.isActiveArr = ""
+          return
+        }
+        this.isActiveArr = v.id
+        this.chooseRoomInfo = v
+        roomInfo({
+          id: v.id
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+            this.formRoomChange.newRoomType = data.roomtype
+            this.formRoomChange.newRoomNum = data.room_no
+            this.formRoomChange.newRoomPrice = data.price
+            this.changeRoomInfo = data
+            if (!this.disabledMeber) {
+              this.formRoomChange.huan_money = this.VipNewMoney(data.price, this.formRoomChange.price)
+              this.formRoomChange.VIPyouhui = (data.price - this.formRoomChange.huan_money).toFixed(2)
+            } else {
+              this.formRoomChange.huan_money = (Number(data.price) - Number(this.formRoomChange.price)).toFixed(2)
+            }
+            this.$forceUpdate()
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      // 会员优惠金额补差价
+      VipNewMoney(newPrice, oldPice) {
+        let sum = 0
+        if (Number(newPrice) - Number(oldPice) > 0) {
+          sum = (newPrice - oldPice) * Number(this.VipInfo.discount / 100)
+        }
+        return sum.toFixed(2)
+      },
+      //充值方式
+      getPaymethodList() {
+        paymethod().then(res => {
+          res = JSON.parse(res);
+          // console.log(res, "获取充值列表");
+          if (res.code === 0) {
+            this.payForForhod = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
       // 查询是否是会员
       searchVip(member_card) {
         orderMemberinfo({
@@ -372,6 +532,19 @@
   .chooseTitle {
     text-align: left;
 
+  }
+
+  div /deep/.activeBlue {
+    border: 1px solid #f00 !important;
+    color: #f00 !important;
+    padding: 5px 10px !important;
+    margin: 0 10px 10px 0 !important;
+
+    span {
+      display: block !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
+    }
   }
 
   .chooseRoom {

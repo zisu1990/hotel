@@ -19,13 +19,13 @@
             </template>
 
             <ul class="floorList">
-              <li v-for="v in f.floorItem" @click="setRoomState(v)" :class="[v.id == roomID?'roomStyle':'']" :key="v.id"
-                :style="{ background: v.color }">
+              <li v-for="v in f.floorItem" @click.prevent.stop="setRoomState(v)"
+                :class="[v.id == roomID?'roomStyle':'']" :key="v.id" :style="{ background: v.color }">
                 <div class="roomStatus">
                   <span>{{ v.room_no }}</span>
                   <span>{{ v.roomtype }}</span>
                 </div>
-                <p>{{ v.state | updataStatus }}</p>
+                <p>{{ v.name }}</p>
               </li>
             </ul>
           </el-collapse-item>
@@ -211,6 +211,8 @@
         }],
         // 房间id
         roomID: "",
+        // 选择的房间状态
+        chooseState: "",
         formRoomFirstPage: {
           addRoomNum: "",
           onRoomFloor: "",
@@ -265,6 +267,15 @@
     created() {
       this.getRows();
     },
+    mounted() {
+      let that = this
+      document.onclick = function () {
+        that.roomID = ""
+        that.formRoomFirstPage.addRoomNum = ""
+        that.formRoomFirstPage.onRoomFloor = ""
+        that.chooseState = ""
+      }
+    },
     filters: {
       updataStatus(v) {
         // console.log(v)
@@ -304,6 +315,7 @@
     methods: {
       pushPage(data) {
         this.isShowRoute = true;
+        // console.log(data)
         // console.log(data.path);
         let roomID = this.roomID
         let RoomNum = this.formRoomFirstPage.addRoomNum
@@ -315,6 +327,14 @@
             path: data.path,
           });
         } else {
+          if (this.chooseState != 3) {
+            this.roomID = ""
+            this.formRoomFirstPage.addRoomNum = ""
+            this.formRoomFirstPage.onRoomFloor = ""
+            this.chooseState = ""
+            this.message('error', '请选择有效的房间')
+            return
+          }
           if (roomID && RoomNum) {
             query = {
               id: roomID,
@@ -470,12 +490,15 @@
       },
       // 修改房态
       setRoomState(v) {
+        // console.log(v)
         if (v.id === this.roomID) {
           this.roomID = ""
           this.formRoomFirstPage.addRoomNum = ""
           this.formRoomFirstPage.onRoomFloor = ""
+          this.chooseState = ""
         } else {
           this.roomID = v.id
+          this.chooseState = v.state
           this.formRoomFirstPage.addRoomNum = v.room_no
           this.formRoomFirstPage.onRoomFloor = v.floor
         }

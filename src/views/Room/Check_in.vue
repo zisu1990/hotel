@@ -40,7 +40,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系电话：" prop="tel">
-                <el-input v-model="checkInForm.tel" placeholder="请输入联系电话" clearable :style="{ width: '100%' }">
+                <el-input @clear="checkInForm.vipNumber=''" v-model="checkInForm.tel" @blur="handleTelBlur()" placeholder="请输入联系电话" clearable
+                  :style="{ width: '100%' }">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -280,6 +281,30 @@
           }
         }, 100);
       };
+      var bookMoney = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error("付款金额不能为空"));
+        }
+        setTimeout(() => {
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
+          } else {
+            callback();
+          }
+        }, 100);
+      };
+      var deposit = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error("押金不能为空"));
+        }
+        setTimeout(() => {
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
+          } else {
+            callback();
+          }
+        }, 100);
+      };
       return {
         // 国籍列表
         nativeList: [],
@@ -389,20 +414,30 @@
             trigger: "change"
           }],
           deposit: [{
-            required: true,
-            message: "请输入押金金额",
-            trigger: "blur"
-          }],
+              required: true,
+              message: "请输入付款金额",
+              trigger: "blur"
+            },
+            {
+              validator: deposit,
+              trigger: "blur"
+            }
+          ],
           payfor: [{
             required: true,
             message: "请选择预付方式",
             trigger: "change"
           }],
           paymentAmount: [{
-            required: true,
-            message: "请输入付款金额",
-            trigger: "blur"
-          }],
+              required: true,
+              message: "请输入付款金额",
+              trigger: "blur"
+            },
+            {
+              validator: bookMoney,
+              trigger: "blur"
+            }
+          ],
         },
         // 是否是会员卡支付disabled
         disabledMember_card: true,
@@ -631,15 +666,18 @@
 
       // 开始日期change
       pickerStart_time(v) {
-        if (!isBefore(new Date(), v)) {
-          this.message('warning', '入住时间不能小于当前时间')
-          this.checkInForm.start_time = ""
+        if (!v) {
+          this.roomType = []
+          this.louceng = []
+          this.isActiveArr = []
           return
         }
-
-        if (!v) {
-          this.roomType = ""
-          this.louceng = ""
+        if (!isBefore(new Date(), v)) {
+          this.message('warning', '入住时间不能小于当前时间')
+          this.roomType = []
+          this.louceng = []
+          this.roomTableData = []
+          this.checkInForm.start_time = ""
           return
         }
         if (this.checkInForm.end_time) {
@@ -701,16 +739,17 @@
       pickerEnd_time(v) {
         console.log(v)
         if (!v) {
-          this.roomType = ""
-          this.louceng = ""
+          this.roomType = []
+          this.louceng = []
+          this.isActiveArr = []
         }
         // console.log("kaishi" + getAllTime(this.checkInForm.start_time) + "结束日期change" + getAllTime(v))
         if (this.checkInForm.start_time) {
           if (v < this.checkInForm.start_time) {
             this.message('warning', '预离时间不能小于遇到时间')
             this.checkInForm.end_time = ""
-            this.roomType = ""
-            this.louceng = ""
+            this.roomType = []
+            this.louceng = []
             this.roomTableData = []
             return
           }
@@ -1111,6 +1150,27 @@
             }
           })
         }
+      },
+      // 通过手机号查询会员
+      handleTelBlur() {
+        orderMemberinfo({
+          member_card: this.checkInForm.tel
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+
+            if (data) {
+              this.checkInForm.vipNumber = data.card_no
+              // this.checkInForm.vipNumber=
+            } else {
+              this.checkInForm.vipNumber = ''
+            }
+          }
+        })
       },
       // 处理房价
       setRoomPrice(val) {

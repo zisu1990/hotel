@@ -192,11 +192,8 @@
           return callback(new Error("预订金额不能为空"));
         }
         setTimeout(() => {
-          if (Number(value) == 0) {
-            callback(new Error("支付金额不能为零"));
-          }
-          if (!Number.isInteger(+value)) {
-            callback(new Error("请输入数字值"));
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
           } else {
             callback();
           }
