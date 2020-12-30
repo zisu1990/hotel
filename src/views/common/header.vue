@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { systemAdmin, editPassWord } from "@/api/system";
+// import { systemAdmin, editPassWord } from "@/api/system";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
