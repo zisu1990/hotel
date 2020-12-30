@@ -53,6 +53,11 @@
                       </el-select>
                     </template>
                   </el-table-column>
+                  <el-table-column prop="price" label="单价(元)">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.price" placeholder="请输入单价" disabled  clearable></el-input>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="num" label="数量">
                     <template v-slot="scope">
                       <el-input @change="handleInputChange(scope.row)" placeholder="请输入数量" clearable
@@ -96,8 +101,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7">
-                <el-form-item label="结算金额" prop="clooseMoney">
-                  <el-input placeholder="请输入结算金额" v-model="formDamageRecad.clooseMoney"></el-input>
+                <el-form-item label="结算金额" prop="money">
+                  <el-input placeholder="请输入结算金额" v-model="formDamageRecad.money"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>

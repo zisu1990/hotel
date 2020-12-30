@@ -546,6 +546,7 @@
             end_time: getAllTime(v)
           }).then(res => {
             res = typeof res == "string" ? JSON.parse(res) : res;
+            console.log(res,'1111111111')
             if (res.code == 0) {
               this.roomTableData = res.data
               this.$forceUpdate()

@@ -17,7 +17,7 @@
 
         <el-table-column label="操作" align="center" width="200">
           <template v-slot="scope">
-            <el-button type="danger" size="small" @click="handleDel(scope.row.id)">删除</el-button>
+            <el-button type="danger" size="small" @click="SubmitDel(scope.row.id)">删除</el-button>
             <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
@@ -193,10 +193,9 @@ export default {
       let str = "";
       this.AddForm.info.forEach(item => {
         str += `${item.money},${item.give_money};`;
-        str = str.substring(0, str.length - 1);
-        // console.log(str)
-        return str;
       });
+      str = str.substring(0, str.length - 1);
+   
       memberDiscountAdd({ info: str }).then(res => {
         res = JSON.parse(res);
         console.log(res, "新增");
@@ -211,7 +210,7 @@ export default {
     },
 
     // 删除
-    handleDel(id) {
+    SubmitDel(id) {
       this.confirm()
         .then(() => {
           memberDiscountDel({ id }).then(res => {

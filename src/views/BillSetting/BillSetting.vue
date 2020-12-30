@@ -68,15 +68,15 @@
             5、酒店LOGO：
             <!-- <el-button type="primary">点击上传</el-button> -->
             <el-upload
-              style="border:1px dashed   #ddd"
+              style="border:1px dashed #ddd"
               class="avatar-uploader"
               :multiple="false"
-              action="http://www.api.vip/api/setting/upload"
+              action="https://api.anhuiqingyou.com/uploads/"
               :show-file-list="false"
               :before-upload="beforeAvatarUpload"
               :http-request="selectPicUpload"
             >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <img v-if="logo" :src="logo" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon">上传</i>
             </el-upload>
           </el-row>
@@ -142,25 +142,11 @@
 </template>
 <script>
 import { getAllTime, getDayTime } from "@/utils/moment.js";
-import { SetLogo, SetBill, GetInfo } from "@/api/BillSetting";
+import { SetLogo, GetInfo ,SetBill} from "@/api/BillSetting";
 export default {
   data() {
     return {
-      formDevice: {
-        setTime: "",
-        yz_date: "",
-        tfend_time1: "", //非会员退房时间
-        tf_money1: "",
-        tfend_time2: "",
-        tf_date: "",
-        datecount: "",
-        membertf_end_time1: "",
-        membertf_tf_money1: "",
-        membertf_end_time2: "",
-        membertf_tf_date: "",
-        tel: "",
-        ys_time: ""
-      },
+      formDevice: {},
 
       // 夜间入住时间段
       start_time: "",
@@ -172,7 +158,7 @@ export default {
           time: ""
         }
       ],
-      imageUrl: "",
+
       logo: "",
 
     };
@@ -188,23 +174,16 @@ export default {
         console.log(res, "计费详情");
         if (res.code === 0) {
           this.formDevice = res.data;
-          this.imageUrl =res.data.logo;
-          this.logo="https://api.anhuiqingyou.com/uploads/" + res.data.logo;
+   
+          this.logo=res.data.logo;
           this.tableData = res.data.ban_info;
-          this.formDevice.tfend_time1=res.data.tfend_time1
+          // this.formDevice.tfend_time1=res.data.tfend_time1
             this.tableData = res.data.ban_info;
             let arrTime = []
             arrTime.push(res.data.yzstart_time)
             arrTime.push(res.data.yzend_time)
             this.formDevice.setTime = arrTime
-
-            
-            res.data.ban_info.forEach(item =>{
-              console.log(item.time)
-            
-            })
-            
-
+            console.log(arrTime)
         } else {
           this.message("error", res.message);
         }
@@ -219,9 +198,8 @@ export default {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res);
         if (res.code == 0) {
-          this.imageUrl =
+          this.logo =
             "https://api.anhuiqingyou.com/uploads/" + res.data[0][0];
-          this.logo = res.data[0][0];
         } else {
           this.message("error", res.message);
         }
@@ -272,16 +250,15 @@ export default {
   },
     // 提交表单
     submitForm() {
-
         let ban_info="";
         this.tableData.forEach(item =>{
           let zaoTime=item.time[0]
           let wanTime=item.time[1]
           let time=zaoTime+"-"+wanTime
           ban_info += `${item.name},${time};`;
-          ban_info = ban_info.substring(0, ban_info.length - 1);
-          console.log(ban_info)
         });
+          ban_info = ban_info.substring(0, ban_info.length - 1);
+          // console.log(ban_info)
 
       let parmas = {
         yzstart_time: this.formDevice.setTime[0],
