@@ -319,9 +319,9 @@
         let price = formReplenish.price
         let end_time = formReplenish.end_time
         let settingInfo = this.settingInfo
-        let HHend_time = Moment(e).format('HH:mm')
+        let HHend_time = Moment(e).format('HH:mm:ss')
         let YYend_time = Moment(e).format('YYYY-MM-DD')
-        let HHend_time1 = Moment(formReplenish.end_time).format('HH:mm')
+        let HHend_time1 = Moment(formReplenish.end_time).format('HH:mm:ss')
         let YYend_time1 = Moment(formReplenish.end_time).format('YYYY-MM-DD')
         let hh = Number(Moment(formReplenish.end_time).format('HH'))
         let mm = Number(Moment(formReplenish.end_time).format('mm'))

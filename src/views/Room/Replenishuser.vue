@@ -318,7 +318,7 @@
         let settingInfo = this.settingInfo
         let HHend_time = Moment(e).format('HH:mm')
         let YYend_time = Moment(e).format('YYYY-MM-DD')
-        let HHend_time1 = Moment(formReplenish.start_time).format('HH:mm')
+        let HHend_time1 = Moment(formReplenish.start_time).format('HH:mm:ss')
         let YYend_time1 = Moment(formReplenish.start_time).format('YYYY-MM-DD')
         let hh = Number(Moment(formReplenish.start_time).format('HH'))
         let mm = Number(Moment(formReplenish.start_time).format('mm'))
