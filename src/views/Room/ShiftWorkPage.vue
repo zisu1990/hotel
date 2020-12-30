@@ -124,7 +124,7 @@
   </el-container>
 </template>
 <script>
-import { banUserList } from "@/api/jiaoban";
+// import { banUserList } from "@/api/jiaoban";
 export default {
   data() {
     return {
