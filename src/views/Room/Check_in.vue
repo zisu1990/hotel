@@ -40,8 +40,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系电话：" prop="tel">
-                <el-input @clear="checkInForm.vipNumber=''" v-model="checkInForm.tel" @blur="handleTelBlur()" placeholder="请输入联系电话" clearable
-                  :style="{ width: '100%' }">
+                <el-input @clear="checkInForm.vipNumber=''" v-model="checkInForm.tel" @blur="handleTelBlur()"
+                  placeholder="请输入联系电话" clearable :style="{ width: '100%' }">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -836,8 +836,10 @@
           // 需要支付的房费
           let totolMoneny
           // 凌晨订房
+          console.log(HHstart_time >= settingInfo.yzstart_time)
+          console.log(HHstart_time)
+          console.log(settingInfo.yzstart_time)
           if (HHstart_time >= settingInfo.yzstart_time && HHstart_time < settingInfo.yzend_time) {
-            // console.log('凌晨订房')
             //根据时间当天的房费
             totolMoneny = sums[2] * Number(settingInfo.yz_date) + sums[2]
             // console.log(sums[2] * Number(settingInfo.yz_date))

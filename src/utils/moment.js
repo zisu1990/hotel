@@ -99,7 +99,7 @@ export function getAllTime(v) {
 }
 export function getDayTime(start, end) {
     let str = moment(end).diff(moment(start), 'days') || '1'
-    return str + '天'
+    return str 
 }
 export function isBefore(start, end) {
     return moment(start).isBefore(moment(end))

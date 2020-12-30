@@ -142,7 +142,7 @@
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="待付方式：" prop="paymethod">
-                  <el-select v-model="formReplenish.paymethod" style="width: 100%">
+                  <el-select v-model="formReplenish.paymethods" style="width: 100%">
                     <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
                     </el-option>
                   </el-select>
@@ -251,7 +251,7 @@
     },
     watch: {
       Newis_card_pay(val) {
-        if (val == '否')
+        if (val == '否'||!val)
           this.disabledCardKkNum = true
         else
           this.disabledCardKkNum = false
@@ -567,7 +567,7 @@
               xuzhu_money: this.formReplenish.RoomSumMoney + '',
               is_card_pay: this.formReplenish.is_card_pay,
               card_money: this.formReplenish.payCardMoney,
-              paymethod: this.formReplenish.paymethod,
+              paymethod: this.formReplenish.paymethods,
               other_pay_money: this.formReplenish.stayOverMoney,
               room_id: this.roomInfo.room_id,
               order_id: this.formReplenish.id,
