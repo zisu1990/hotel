@@ -811,27 +811,12 @@
         if (sums[2] != '结算') {
           let checkInForm = this.checkInForm
           let settingInfo = this.settingInfo
-          let HHstart_time = Moment(checkInForm.start_time).format('HH:mm')
-          let HHend_time = Moment(checkInForm.end_time).format('HH:mm')
+          let HHstart_time = Moment(checkInForm.start_time).format('HH:mm:ss')
+          let HHend_time = Moment(checkInForm.end_time).format('HH:mm:ss')
           let YYstart_time = Moment(checkInForm.start_time).format('YYYY-MM-DD')
           let YYend_time = Moment(checkInForm.end_time).format('YYYY-MM-DD')
           let chargeAmount
           let couponMoney
-          // let settingInfo = this.settingInfo
-          // let start_time = Moment(this.checkInForm.start_time).format('X')
-          // let end_time = Moment(this.checkInForm.end_time).format('X')
-          // let strDate = Moment.unix(start_time).format("YYYY MM DD HH:mm")
-          // let endDate = Moment.unix(end_time).format("YYYY MM DD HH:mm")
-
-          // // 夜间入住时间段
-          // let yzstart_time = Moment(settingInfo.yzstart_time).format('X')
-          // let yzend_time = Moment(settingInfo.yzend_time).format('X')
-
-          // console.log(yzend_time - yzstart_time)
-          // if (sums[2] != '结算' && start_time && end_time) {
-          //   if (end_time - start_time < yzend_time - yzstart_time) {
-
-          //   }
           let diffDay = Moment(YYend_time).diff(Moment(YYstart_time), 'days')
           // 需要支付的房费
           let totolMoneny
@@ -1178,8 +1163,8 @@
       setRoomPrice(val) {
         let checkInForm = this.checkInForm
         let settingInfo = this.settingInfo
-        let HHstart_time = Moment(checkInForm.start_time).format('HH:mm')
-        let HHend_time = Moment(checkInForm.end_time).format('HH:mm')
+        let HHstart_time = Moment(checkInForm.start_time).format('HH:mm:ss')
+        let HHend_time = Moment(checkInForm.end_time).format('HH:mm:ss')
         let YYstart_time = Moment(checkInForm.start_time).format('YYYY-MM-DD')
         let YYend_time = Moment(checkInForm.end_time).format('YYYY-MM-DD')
         let chargeAmount
