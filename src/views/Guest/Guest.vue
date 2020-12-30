@@ -35,7 +35,6 @@
 
       <el-table :data="BookingTableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="50" align="center"></el-table-column>
-
         <el-table-column prop="roomtype" label="房间类型" align="center"></el-table-column>
         <el-table-column prop="room_no" label="房间号" align="center"></el-table-column>
         <el-table-column prop="name" label="住客姓名" align="center"></el-table-column>
@@ -47,7 +46,6 @@
         <el-table-column prop="tel" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="start_time" label="入住时间"  show-overflow-tooltip align="center"></el-table-column>
         <el-table-column prop="end_time" label="离店时间" show-overflow-tooltip align="center"></el-table-column>
-
         <el-table-column prop="create_time" label="操作时间" show-overflow-tooltip align="center"></el-table-column>
         <el-table-column prop="status" label="状态" align="center">
           <template v-slot="scope">

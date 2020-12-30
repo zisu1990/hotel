@@ -42,7 +42,7 @@
         <el-table-column label="操作" align="center" width="250">
           <template v-slot="scope">
             <el-button type="danger" size="small" @click="handleCancel(scope.row.id)">取消</el-button>
-             <el-button type="primary" size="small">详情</el-button>
+             <el-button type="primary" size="small" @click="handleDetail(scope.row)">详情</el-button>
             <el-button type="warning" size="small" @click="CheckInDialogVisible=true">入住</el-button>
           </template>
         </el-table-column>
@@ -289,6 +289,38 @@
             <el-button type="primary" @click="CheckInDialogVisible = false">确认</el-button>
           </el-row>
         </el-form>
+      </el-dialog>
+
+
+
+      <!-- 详情 -->
+      <el-dialog title="预订详情" :visible.sync="detailDialogVisible" width="60%">
+        <el-row type="flex" justify="space-between" style="text-align: left;font-size:16px;">
+          <el-col :span='6'>预定人：{{detail.name}}</el-col>
+          <el-col :span='6'>联系电话：{{detail.tel}}</el-col>
+          <el-col :span='6'>预到时间：{{detail.start_time}}</el-col>
+          <el-col :span='6'>离店时间：{{detail.end_time}}</el-col>
+        </el-row>
+        <el-row type="flex" justify="space-between" style="text-align: left;font-size:16px;">
+          <el-col :span='6'>预付方式：{{detail.paymethod}}</el-col>
+          <el-col :span='6'>预付金额：{{detail.pre_money}}</el-col>
+          <el-col :span='6'>客户类型：{{detail.type}}</el-col>
+          <el-col :span='6'>团体名称：{{detail.groupname}}</el-col>
+        </el-row>
+         <el-row type="flex" justify="space-between" style="text-align: left;font-size:16px;">
+          <el-col :span='6'>会员卡号：{{detail.member_card}}</el-col>
+          <el-col :span='6'>国籍：{{detail.nationality}}</el-col>
+          <el-col :span='6'></el-col>
+          <el-col :span='6'></el-col>
+        </el-row>
+
+        <el-row v-for="(item,index) in detail.roomtype_info" :key="index" style="text-align: left;font-size:16px;">
+          <el-col :span="6">预定房间类型：{{item.roomtype}}</el-col>
+          <el-col :span="6">预定房间数量：{{item.num}}间</el-col>
+        </el-row>
+
+
+
       </el-dialog>
     </el-main>
   </el-container>
@@ -861,7 +893,14 @@
           homeName: "单人间",
           roomNum: 8102,
           pric: 200
-        }]
+        }],
+
+
+        //预订详情
+        detailDialogVisible:false,
+        detail:{
+          name:""
+        }
       };
     },
     created() {
@@ -946,6 +985,16 @@
           })
           .catch(() => {});
       },
+
+
+      //详情
+      handleDetail(row){
+        console.log(row)
+        this.detail=row
+        this.detailDialogVisible=true;
+      },
+
+
     }
   };
 </script>
