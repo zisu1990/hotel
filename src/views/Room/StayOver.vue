@@ -251,7 +251,7 @@
     },
     watch: {
       Newis_card_pay(val) {
-        if (val == '否'||!val)
+        if (val == '否' || !val)
           this.disabledCardKkNum = true
         else
           this.disabledCardKkNum = false
@@ -578,6 +578,7 @@
               // console.log('续住接口', res)
               if (res.code == 0) {
                 this.message("success", res.message)
+                this.$router.back()
               } else {
                 this.message("error", res.message)
               }

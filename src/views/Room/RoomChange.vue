@@ -381,6 +381,7 @@
               console.log(res)
               if (res.code == 0) {
                 this.message("success", res.message)
+                this.$router.back()
               } else {
                 this.message("error", res.message)
               }

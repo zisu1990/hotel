@@ -175,7 +175,9 @@
     settingInfo,
     orderMemberinfo,
   } from '@/api/StayOver'
-  import{BuLu} from '@/api/Replenish'
+  import {
+    BuLu
+  } from '@/api/Replenish'
   import {
     getDayTime,
     getAllTime,
@@ -215,7 +217,7 @@
         VipInfo: {},
         // 计费详情
         settingInfo: {},
-                // 卡扣是否禁用
+        // 卡扣是否禁用
         disabledCardKkNum: true,
         // 会员详情
         VipInfo: {
@@ -240,7 +242,7 @@
       this.roomInfo.room_id = this.$route.query.id
       this.getRows()
     },
-     computed: {
+    computed: {
       Newis_card_pay() {
         return this.formReplenish.is_card_pay
       },
@@ -276,7 +278,7 @@
           this.roomInfo
         ).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res,'11111111111111111')
+          console.log(res, '11111111111111111')
           if (res.code == 0) {
             let {
               data
@@ -302,13 +304,13 @@
       },
       // inputchange
       handlePickerChange(e) {
-        if(!e){
+        if (!e) {
           this.formReplenish.RoomSumMoney = '0'
         }
-       
+
         if (!isBefore(this.formReplenish.start_time, e)) {
           this.message('error', '补录日期不能小于原离店日期')
-                   this.formReplenish.goOutTime = ''
+          this.formReplenish.goOutTime = ''
           this.formReplenish.RoomSumMoney = '0'
           return
         }
@@ -572,8 +574,8 @@
               res = typeof res == "string" ? JSON.parse(res) : res;
               console.log('补录接口', res)
               if (res.code == 0) {
-                this.message('success','补录成功')
-                  this.$router.push('RoomFirstPage')
+                this.message('success', '补录成功')
+                this.$router.back()
               } else {
                 this.message("error", res.message)
               }

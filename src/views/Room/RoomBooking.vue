@@ -392,10 +392,8 @@
                 if (!res.data) {
                   return this.message("error", '添加失败请稍后再试')
                 }
-                this.$router.replace({
-                  path: '/RoomFirstPage'
-                })
                 this.message("success", res.message)
+                this.$router.back()
               } else {
                 this.message("error", res.message)
               }
@@ -546,7 +544,7 @@
             end_time: getAllTime(v)
           }).then(res => {
             res = typeof res == "string" ? JSON.parse(res) : res;
-            console.log(res,'1111111111')
+            console.log(res, '1111111111')
             if (res.code == 0) {
               this.roomTableData = res.data
               this.$forceUpdate()
