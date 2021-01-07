@@ -9,3 +9,6 @@ export const orderMemberinfo = params => post('/order/memberinfo', params)
 
 // 房间信息
 export const orderRoom_order = params => post('/order/room_order', params)
+
+// 退房
+export const orderTui = params => post('/order/tui', params)

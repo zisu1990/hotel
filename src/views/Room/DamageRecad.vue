@@ -303,7 +303,7 @@
               room_no: formDamageRecad.room_no,
               wupin_info: this.setTable(this.tableData),
               paymethod: formDamageRecad.payWay,
-              pay_money: formDamageRecad.clooseMoney,
+              pay_money: formDamageRecad.money,
               room_id: formDamageRecad.room_id,
               order_id: formDamageRecad.id,
               money: formDamageRecad.copeWith,
