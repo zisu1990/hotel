@@ -84,6 +84,14 @@
 
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
+              <el-form-item label="结算方式：">
+                <el-select v-model="checkOutForm.paymethod" style="width: 100%">
+                  <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="会员卡支付：">
                 <el-select :disabled="disabledMeber" v-model="checkOutForm.is_card_pay" style="width: 100%">
                   <el-option label="是" value="是"></el-option>
@@ -100,14 +108,6 @@
                    position: absolute;
                    right:-100px;
                 ">{{getBalance}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="结算方式：">
-                <el-select v-model="checkOutForm.paymethod" style="width: 100%">
-                  <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
-                  </el-option>
-                </el-select>
               </el-form-item>
             </el-col>
 
@@ -210,7 +210,7 @@
           return callback(new Error("预订金额不能为空"));
         }
         setTimeout(() => {
-          if (Number(value) < 0 || !Number(value)) {
+          if (Number(value) <= 0 || !Number(value)) {
             callback(new Error("请输入有效数字"));
           } else {
             callback();
@@ -284,7 +284,7 @@
     },
     computed: {
       NewtuiInfozhu_num() {
-        return this.tuiInfo.zhu_num
+        return this.multipleSelection.length
       },
       Newis_card_pay() {
         return this.checkOutForm.is_card_pay
@@ -294,29 +294,39 @@
       },
       getBalance() {
         return this.VipInfo.balance ? '余额' + this.VipInfo.balance + '元' : ''
+      },
+      Newpayfor() {
+        return this.checkOutForm.payfor
       }
     },
     watch: {
-      NewtuiInfozhu_num(val) {
-        if (val > this.multipleSelection.length) {
+      Newpayfor(v) {
+        if (v == '是') {
           this.yajinpayDisabled = true
         } else {
           this.yajinpayDisabled = false
         }
       },
+      NewtuiInfozhu_num(val) {
+        if (this.tuiInfo.zhu_num > val) {
+          this.yajinpayDisabled = true
+          this.checkOutForm.yajinpayMethod = ''
+        } else {
+          this.yajinpayDisabled = false
+        }
+      },
       Newis_card_pay(val) {
-        if (val == '否' || !val)
+        if (val == '否' || !val) {
           this.disabledCardKkNum = true
-        else
+        } else {
           this.disabledCardKkNum = false
+        }
         deep: true
       },
       Newmember_card(val) {
         if (!val) {
-          this.disabledMeber = true
           this.checkOutForm.is_card_pay = '否'
-        } else
-          this.disabledMeber = false
+        } 
         deep: true
       },
     },
@@ -340,7 +350,7 @@
             let params = {
               id: roomOrderInfo.id,
               room_info: that.setMultipleSelection(that.multipleSelection),
-              sunpei_info: that.setxiaoFeimultipleSelection(that.xiaoFeimultipleSelection),
+              sunpei_info: that.setxiaoFeimultipleSelection(that.xiaoFeimultipleSelection), 
               is_pay_yajin: checkOutForm.payfor,
               use_yajin_money: checkOutForm.yajindikou,
               count_money: roomOrderInfo.count_money,
@@ -350,7 +360,7 @@
               card_money: checkOutForm.payCardMoney,
               paymethod: checkOutForm.paymethod,
               other_pay_money: checkOutForm.SettlementAmount,
-              member_card: roomOrderInfo.member_card,
+              member_card: roomOrderInfo.tel,
               tui_paymethod: checkOutForm.yajinpayMethod
             }
             orderTui(params).then(res => {
@@ -406,6 +416,9 @@
             if (res.data) {
               this.isVip = true
               this.VipInfo = res.data
+              if (res.data.card_no) {
+                this.disabledMeber = false
+              }
             } else {
               this.isVip = false
             }
@@ -496,7 +509,7 @@
               member_card: data.tel
             }
             this.checkOutInfo(params)
-            // this.searchVip(data.tel)
+            this.searchVip(data.tel)
           } else {
             this.message("error", res.message)
           }

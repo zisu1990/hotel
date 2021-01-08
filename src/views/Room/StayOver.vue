@@ -189,7 +189,7 @@
     data() {
       var bookMoney = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error("预订金额不能为空"));
+          return callback(new Error("支付金额不能为空"));
         }
         setTimeout(() => {
           if (Number(value) < 0 || !Number(value)) {

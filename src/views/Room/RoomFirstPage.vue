@@ -73,17 +73,9 @@
               <h2>房态维护</h2>
             </div>
             <ul class="roomType-icon">
-              <li>
-                <img src="@/assets/image/cleaning.png" alt srcset />
-                <span>打扫</span>
-              </li>
-              <li>
-                <img src="@/assets/image/repair.png" alt srcset />
-                <span>维修</span>
-              </li>
-              <li>
-                <img src="@/assets/image/repairOver.png" alt srcset />
-                <span>维修结束</span>
+              <li v-for="(item,index) in stateList" :key="index" @click="submitRoomState(item)">
+                <img :src="item.img" alt srcset />
+                <span>{{item.text}}</span>
               </li>
             </ul>
           </div>
@@ -161,6 +153,22 @@
   export default {
     data() {
       return {
+        stateList: [{
+            img: require("@/assets/image/cleaning.png"),
+            text: "清扫",
+            state: "1"
+          },
+          {
+            img: require("@/assets/image/repair.png"),
+            text: "维修",
+            state: "2"
+          },
+          {
+            img: require("@/assets/image/repairOver.png"),
+            text: "维修结束",
+            state: "3"
+          }
+        ],
         // 房态标识
         roomTip: [{
             text: "总",
@@ -203,17 +211,17 @@
         checkRoomState: [],
         roomType: [],
         checkRoomType: [],
-        roomStateValue: "",
-        roomStateOption: [{
-          name: "清扫",
-          id: 1
-        }, {
-          name: "维修",
-          id: 2
-        }, {
-          name: "维修结束",
-          id: 3
-        }],
+        // roomStateValue: "",
+        // roomStateOption: [{
+        //   name: "清扫",
+        //   id: 1
+        // }, {
+        //   name: "维修",
+        //   id: 2
+        // }, {
+        //   name: "维修结束",
+        //   id: 3
+        // }],
         // 房间id
         roomID: "",
         // 选择的房间状态
@@ -602,23 +610,31 @@
 
         // console.log(v)
       },
-      // submitRoomState() {
-      //   // console.log(typeof this.roomID)
-      //   let params = {
-      //     ids: this.roomID + "",
-      //     repair: this.roomStateValue
-      //   }
-      //   roomModify(params).then(res => {
-      //     res = typeof res == "string" ? JSON.parse(res) : res;
-      //     // console.log(res)
-      //     if (res.code == 0) {
-      //       this.getRows()
-      //       this.dialogVisible = false
-      //     } else {
-      //       this.message("error", res.message)
-      //     }
-      //   })
-      // },
+      submitRoomState(v) {
+        // console.log(typeof this.roomID)
+        if (!this.roomID) {
+          return this.message('error', '请选择有效的房间')
+        }
+        let params = {
+          ids: this.roomID + "",
+          repair: v.state
+        }
+        this.confirm("您确定修改此房间的房态吗").then(() => {
+          roomModify(params).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            // console.log(res)
+            if (res.code == 0) {
+              this.message("success", res.message)
+              this.getRows()
+            } else {
+              this.message("error", res.message)
+            }
+          })
+        }).catch(() => {
+          this.roomID = ''
+        })
+
+      },
     },
   };
 </script>
@@ -713,6 +729,14 @@
           font-size: 14px;
           color: #989898;
         }
+      }
+
+      li:hover {
+        cursor: pointer;
+      }
+
+      li:hover span {
+        color: red;
       }
     }
   }

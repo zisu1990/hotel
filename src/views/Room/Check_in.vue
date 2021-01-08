@@ -469,18 +469,7 @@
     mounted() {
       // console.log('tag', this.$route.query)
     },
-    // computed(){
-    //   setColor(){
 
-    //   }
-    // // },
-    // watch: {
-    //   isActiveArr(val) {
-    //     let roomSetCorlor = this.$refs.roomSetCorlor
-    //     console.log(roomSetCorlor.id)
-    //     val.forEach((v, i) => {})
-    //   },
-    // },
     computed: {
       Newis_card_pay() {
         return this.checkInForm.isCardPayfor
@@ -490,6 +479,9 @@
       },
       NewRoomSumMoney() {
         return this.checkInForm.RoomSumMoney
+      },
+      NewVipNumber() {
+        return this.checkInForm.vipNumber
       }
     },
     watch: {
@@ -500,20 +492,23 @@
           this.disabledCardKkNum = false
         deep: true
       },
-      Newmember_card(val) {
-        if (!val) {
-          this.disabledMember_card = true
-          this.checkInForm.is_card_pay = '否'
-        } else
-          this.disabledMember_card = false
-        deep: true
-      },
+      // Newmember_card(val) {
+      //   if (!val) {
+      //     this.checkInForm.is_card_pay = ''
+      //     this.disabledMember_card = true
+      //   } else
+      //     this.disabledMember_card = false
+      //   deep: true
+      // },
       NewRoomSumMoney(val) {
         if (!this.disabledMember_card && this.VIPInfo) {
           let couponMoney = this.checkInForm.couponMoney ? this.checkInForm.couponMoney : 0
           couponMoney += (val / Number(this.VIPInfo.discount / 100)) - val
           this.checkInForm.couponMoney = couponMoney
         }
+      },
+      NewVipNumber(val) {
+        this.handleTelBlur()
       }
     },
     methods: {
@@ -816,18 +811,16 @@
           let HHend_time = Moment(checkInForm.end_time).format('HH:mm:ss')
           let YYstart_time = Moment(checkInForm.start_time).format('YYYY-MM-DD')
           let YYend_time = Moment(checkInForm.end_time).format('YYYY-MM-DD')
-          let chargeAmount
-          let couponMoney
+          let chargeAmount = 0
+          let couponMoney = 0
           let diffDay = Moment(YYend_time).diff(Moment(YYstart_time), 'days')
           // 需要支付的房费
-          let totolMoneny
+          let totolMoneny = 0
           // 凌晨订房
-          console.log(HHstart_time >= settingInfo.yzstart_time)
-          console.log(HHstart_time)
-          console.log(settingInfo.yzstart_time)
           if (HHstart_time >= settingInfo.yzstart_time && HHstart_time < settingInfo.yzend_time) {
             //根据时间当天的房费
             totolMoneny = sums[2] * Number(settingInfo.yz_date) + sums[2]
+            chargeAmount += sums[2] * Number(settingInfo.yz_date)
             // console.log(sums[2] * Number(settingInfo.yz_date))
             // console.log(sums[2])
             // 当天
@@ -835,6 +828,7 @@
             if (diffDay == 0) {
               // console.log('凌晨订房-结束时间当天')
               // 非会员
+              console.log('disabledMember_card', this.disabledMember_card)
               if (this.disabledMember_card) {
                 // console.log('凌晨订房-结束时间当天-非会员')
                 // 下午退房时间之内按小时收费
@@ -849,56 +843,61 @@
                   if (hh1 - hh == 0) {
                     // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-超过十几分钟')
                     totolMoneny += Number(settingInfo.tf_money1)
-                    chargeAmount = Number(settingInfo.tf_money1)
+                    chargeAmount += Number(settingInfo.tf_money1)
                   } else {
                     // console.log(mm , mm2)
                     // console.log(mm > mm2)
                     if (mm > mm2) {
                       // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-几个小时')
                       totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
-                      chargeAmount = Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
                       // console.log(hh1 - hh)
                       // console.log(Number(settingInfo.tf_money1))
                     } else {
                       // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-小时')
                       totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
-                      chargeAmount = Number(settingInfo.tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
                     }
                   }
                 } else if (HHend_time > settingInfo.tfend_time2) {
                   // 下午退房时间之内按天收费
                   totolMoneny += sums[2] * Number(settingInfo.tf_date)
-                  chargeAmount = sums[2] * Number(settingInfo.tf_date)
+                  chargeAmount += sums[2] * Number(settingInfo.tf_date)
                 }
               } else {
                 // 会员
                 if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
                   let hh = Number(Moment(checkInForm.end_time).format('HH'))
                   let mm = Number(Moment(checkInForm.end_time).format('mm'))
-                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
-                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                  let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
                   if (hh - hh1 == 0) {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.membertf_tf_money1)
-                      chargeAmount = Number(settingInfo.membertf_tf_money1)
-                      couponMoney = Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1)
+                      couponMoney += Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                      console.log('totolMoneny', totolMoneny)
                     } else {}
                   } else {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
-                      chargeAmount = Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
-                      couponMoney = Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                      console.log('totolMoneny', totolMoneny)
+                      console.log('chargeAmount', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
+                      console.log('tf_money1', Number(settingInfo.tf_money1) * ((hh - hh1) + 1))
+                      console.log('membertf_tf_money1', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
+                      couponMoney += Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
                         .membertf_tf_money1) * ((hh - hh1) + 1)
                     } else {
                       totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
-                      chargeAmount = Number(settingInfo.membertf_tf_money1) * (hh - hh1)
-                      couponMoney = Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                      couponMoney += Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
                         .membertf_tf_money1) * (hh - hh1)
                     }
                   }
                 } else {
                   totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
-                  chargeAmount = sums[2] * Number(settingInfo.membertf_tf_date)
+                  chargeAmount += sums[2] * Number(settingInfo.membertf_tf_date)
                   couponMoney = sums[2] * Number(settingInfo.tf_date) - sums[2] * Number(settingInfo.membertf_tf_date)
                 }
               }
@@ -919,39 +918,52 @@
                     let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
                     if (hh - hh1 == 0) {
                       if (mm > mm2) {
-                        totolMoneny += Number(settingInfo.membertf_tf_money1)
+                        totolMoneny += Number(settingInfo.tf_money1)
+                        chargeAmount += Number(settingInfo.tf_money1)
                       } else {}
                     } else {
                       if (mm > mm2) {
                         totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                        chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
                       } else {
                         totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                        chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
                       }
                     }
                   } else if (HHend_time > settingInfo.membertf_end_time2) {
                     // 下午退房时间之内按天收费
                     totolMoneny += sums[2] * Number(settingInfo.tf_date)
+                    chargeAmount += sums[2] * Number(settingInfo.tf_date)
                   }
                 } else {
                   // 会员
                   if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
-                    let hh = Moment(checkInForm.end_time).format('HH')
-                    let mm = Moment(checkInForm.end_time).format('mm')
-                    let hh1 = settingInfo.membertf_end_time1.substring(0, 2)
+                    let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                    let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                    let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
                     let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
                     if (hh - hh1 == 0) {
                       if (mm > mm2) {
                         totolMoneny += Number(settingInfo.membertf_tf_money1)
+                        chargeAmount += Number(settingInfo.membertf_tf_money1)
+                        couponMoney += Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
                       } else {}
                     } else {
                       if (mm > mm2) {
                         totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                        chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                        couponMoney += Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                          .membertf_tf_money1) * ((hh - hh1) + 1)
                       } else {
                         totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                        chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                        couponMoney += Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                          .membertf_tf_money1) * (hh - hh1)
                       }
                     }
                   } else {
                     totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
+                    chargeAmount += sums[2] * Number(settingInfo.membertf_tf_date)
                   }
                 }
                 //  totolMoneny = sums[2] * settingInfo.yz_date
@@ -977,22 +989,22 @@
                   if (hh - hh1 == 0) {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.tf_money1)
-                      chargeAmount = Number(settingInfo.tf_money1)
+                      chargeAmount += Number(settingInfo.tf_money1)
 
                     } else {}
                   } else {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
-                      chargeAmount = Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
                     } else {
                       totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
-                      chargeAmount = Number(settingInfo.tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
                     }
                   }
                 } else if (HHend_time > settingInfo.tfend_time2) {
                   // 下午退房时间之内按天收费
                   totolMoneny += sums[2] * Number(settingInfo.tf_date)
-                  chargeAmount = sums[2] * Number(settingInfo.tf_date)
+                  chargeAmount += sums[2] * Number(settingInfo.tf_date)
                 } else {}
               } else {
                 // 会员
@@ -1004,26 +1016,26 @@
                   if (hh - hh1 == 0) {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.membertf_tf_money1)
-                      chargeAmount = Number(settingInfo.membertf_tf_money1)
-                      couponMoney = Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1)
+                      couponMoney += Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
                     } else {}
                   } else {
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
-                      chargeAmount = Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
                       couponMoney = Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
                         .membertf_tf_money1) * ((hh - hh1) + 1)
                       console.log(couponMoney)
                     } else {
                       totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
-                      chargeAmount = Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
                       couponMoney = Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
                         .membertf_tf_money1) * (hh - hh1)
                     }
                   }
                 } else if (HHend_time > settingInfo.membertf_end_time2) {
                   totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
-                  chargeAmount = sums[2] * Number(settingInfo.membertf_tf_date)
+                  chargeAmount += sums[2] * Number(settingInfo.membertf_tf_date)
                   couponMoney = sums[2] * Number(settingInfo.tf_date) * Number(settingInfo.membertf_tf_date)
                 }
               }
@@ -1033,8 +1045,8 @@
             this.checkInForm.RoomSumMoney = 0
           } else {
             this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2)
-            this.checkInForm.chargeAmount = chargeAmount
-            this.checkInForm.couponMoney = couponMoney
+            this.checkInForm.chargeAmount = chargeAmount.toFixed(2)
+            this.checkInForm.couponMoney = couponMoney.toFixed(2)
             if (!this.disabledMember_card) {
               this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2) * (Number(this.VIPInfo.discount) / 100)
             }
@@ -1152,10 +1164,13 @@
             } = res
 
             if (data) {
+              this.VIPInfo = data
+              this.disabledMember_card = false
               this.checkInForm.vipNumber = data.card_no
               // this.checkInForm.vipNumber=
             } else {
               this.checkInForm.vipNumber = ''
+              this.disabledMember_card = true
             }
           }
         })
@@ -1294,8 +1309,6 @@
               //  totolMoneny = sums[2] * settingInfo.yz_date
             }
           }
-          // checkInForm.RoomSumMoney = sums[2] + sums[2] * settingInfo.yz_date
-          // checkInForm.chargeAmount = sums[2] * settingInfo.yz_date
         } else {
           // 正常时间订房
           if (diffDay == 0) {
@@ -1388,7 +1401,6 @@
           return
         }
         v.kx_count = this.setRoomPrice(v.price)
-        console.log('tag', v.kx_count)
         roomTableData.push(v);
         this.isActiveArr.push(v.id);
         this.$forceUpdate()
