@@ -46,6 +46,10 @@ import DataReport from '../views/DataReport/DataReport.vue';
 
 import NationalitySet from '../views/NationalitySet/NationalitySet.vue';
 
+import Night from '../views/Night/Night.vue';
+
+import ReportSetting from '../views/ReportSetting/ReportSetting.vue';
+
 
 Vue.use(VueRouter)
 // {
@@ -246,6 +250,13 @@ const routes = [{
       }
     },
     {
+      path: '/Night', //夜审
+      component: Night,
+      meta: {
+        title: '夜审'
+      }
+    },
+    {
       path: '/BookPayType', //预订支付方式设置
       component: BookPayType,
       meta: {
@@ -264,6 +275,14 @@ const routes = [{
       component: NationalitySet,
       meta: {
         title: '国籍设置'
+      }
+    },
+    ,
+    {
+      path: '/ReportSetting', //数据报表设置
+      component: ReportSetting,
+      meta: {
+        title: '数据报表设置'
       }
     },
   ]

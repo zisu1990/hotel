@@ -41,6 +41,9 @@
           <el-menu-item index="/BookPayType">
             <span>预订支付方式设置</span>
           </el-menu-item>
+                    <el-menu-item index="/ReportSetting">
+            <span>数据报表设置</span>
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
 
@@ -90,6 +93,9 @@
       </el-menu-item>
       <el-menu-item index="/DataReport">
         <span>数据统计</span>
+      </el-menu-item>
+            <el-menu-item index="/Night">
+        <span>夜审</span>
       </el-menu-item>
     </el-menu>
   </div>
