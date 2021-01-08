@@ -11,7 +11,8 @@
           </el-col>
           <el-col :span="6">
             <el-form-item>
-              <el-input v-model="BookingForm.name" placeholder="请输入姓名/手机号" @change="handleChangeOfTel" clearable :style="{width: '100%'}">
+              <el-input v-model="BookingForm.name" placeholder="请输入姓名/手机号" @change="handleChangeOfTel" clearable
+                :style="{width: '100%'}">
               </el-input>
             </el-form-item>
           </el-col>
@@ -27,7 +28,8 @@
         <el-table-column type="index" width="30" align="center"></el-table-column>
         <el-table-column prop="OddNumber" label="预订单号" width="100" align="center"></el-table-column>
         <el-table-column prop="type" label="客户类型" width="80" align="center"></el-table-column>
-        <el-table-column prop="groupname" label="团体名称" show-overflow-tooltip width="80" align="center"></el-table-column>
+        <el-table-column prop="groupname" label="团体名称" show-overflow-tooltip width="80" align="center">
+        </el-table-column>
         <el-table-column prop="name" label="预订人" width="80" align="center"></el-table-column>
         <el-table-column prop="tel" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="start_time" label="预到时间" show-overflow-tooltip align="center"></el-table-column>
@@ -36,14 +38,14 @@
         <el-table-column prop="pre_money" label="预付金额" width="80" align="center"></el-table-column>
         <el-table-column prop="member_card" label="会员卡号" align="center"></el-table-column>
         <el-table-column prop="nationality" label="国籍" width="60" align="center"></el-table-column>
-        <el-table-column prop="create_time" label="操作时间" show-overflow-tooltip  align="center"></el-table-column>
+        <el-table-column prop="create_time" label="操作时间" show-overflow-tooltip align="center"></el-table-column>
         <el-table-column prop="beizhu" label="备注" align="center"></el-table-column>
         <el-table-column prop="username" label="操作员" width="80" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template v-slot="scope">
             <el-button type="danger" size="small" @click="handleCancel(scope.row.id)">取消</el-button>
-             <el-button type="primary" size="small" @click="handleDetail(scope.row)">详情</el-button>
-            <el-button type="warning" size="small" @click="CheckInDialogVisible=true">入住</el-button>
+            <el-button type="primary" size="small" @click="handleDetail(scope.row)">详情</el-button>
+            <el-button type="warning" size="small" @click="bookingRoom(scope.row.id)">入住</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -92,115 +94,106 @@
       </el-dialog>
 
       <!-- 预订入住 -->
-      <el-dialog title="预订入住" :visible.sync="CheckInDialogVisible" width="60%" class="checkWarp">
-        <el-form :model="checkInForm" label-width="140px">
+      <el-dialog @close="CheckInDialogVisibleClose" title="预订入住" :visible.sync="CheckInDialogVisible" width="60%"
+        class="checkWarp">
+        <el-form :rules="rules" ref="checkInForm" :model="checkInForm" label-width="140px">
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="客户类型：">
-                <el-select v-model="checkInForm.personType" placeholder="选择客客户类型" :style="{ width: '100%' }">
-                  <el-option v-for="(item, index) in personTypeOptions" :key="index" :label="item.label"
-                    :value="item.value" :disabled="item.disabled"></el-option>
-                </el-select>
+                <el-input v-model="bookingInfo.type" disabled style="width: 100%"> </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="团体名称：">
-                <el-input v-model="checkInForm.teamName" placeholder="请输入团体名称" clearable :style="{ width: '100%' }">
-                </el-input>
+                <el-input v-model="bookingInfo.groupname" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="国籍：">
-                <el-select v-model="checkInForm.native" placeholder="选择国籍" :style="{ width: '100%' }">
-                  <el-option v-for="(item, index) in nativeOptions" :key="index" :label="item.label" :value="item.value"
-                    :disabled="item.disabled"></el-option>
-                </el-select>
+                <el-input v-model="bookingInfo.nationality" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8" style="display: flex; align-content: center">
               <el-form-item label="证件类型：">
-                <el-select v-model="checkInForm.certificate" placeholder="选择证件类型" :style="{ width: '100%' }">
-                  <el-option v-for="(item, index) in certificateOptions" :key="index" :label="item.label"
-                    :value="item.value" :disabled="item.disabled"></el-option>
-                </el-select>
+                <el-input v-model="bookingInfo.zhengjian" disabled style="width: 100%"></el-input>
               </el-form-item>
               <el-button type="primary" class="duCard">读身份证</el-button>
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系电话：">
-                <el-input v-model="checkInForm.tel" placeholder="请输入联系电话" clearable :style="{ width: '100%' }">
-                </el-input>
+                <el-input v-model="bookingInfo.tel" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="会员卡号：">
-                <el-input v-model="checkInForm.vipNumber" placeholder="请输入会员卡号" clearable :style="{ width: '100%' }">
-                </el-input>
+                <el-input v-model="bookingInfo.member_card" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="客主姓名：">
-                <el-input v-model="checkInForm.name" placeholder="请输入客主姓名" clearable :style="{ width: '100%' }">
-                </el-input>
+                <el-input v-model="bookingInfo.name" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="证件号码：">
-                <el-input v-model="checkInForm.idNumber" placeholder="请输入证件号码" clearable :style="{ width: '100%' }">
-                </el-input>
+                <el-input v-model="bookingInfo.zhengjian_no" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-button type="success" round class="checkIn-search">住客登记查询</el-button>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="24">
               <el-form-item label="证件地址：">
-                <el-input v-model="checkInForm.adderss" placeholder="请输入证件地址" clearable :style="{ width: '100%' }">
-                </el-input>
+                <el-input v-model="bookingInfo.address" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20" type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="入住时间：">
-                <el-date-picker v-model="checkInForm.value1" type="date" placeholder="选择日期"></el-date-picker>
+                <el-input v-model="bookingInfo.start_time" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="离店时间：">
-                <el-date-picker v-model="checkInForm.value2" type="date" placeholder="选择日期"></el-date-picker>
+                <el-input v-model="bookingInfo.end_time" disabled style="width: 100%"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
-                <el-input v-model="checkInForm.days" placeholder clearable :style="{ width: '40%' }" class="days">
-                </el-input>
+                <el-input v-model="bookingInfo.datecount" disabled style="width: 40%" class="days"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <p class="chooseTitle">可选房型：</p>
           <div class="chooseRoom">
+            <div style="text-align:center;padding-bottom:20px;color:#999" v-show="!roomType.length">
+              ---------无房间---------</div>
             <el-row :gutter="20" type="flex" justify="left">
               <el-col :span="8">
-                <el-check-group v-model="roomType">
-                  <el-checkbox v-for="(v, i) in roomType" :key="i" :name="v.roomtype">
-                    {{ v.roomtype }}({{ v.sheng }}/{{ v.sum }})</el-checkbox>
-                </el-check-group>
+                <el-checkbox-group @change="handleChangeRoomType" v-model="checkRoomType">
+                  <el-checkbox v-for="(v, i) in roomType" :key="i" :value="v.name" :label="v.name">
+                    {{ v.name }}({{ v.kx_count }}/{{ v.count }})
+                  </el-checkbox>
+                </el-checkbox-group>
               </el-col>
 
               <el-col :span="16" class="chooseRoomRight">
                 <div class="floorItem" v-for="(v, i) in louceng" :key="i">
                   <p>{{ v.floor }}：</p>
                   <ul>
-                    <li v-for="(f, id) in v.listItem" :key="id">
-                      <span>{{ f.floorNo }}</span>
-                      <span>{{ f.type }}</span>
+                    <!-- :class="setColor(f,index)" -->
+
+                    <li class="fangjian" v-for="(f, index) in v.item"
+                      :class="{'activeBlue':isActiveArr.indexOf(f.id)!=-1}" ref="roomSetCorlor" @click="chooseRoom(f)"
+                      :key="index">
+                      <span>{{ f.room_no }}</span>
+                      <span>{{ f.roomtype }}</span>
                     </li>
                   </ul>
                 </div>
@@ -210,13 +203,16 @@
           <p class="chooseTitle">已选客房：</p>
           <el-row>
             <el-col :span="24">
-              <el-table stripe :data="roomTableData" style="width: 100%" max-height="500px">
-                <el-table-column prop="homeName" label="房间类型" width="150px"></el-table-column>
-                <el-table-column prop="roomNum" label="房间号"></el-table-column>
-                <el-table-column prop="pric" label="房间单价(元)"></el-table-column>
-
-                <el-table-column label="操作">
-                  <el-button icon="el-icon-delete" circle type="danger"></el-button>
+              <el-table stripe show-summary :summary-method="getSumMoney" :header-cell-style="tableStyle"
+                :cell-style="tableStyle" :data="roomTableData" style="width: 100%; margin-top: 10px" max-height="500px">
+                <el-table-column align="center" prop="roomtype" label="房间类型" width="150px"></el-table-column>
+                <el-table-column align="center" prop="room_no" label="房间号"></el-table-column>
+                <el-table-column align="center" prop="price" label="房间单价(元)"></el-table-column>
+                <el-table-column align="center" label="操作">
+                  <template v-slot="scope">
+                    <el-button icon="el-icon-delete" circle type="danger"
+                      @click="handleReduce(scope.$index, scope.row)"></el-button>
+                  </template>
                 </el-table-column>
               </el-table>
             </el-col>
@@ -224,69 +220,84 @@
 
           <el-row :gutter="20" type="flex" justify="left">
             <el-col :span="8">
-              <el-form-item label="房费总金额（元）：">
+              <el-form-item label="房费总金额：">
                 <el-input v-model="checkInForm.RoomSumMoney" disabled :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="押金（元）：">
+              <el-form-item label="加收金额：">
+                <el-input v-model="checkInForm.chargeAmount" disabled :style="{ width: '100%' }"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="优惠金额：">
+                <el-input v-model="checkInForm.couponMoney" disabled :style="{ width: '100%' }"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" type="flex" justify="left">
+            <el-col :span="8">
+              <el-form-item label="应交预付款：">
+                <el-input v-model="checkInForm.residueMoney" disabled :style="{ width: '100%' }"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="押金金额：" prop="deposit">
                 <el-input v-model="checkInForm.deposit" :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="已付预款（元）：">
-                <el-input v-model="checkInForm.advancePay" :style="{ width: '100%' }"></el-input>
+              <el-form-item label="已付预款：">
+                <el-input v-model="bookingInfo.pre_money" disabled :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
 
+
+          </el-row>
           <el-row :gutter="20" type="flex" justify="left">
             <el-col :span="8">
-              <el-form-item label="应交预付款（元）：">
-                <el-input v-model="checkInForm.RoomSumMoney" disabled :style="{ width: '100%' }"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="预付方式：">
+              <el-form-item label="预付方式：" prop="payfor">
                 <el-select v-model="checkInForm.payfor" placeholder="选择支付方式" :style="{ width: '100%' }">
-                  <el-option label="现金" value="1"></el-option>
-                  <el-option label="支付宝" value="2"></el-option>
-                  <el-option label="微信" value="3"></el-option>
+                  <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="预付金额（元）：">
+              <el-form-item label="预付金额：" prop="advanceMoney">
                 <el-input v-model="checkInForm.advanceMoney" :style="{ width: '100%' }"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row :gutter="20" type="flex" justify="left">
-            <el-col :span="16" style="display: flex; align-content: center">
+            <el-col :span="8">
               <el-form-item label="会员卡支付：">
-                <el-select v-model="checkInForm.isCardPayfor" placeholder="选择支付方式" :style="{ width: '100%' }">
-                  <el-option label="会员卡支付" value="1"></el-option>
-                  <el-option label="否" value="2"></el-option>
+                <el-select v-model="checkInForm.is_card_pay" :disabled="disabledMeber" placeholder="请选择"
+                  :style="{ width: '100%' }">
+                  <el-option label="是" value="是"></el-option>
+                  <el-option label="否" value="否"></el-option>
                 </el-select>
               </el-form-item>
-              <span style="
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" type="flex" justify="left">
+            <el-col :span="8">
+              <el-form-item label="卡扣金额：">
+                <el-input :style="{ width: '100%' }" :disabled="disabledCardKkNum" clearable
+                  v-model="checkInForm.payCardMoney"></el-input>
+                <span style="
                   font-size: 14px;
                   color: #005ab9;
-                  padding-top: 10px;
-                  padding-left: 5px;
-                ">余额：300元</span>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="卡扣金额（元）：">
-                <el-input v-model="checkInForm.cardPayfor" :style="{ width: '100%' }"></el-input>
+                   position: absolute;
+                   right:-100px;
+                ">{{vipCardMoney}}</span>
               </el-form-item>
             </el-col>
+            <el-col :span="8"></el-col>
+            <el-col :span="8"></el-col>
           </el-row>
 
           <el-row :gutter="20" type="flex" justify="center" class="btn">
-            <el-button>重置</el-button>
-            <el-button type="primary" @click="CheckInDialogVisible = false">确认</el-button>
+            <el-button @click="CheckInDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="submitForm">确认</el-button>
           </el-row>
         </el-form>
       </el-dialog>
@@ -307,7 +318,7 @@
           <el-col :span='6'>客户类型：{{detail.type}}</el-col>
           <el-col :span='6'>团体名称：{{detail.groupname}}</el-col>
         </el-row>
-         <el-row type="flex" justify="space-between" style="text-align: left;font-size:16px;">
+        <el-row type="flex" justify="space-between" style="text-align: left;font-size:16px;">
           <el-col :span='6'>会员卡号：{{detail.member_card}}</el-col>
           <el-col :span='6'>国籍：{{detail.nationality}}</el-col>
           <el-col :span='6'></el-col>
@@ -319,8 +330,6 @@
           <el-col :span="6">预定房间数量：{{item.num}}间</el-col>
         </el-row>
 
-
-
       </el-dialog>
     </el-main>
   </el-container>
@@ -330,13 +339,46 @@
 <script>
   import {
     orderIndex,
-    orderCancel
+    orderCancel,
+    orderInfo,
+    settingInfo,
+    orderYdroomtype,
+    orderMemberinfo,
+    paymethod,
+    orderlivein
   } from '@/api/Booking.js'
   import {
-    getAllTime
+    getAllTime,
+    getDayTime,
+    isBefore
   } from '@/utils/moment.js'
+  import Moment from 'moment'
   export default {
     data() {
+      var deposit = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error("请输入押金金额"));
+        }
+        setTimeout(() => {
+          if (Number(value) < 0 || !Number(value)) {
+            callback(new Error("请输入有效数字"));
+          } else {
+            callback();
+          }
+        }, 100);
+      };
+      var advanceMoney = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error("请输入预付金额"));
+        }
+        setTimeout(() => {
+          if (Number(value) >= 0) {
+            callback();
+          } else {
+            callback(new Error("请输入有效数字"));
+          }
+        }, 100);
+      };
       return {
         BookingForm: {
           value1: [],
@@ -344,570 +386,440 @@
           tel: ""
         },
         BookingTableData: [],
-
+        rules: {
+          deposit: [{
+            validator: deposit,
+            trigger: "blur"
+          }],
+          advanceMoney: [{
+            validator: advanceMoney,
+            trigger: "blur"
+          }],
+        },
 
         //预订房间查询
         BookRoomDialogVisible: false,
         SearchBookRoomTableData: [{
-            roomNo: "8101",
-            roomType: "单间",
-            yi: "",
-            er: "",
-            san: "",
-            si: "",
-            wu: "",
-            liu: "",
-            qi: "",
-            ba: "",
-            jiu: "",
-            shi: "",
-            shiyi: "",
-            shier: "",
-            shisan: "",
-            shisi: "",
-            shiwu: "",
-            shiliu: "",
-            shiqi: "",
-            shiba: "",
-            shijiu: "",
-            ershi: "",
-            ershiyi: "",
-            ershier: "",
-            ershier: "",
-            ershisan: "",
-            ershisi: "",
-            ershiwu: "",
-            ershiliu: "",
-            ershiqi: "",
-            ershiba: "",
-            ershijiu: "",
-            sanzhi: "",
-            sanshiyi: ""
-          },
-          {
-            roomNo: "8102",
-            roomType: "三人间",
-            yi: "",
-            er: "",
-            san: "",
-            si: "",
-            wu: "",
-            liu: "",
-            qi: "",
-            ba: "",
-            jiu: "",
-            shi: "",
-            shiyi: "",
-            shier: "",
-            shisan: "",
-            shisi: "",
-            shiwu: "",
-            shiliu: "",
-            shiqi: "",
-            shiba: "",
-            shijiu: "",
-            ershi: "",
-            ershiyi: "",
-            ershier: "",
-            ershier: "",
-            ershisan: "",
-            ershisi: "",
-            ershiwu: "",
-            ershiliu: "",
-            ershiqi: "",
-            ershiba: "",
-            ershijiu: "",
-            sanzhi: "",
-            sanshiyi: ""
-          },
-          {
-            roomNo: "8103",
-            roomType: "四人间",
-            yi: "",
-            er: "",
-            san: "",
-            si: "",
-            wu: "",
-            liu: "",
-            qi: "",
-            ba: "",
-            jiu: "",
-            shi: "",
-            shiyi: "",
-            shier: "",
-            shisan: "",
-            shisi: "",
-            shiwu: "",
-            shiliu: "",
-            shiqi: "",
-            shiba: "",
-            shijiu: "",
-            ershi: "",
-            ershiyi: "",
-            ershier: "",
-            ershier: "",
-            ershisan: "",
-            ershisi: "",
-            ershiwu: "",
-            ershiliu: "",
-            ershiqi: "",
-            ershiba: "",
-            ershijiu: "",
-            sanzhi: "",
-            sanshiyi: ""
-          },
-          {
-            roomNo: "8104",
-            roomType: "五人间",
-            yi: "",
-            er: "",
-            san: "",
-            si: "",
-            wu: "",
-            liu: "",
-            qi: "",
-            ba: "",
-            jiu: "",
-            shi: "",
-            shiyi: "",
-            shier: "",
-            shisan: "",
-            shisi: "",
-            shiwu: "",
-            shiliu: "",
-            shiqi: "",
-            shiba: "",
-            shijiu: "",
-            ershi: "",
-            ershiyi: "",
-            ershier: "",
-            ershier: "",
-            ershisan: "",
-            ershisi: "",
-            ershiwu: "",
-            ershiliu: "",
-            ershiqi: "",
-            ershiba: "",
-            ershijiu: "",
-            sanzhi: "",
-            sanshiyi: ""
-          }
-        ],
+          roomNo: "8104",
+          roomType: "五人间",
+          yi: "",
+          er: "",
+          san: "",
+          si: "",
+          wu: "",
+          liu: "",
+          qi: "",
+          ba: "",
+          jiu: "",
+          shi: "",
+          shiyi: "",
+          shier: "",
+          shisan: "",
+          shisi: "",
+          shiwu: "",
+          shiliu: "",
+          shiqi: "",
+          shiba: "",
+          shijiu: "",
+          ershi: "",
+          ershiyi: "",
+          ershier: "",
+          ershier: "",
+          ershisan: "",
+          ershisi: "",
+          ershiwu: "",
+          ershiliu: "",
+          ershiqi: "",
+          ershiba: "",
+          ershijiu: "",
+          sanzhi: "",
+          sanshiyi: ""
+        }],
 
         //入住
         CheckInDialogVisible: false,
-        checkInForm: {
-          personType: "散客",
-          teamName: "无",
-          certificate: "身份证",
-          tel: "1825632124",
-          vipNumber: "",
-          name: "张三",
-          idNumber: "3408811999910256895",
-          adderss: "安徽省合肥市滨湖新区西藏路1110号",
-          value1: "2020-12-02",
-          value2: "2020-12-03",
-          days: "1天",
-          RoomSumMoney: 1000,
-          deposit: 200,
-          advancePay: 0,
-          payfor: "",
-          advanceMoney: 200,
-          isCardPayfor: "",
-          cardPayfor: 500
-        },
+        checkInForm: {},
         checkInRef: {
           personType: [],
           teamName: []
         },
-        personTypeOptions: [{
-            label: "散客",
-            value: 1
-          },
-          {
-            label: "团体",
-            value: 2
-          }
-        ],
-        nativeOptions: [{
-            label: "中国",
-            value: 1
-          },
-          {
-            label: "美国",
-            value: 2
-          }
-        ],
-        certificateOptions: [{
-            label: "身份证",
-            value: 1
-          },
-          {
-            label: "驾驶证",
-            value: 2
-          },
-          {
-            label: "学生证",
-            value: 3
-          }
-        ],
-        roomType: [{
-            roomtype: "单人间",
-            sheng: 10,
-            sum: 30
-          },
-          {
-            roomtype: "标间",
-            sheng: 10,
-            sum: 30
-          },
-          {
-            roomtype: "三人间",
-            sheng: 10,
-            sum: 30
-          },
-          {
-            roomtype: "五人间",
-            sheng: 10,
-            sum: 30
-          },
-          {
-            roomtype: "十人间",
-            sheng: 10,
-            sum: 30
-          },
-          {
-            roomtype: "钟点房",
-            sheng: 10,
-            sum: 30
-          }
-        ],
-        louceng: [{
-            floor: "1楼",
-            listItem: [{
-                id: 1,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 2,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 3,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 4,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 5,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 6,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 7,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 8,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 9,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 10,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 11,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 12,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 13,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 14,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              }
-            ]
-          },
-          {
-            floor: "2楼",
-            listItem: [{
-                id: 24,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 25,
-                floorNo: 8102,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 26,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 27,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 28,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 29,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 30,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 31,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 32,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 33,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              }
-            ]
-          },
-          {
-            floor: "3楼",
-            listItem: [{
-                id: 15,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 16,
-                floorNo: 8102,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 17,
-                floorNo: 8102,
-                status: "预订中",
-                type: "三人间",
-                background: "#FCB634",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 18,
-                floorNo: 8103,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 19,
-                floorNo: 8104,
-                status: "入住中",
-                type: "五人间",
-                background: "#FE775E",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 20,
-                floorNo: 8105,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 21,
-                floorNo: 8106,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 22,
-                floorNo: 8107,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 23,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 34,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 35,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              },
-              {
-                id: 36,
-                floorNo: 8108,
-                status: "空闲中",
-                type: "五人间",
-                background: "#005AB9",
-                icon: "@/assets/image/zhong.png"
-              }
-            ]
-          }
-        ],
         pagination: {
           currentPage: 1,
           pageSize: 10,
           total: 0
         },
         // 表格对应的数据
-        roomTableData: [{
-          homeName: "单人间",
-          roomNum: 8102,
-          pric: 200
-        }],
-
-
+        roomTableData: [],
+        // 表格样式
+        tableStyle: {
+          textAlign: "center"
+        },
+        checkRoomType: [],
+        louceng: "",
+        roomType: [],
+        settingInfo: "",
+        isActiveArr: [],
         //预订详情
-        detailDialogVisible:false,
-        detail:{
-          name:""
-        }
+        detailDialogVisible: false,
+        detail: {
+          name: ""
+        },
+        // 预订入住
+        bookingInfo: {},
+        VIPInfo: "",
+        // 支付方式
+        payForForhod: [],
+        // 会员卡号是否禁用
+        disabledMeber: true,
+        // 卡扣是否禁用
+        disabledCardKkNum: true,
+        // 会员余额
+        vipCardMoney: "",
       };
+    },
+    computed: {
+      Newis_card_pay() {
+        return this.checkInForm.is_card_pay
+      },
+      Newmember_card() {
+        return this.checkInForm.payCardMoney
+      },
+    },
+    watch: {
+      Newis_card_pay(val) {
+        if (val == '否' || !val) {
+          this.checkInForm.payCardMoney = ''
+          this.disabledCardKkNum = true
+        } else
+          this.disabledCardKkNum = false
+        deep: true
+      },
+      isActiveArr(val) {
+        let arr = []
+        val.length > 0 ? val.forEach(v => Object.keys(this.louceng).forEach(key => this.louceng[key].item.forEach(v1 =>
+          v1.id == v ? arr.push(v1) : ''))) : ""
+        this.roomTableData = arr
+      },
+      roomTableData(val) {
+        let sumPirce = this.getTablePice(val)
+        let totolMoneny
+        let checkInForm = this.checkInForm
+        let settingInfo = this.settingInfo
+        let bookingInfo = this.bookingInfo
+        let HHstart_time = Moment(bookingInfo.start_time).format('HH:mm:ss')
+        let HHend_time = Moment(bookingInfo.end_time).format('HH:mm:ss')
+        let YYstart_time = Moment(bookingInfo.start_time).format('YYYY-MM-DD')
+        let YYend_time = Moment(bookingInfo.end_time).format('YYYY-MM-DD')
+        let chargeAmount = 0
+        let couponMoney = 0
+        let diffDay = Moment(YYend_time).diff(Moment(YYstart_time), 'days')
+        // 需要支付的房费
+
+        // 凌晨订房
+        if (HHstart_time >= settingInfo.yzstart_time && HHstart_time < settingInfo.yzend_time) {
+          //根据时间当天的房费
+          totolMoneny = sumPirce * Number(settingInfo.yz_date) + sumPirce
+          chargeAmount += sumPirce * Number(settingInfo.yz_date)
+          // console.log(sums[2] * Number(settingInfo.yz_date))
+          // console.log(sums[2])
+          // 当天
+
+          if (diffDay == 0) {
+            // console.log('凌晨订房-结束时间当天')
+            // 非会员
+            if (!this.bookingInfo.member_card) {
+              // console.log('凌晨订房-结束时间当天-非会员')
+              // 下午退房时间之内按小时收费
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费')
+                let hh = Number(Moment(bookingInfo.end_time).format('HH'))
+                let mm = Number(Moment(bookingInfo.end_time).format('mm'))
+                let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+
+
+                if (hh1 - hh == 0) {
+                  // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-超过十几分钟')
+                  totolMoneny += Number(settingInfo.tf_money1)
+                  chargeAmount += Number(settingInfo.tf_money1)
+                } else {
+                  // console.log(mm , mm2)
+                  // console.log(mm > mm2)
+                  if (mm > mm2) {
+                    // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-几个小时')
+                    totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    // console.log(hh1 - hh)
+                    // console.log(Number(settingInfo.tf_money1))
+                  } else {
+                    // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-小时')
+                    totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
+                  }
+                }
+              } else if (HHend_time > settingInfo.tfend_time2) {
+                // 下午退房时间之内按天收费
+                totolMoneny += sumPirce * Number(settingInfo.tf_date)
+                chargeAmount += sumPirce * Number(settingInfo.tf_date)
+              }
+            } else {
+              // 会员
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                let hh = Number(Moment(bookingInfo.end_time).format('HH'))
+                let mm = Number(Moment(bookingInfo.end_time).format('mm'))
+                let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+                if (hh - hh1 == 0) {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1)
+                    couponMoney = Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                  } else {}
+                } else {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    couponMoney = Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                      .membertf_tf_money1) * ((hh - hh1) + 1)
+                  } else {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    couponMoney = Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                      .membertf_tf_money1) * (hh - hh1)
+                  }
+                }
+              } else {
+                totolMoneny += sumPirce * Number(settingInfo.membertf_tf_date)
+                chargeAmount += sumPirce * Number(settingInfo.membertf_tf_date)
+                couponMoney = sumPirce * Number(settingInfo.tf_date) - sumPirce * Number(settingInfo.membertf_tf_date)
+              }
+            }
+
+          } else {
+            // console.log(HHend_time > settingInfo.tfend_time1)
+            // console.log(HHend_time <= settingInfo.tfend_time2)
+            totolMoneny += sumPirce * (Number(diffDay))
+            console.log('totolMoneny', totolMoneny)
+            if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+              // console.log(123)
+              // 非会员
+              if (!this.bookingInfo.member_card) {
+                // 下午退房时间之内按小时收费
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                  let hh = Number(Moment(bookingInfo.end_time).format('HH'))
+                  let mm = Number(Moment(bookingInfo.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                  if (hh - hh1 == 0) {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1)
+                    } else {}
+                  } else {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    } else {
+                      totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
+                    }
+                  }
+                } else if (HHend_time > settingInfo.membertf_end_time2) {
+                  // 下午退房时间之内按天收费
+                  totolMoneny += sumPirce * Number(settingInfo.tf_date)
+                  chargeAmount += sumPirce * Number(settingInfo.tf_date)
+                }
+              } else {
+                // 会员
+                if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                  let hh =  Number(Moment(bookingInfo.end_time).format('HH'))
+                  let mm =  Number(Moment(bookingInfo.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+                  if (hh - hh1 == 0) {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1)
+                      couponMoney = Number(settingInfo.membertf_tf_money1) - Number(settingInfo.membertf_tf_money1)
+                    } else {}
+                  } else {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                      couponMoney = Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                        .membertf_tf_money1) * ((hh - hh1) + 1)
+                    } else {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                      couponMoney = Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                        .membertf_tf_money1) * (hh - hh1)
+                    }
+                  }
+                } else {
+                  totolMoneny += sumPirce * Number(settingInfo.membertf_tf_date)
+                  chargeAmount += sumPirce * Number(settingInfo.membertf_tf_date)
+                  couponMoney = sumPirce * Number(settingInfo.tf_date) - sumPirce * Number(settingInfo.membertf_tf_date)
+                }
+              }
+            }
+          }
+        } else {
+          // 正常时间订房
+          console.log('正常时间订房')
+          if (diffDay == 0) {
+            totolMoneny = sumPirce * (diffDay + 1)
+          } else {
+            totolMoneny = sumPirce * (diffDay)
+            // 非会员
+            if (!this.bookingInfo.member_card) {
+              // 下午退房时间之内按小时收费
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                // console.log('正常时间订房-下午退房时间之内按小时收费')
+                let hh = Number(Moment(bookingInfo.end_time).format('HH'))
+                let mm = Number(Moment(bookingInfo.end_time).format('mm'))
+
+                let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                if (hh - hh1 == 0) {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.tf_money1)
+                    chargeAmount += Number(settingInfo.tf_money1)
+
+                  } else {}
+                } else {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                  } else {
+                    totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
+                  }
+                }
+              } else if (HHend_time > settingInfo.tfend_time2) {
+                // 下午退房时间之内按天收费
+                totolMoneny += sumPirce * Number(settingInfo.tf_date)
+                chargeAmount += sumPirce * Number(settingInfo.tf_date)
+              } else {}
+            } else {
+              // 会员
+              if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                let hh = Number(Moment(bookingInfo.membertf_end_time1).format('HH'))
+                let mm = Number(Moment(bookingInfo.membertf_end_time1).format('mm'))
+                let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+                if (hh - hh1 == 0) {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1)
+                    couponMoney = Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                  } else {}
+                } else {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    couponMoney = Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                      .membertf_tf_money1) * ((hh - hh1) + 1)
+                    console.log(couponMoney)
+                  } else {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    couponMoney = Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                      .membertf_tf_money1) * (hh - hh1)
+                  }
+                }
+              } else if (HHend_time > settingInfo.membertf_end_time2) {
+                totolMoneny += sumPirce * Number(settingInfo.membertf_tf_date)
+                chargeAmount += sumPirce * Number(settingInfo.membertf_tf_date)
+                couponMoney =sumPirce * Number(settingInfo.tf_date)-sumPirce * Number(settingInfo.membertf_tf_date)
+              }
+            }
+          }
+        }
+        this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2)
+        console.log('chargeAmount', chargeAmount)
+        console.log('couponMoney', couponMoney)
+        this.checkInForm.chargeAmount = chargeAmount.toFixed(2)
+        this.checkInForm.couponMoney = couponMoney.toFixed(2)
+        this.checkInForm.residueMoney = Number(totolMoneny).toFixed(2) - Number(bookingInfo.pre_money)
+        if (bookingInfo.member_card) {
+          this.checkInForm.RoomSumMoney = Number(totolMoneny).toFixed(2) * (Number(this.VIPInfo.discount) / 100)
+          this.checkInForm.residueMoney = (Number(totolMoneny).toFixed(2) * (Number(this.VIPInfo.discount) / 100)) -
+            Number(bookingInfo.pre_money)
+        }
+      }
     },
     created() {
       this.getRows()
+      this.getMoneyWay()
     },
     methods: {
-      // 
+      submitForm() {
+        this.$refs.checkInForm.validate((valid) => {
+          if (valid) {
+            let bookingInfo = this.bookingInfo
+            let checkInForm = this.checkInForm
+            let params = {
+              id: bookingInfo.id,
+              type: bookingInfo.type,
+              groupname: bookingInfo.groupname,
+              nationality: bookingInfo.nationality,
+              zhengjian: bookingInfo.zhengjian,
+              tel: bookingInfo.tel,
+              member_card: bookingInfo.member_card,
+              name: bookingInfo.name,
+              zhengjian_no: bookingInfo.zhengjian_no,
+              address: bookingInfo.address,
+              start_time: bookingInfo.start_time,
+              end_time: bookingInfo.end_time,
+              datecount: bookingInfo.datecount,
+              roomtype_info: this.setTableRoomPrice(this.roomTableData),
+              count_money: checkInForm.RoomSumMoney,
+              yajin_money: checkInForm.deposit,
+              pre_money: bookingInfo.pre_money,
+              is_card_pay: checkInForm.is_card_pay,
+              card_money: checkInForm.payCardMoney,
+              paymethod: checkInForm.payfor,
+              other_pay_money: checkInForm.advanceMoney,
+              total_count: Number(checkInForm.RoomSumMoney) + Number(checkInForm.deposit),
+              jia_money: checkInForm.chargeAmount,
+              discount_money: checkInForm.couponMoney,
+            }
+            orderlivein(params).then(res => {
+              res = typeof res == "string" ? JSON.parse(res) : res;
+              console.log(res)
+              if (res.code == 0) {
+                if (res.data == 1) {
+                  this.message('success', res.message)
+                  this.CheckInDialogVisible = false
+                  this.getRows()
+                }
+              } else {
+                this.message("error", res.message)
+              }
+            })
+          }
+        })
+      },
+      // 获取table总价格
+      getTablePice(v) {
+        let sum = 0
+        v.forEach(v => {
+          console.log(v.price)
+          sum += Number(v.price)
+        });
+        return Number(sum)
+      },
+      // 获取房间名房间数
+      setTableRoomPrice(v) {
+        console.log(v)
+        let str = ""
+        v.forEach(item => {
+          str += `${item.id},${item.roomtype},${item.room_no},${item.price},${item.floor},${item.kx_count};`
+        });
+        str = str.substring(0, str.length - 1)
+        console.log('tag', str)
+        return str
+      },
       getRows(start_time, end_time, keys) {
         let params = {
           page: this.pagination.currentPage,
@@ -933,19 +845,153 @@
           }
         })
       },
+      // 计费设置
+      getMoneyWay() {
+        settingInfo().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.settingInfo = res.data
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+
+      // 可选房型查询
+      handleChangeRoomType() {
+        orderYdroomtype({
+          start_time: getAllTime(this.bookingInfo.start_time),
+          roomtype: this.setCheckRoomTypeStr(this.checkRoomType),
+          end_time: getAllTime(this.bookingInfo.end_time)
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          // console.log(res)
+          if (res.code == 0) {
+            this.$forceUpdate()
+            this.roomType = res.data
+            this.louceng = res.room_list
+          } else {
+            this.$forceUpdate()
+            this.message("error", res.message)
+          }
+        })
+      },
+      setCheckRoomTypeStr(v) {
+        let str = ""
+        v.forEach(element => {
+          str += element + ","
+        });
+        str = str.substring(0, str.length - 1)
+        // console.log(str)
+        return str
+      },
+      bookingRoom(id) {
+        this.getPaymethodList()
+        this.CheckInDialogVisible = true
+        orderInfo({
+          id
+        }).then(async res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res, 'orderInfo')
+          if (res.code == 0) {
+            let {
+              data
+            } = res
+            this.bookingInfo = data
+            let params = {
+              start_time: data.start_time,
+              end_time: data.end_time,
+              order_id: data.id
+            }
+            await this.cheackRoom(params, data)
+            this.IsVIPserarch(data.tel, data.member_card)
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      //充值方式
+      getPaymethodList() {
+        paymethod().then(res => {
+          res = JSON.parse(res);
+          // console.log(res, "获取充值列表");
+          if (res.code === 0) {
+            this.payForForhod = res.data;
+          } else {
+            this.message("error", res.message);
+          }
+        });
+      },
+      // 查询是否是会员
+      IsVIPserarch(member_card, vipcard) {
+        if (!vipcard) {
+          return
+        }
+        orderMemberinfo({
+          member_card
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res, 'orderMemberinfo')
+          if (res.code == 0) {
+            this.VIPInfo = res.data
+            this.vipCardMoney = res.data.balance + '余额'
+            this.disabledMeber = false
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      // 查询可选房型
+      cheackRoom(v, data) {
+        orderYdroomtype(v).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res, 'orderYdroomtype')
+          if (res.code == 0) {
+            this.roomType = res.data
+            this.louceng = res.room_list
+            data.room_info.forEach((v, i) => this.$set(this.isActiveArr, i, v.room_id))
+          } else {
+            this.message("error", res.message)
+          }
+        })
+      },
+      chooseRoom(v) {
+        let roomTableData = this.roomTableData
+        let len = -1
+        try {
+          roomTableData.forEach((item, index) => {
+            if (item.id == v.id) {
+              len = index
+              throw new Error("end")
+            } else {
+              len = -1
+            }
+          })
+        } catch (e) {}
+        if (len >= 0) {
+          roomTableData.splice(len, 1)
+          this.isActiveArr.splice(len, 1)
+          this.$forceUpdate()
+          return
+        }
+        roomTableData.push(v);
+        this.isActiveArr.push(v.id);
+        this.$forceUpdate()
+      },
       // 时间选择器change
       handleChangePicker() {
         let start = getAllTime(this.BookingForm.value1[0])
         let end = getAllTime(this.BookingForm.value1[1])
-         if(!start||!end){
+        if (!start || !end) {
           this.getRows()
         }
         this.getRows(start, end)
       },
       // inputChange时间
-      handleChangeOfTel(){
-        if(!this.BookingForm.name){
-           this.getRows()
+      handleChangeOfTel() {
+        if (!this.BookingForm.name) {
+          this.getRows()
         }
       },
       // 根据手机号查询
@@ -963,10 +1009,65 @@
         // console.log(`当前页: ${val}`);
         this.getRows();
       },
+      handleReduce(i, v) {
+        let roomTableData = this.roomTableData;
+        roomTableData.splice(i, 1);
+        this.isActiveArr.forEach((item, i) => {
+          if (v.id === item) {
+            this.isActiveArr.splice(i, 1)
+          }
+        })
+      },
+
+      // 设置最后一行合计
+      getSumMoney({
+        columns,
+        data
+      }) {
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 1 || index === 4) {
+            return;
+          }
+          const values = data.map((item) => Number(item[column.property]));
+          if (!values.every((value) => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index];
+          } else {
+            sums[index] = "结算";
+          }
+        });
+        if (sums[3] != '结算') {
+          this.checkInForm.fangfei = sums[3]
+        }
+
+        return sums;
+      },
+      CheckInDialogVisibleClose() {
+        this.bookingInfo = {}
+        this.VIPInfo = ""
+        this.payForForhod = ""
+        this.disabledMeber = true
+        this.disabledCardKkNum = true
+        this.vipCardMoney = ""
+
+        this.roomType = []
+        this.checkRoomType = []
+        this.louceng = ""
+        this.isActiveArr = []
+        this.checkInForm = {}
 
 
 
-         //预订取消
+      },
+      //预订取消
       handleCancel(id) {
         this.confirm()
           .then(() => {
@@ -988,10 +1089,10 @@
 
 
       //详情
-      handleDetail(row){
+      handleDetail(row) {
         console.log(row)
-        this.detail=row
-        this.detailDialogVisible=true;
+        this.detail = row
+        this.detailDialogVisible = true;
       },
 
 
@@ -1000,6 +1101,19 @@
 </script>
 
 <style lang="less" scoped>
+  div /deep/.activeBlue {
+    border: 1px solid #f00 !important;
+    color: #f00 !important;
+    padding: 5px 10px !important;
+    margin: 0 10px 10px 0 !important;
+
+    span {
+      display: block !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
+    }
+  }
+
   .el-main {
     background: #fff;
 
@@ -1035,7 +1149,9 @@
         font-size: 18px;
       }
 
+
       .chooseRoom {
+        min-height: 30px;
         background: #f9f9f9;
         padding: 20px 20px 0;
         margin: 10px 0 20px;
@@ -1047,7 +1163,7 @@
         }
 
         .chooseRoomRight {
-          height: 280px;
+          max-height: 280px;
           overflow-y: auto;
         }
 
@@ -1063,7 +1179,7 @@
 
             flex-wrap: wrap;
 
-            li {
+            .fangjian {
               padding: 5px 10px;
               border: 1px solid #333;
               margin: 0 10px 10px 0;

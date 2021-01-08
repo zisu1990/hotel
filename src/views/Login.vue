@@ -54,7 +54,7 @@
         //登录表单
         loginForm: {
           username: "zhuliu",
-          password: "qy123456",
+          password: "qy12345",
           code: "",
         },
 

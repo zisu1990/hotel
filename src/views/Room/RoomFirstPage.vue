@@ -73,17 +73,9 @@
               <h2>房态维护</h2>
             </div>
             <ul class="roomType-icon">
-              <li>
-                <img src="@/assets/image/cleaning.png" alt srcset />
-                <span>打扫</span>
-              </li>
-              <li>
-                <img src="@/assets/image/repair.png" alt srcset />
-                <span>维修</span>
-              </li>
-              <li>
-                <img src="@/assets/image/repairOver.png" alt srcset />
-                <span>维修结束</span>
+              <li v-for="(item,index) in stateList" :key="index" @click="submitRoomState(item)">
+                <img :src="item.img" alt srcset />
+                <span>{{item.text}}</span>
               </li>
             </ul>
           </div>
@@ -128,17 +120,16 @@
             <div class="roomType-title">
               <span class="iconBlue"></span>
               <h2>系统消息</h2>
+              <p @click="handleClickAllMessage">全部已读</p>
             </div>
-            <div class="systemMessage">
-              <p>
-                <span>已读:</span>
-                XX预订房间 即将到期,请及时处理.
-              </p>
-              <p>
-                <span>未读:</span>
-                XX预订房间 即将到期,请及时处理.
+            <div v-show="roomMessage.length" class="systemMessage">
+              <p @click="handleClickMessage(item)" :style="systemMessageStyle" v-for="(item,index) in roomMessage"
+                :key="index">
+                <span>{{item.is_read ? '未读' : '未读'}}</span>
+                {{item.des}}
               </p>
             </div>
+            <div v-show="!roomMessage.length" class="nomorl">--没有更多消息--</div>
           </div>
         </div>
       </div>
@@ -151,7 +142,10 @@
     roomsRoomcount,
     roomLists,
     roomtypeLists,
-    roomModify
+    roomModify,
+    noticeIndex,
+    noticeReadone,
+    noticeReadall
   } from "@/api/RoomFirstPage.js";
   import {
     saveToken,
@@ -161,6 +155,22 @@
   export default {
     data() {
       return {
+        stateList: [{
+            img: require("@/assets/image/cleaning.png"),
+            text: "清扫",
+            state: "1"
+          },
+          {
+            img: require("@/assets/image/repair.png"),
+            text: "维修",
+            state: "2"
+          },
+          {
+            img: require("@/assets/image/repairOver.png"),
+            text: "维修结束",
+            state: "3"
+          }
+        ],
         // 房态标识
         roomTip: [{
             text: "总",
@@ -203,17 +213,17 @@
         checkRoomState: [],
         roomType: [],
         checkRoomType: [],
-        roomStateValue: "",
-        roomStateOption: [{
-          name: "清扫",
-          id: 1
-        }, {
-          name: "维修",
-          id: 2
-        }, {
-          name: "维修结束",
-          id: 3
-        }],
+        // roomStateValue: "",
+        // roomStateOption: [{
+        //   name: "清扫",
+        //   id: 1
+        // }, {
+        //   name: "维修",
+        //   id: 2
+        // }, {
+        //   name: "维修结束",
+        //   id: 3
+        // }],
         // 房间id
         roomID: "",
         // 选择的房间状态
@@ -273,6 +283,14 @@
         timeoutObj: null, //心跳心跳倒计时
         serverTimeoutObj: null, //心跳倒计时
         timeoutnum: null, //断开 重连倒计时
+
+
+        // time: 300000,
+        time: 300000,
+        interval: -1,
+
+        roomMessage: {},
+        systemMessageStyle: {},
       };
     },
     created() {
@@ -325,54 +343,54 @@
       },
     },
     methods: {
-      initWebpack() {
-        let url = "wss://api.anhuiqingyou.com/api/notice/index"
-        this.ws = new WebSocket(url);
-        this.ws.onopen = this.onopen;
-        this.ws.onmessage = this.onmessage;
-        this.ws.onclose = this.onclose;
-        this.ws.onerror = this.onerror;
-      },
-      reconnect() { //重新连接
-        var that = this;
-        if (that.lockReconnect) {
-          return;
-        };
-        that.lockReconnect = true;
-        //没连接上会一直重连，设置延迟避免请求过多
-        that.timeoutnum && clearTimeout(that.timeoutnum);
-        that.timeoutnum = setTimeout(function () {
-          //新连接
-          that.initWebpack();
-          that.lockReconnect = false;
-        }, 5000);
-      },
-      reset() { //重置心跳
-        var that = this;
-        //清除时间
-        clearTimeout(that.timeoutObj);
-        clearTimeout(that.serverTimeoutObj);
-        //重启心跳
-        that.start();
-      },
-      start() { //开启心跳
-        var self = this;
-        self.timeoutObj && clearTimeout(self.timeoutObj);
-        self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
-        self.timeoutObj = setTimeout(function () {
-          //这里发送一个心跳，后端收到后，返回一个心跳消息，
-          if (self.ws.readyState == 1) { //如果连接正常
-            self.ws.send("heartCheck");
-          } else { //否则重连
-            self.reconnect();
-          }
-          self.serverTimeoutObj = setTimeout(function () {
-            //超时关闭
-            self.ws.close();
-          }, self.timeout);
+      // initWebpack() {
+      //   let url = "wss://api.anhuiqingyou.com/api/notice/index"
+      //   this.ws = new WebSocket(url);
+      //   this.ws.onopen = this.onopen;
+      //   this.ws.onmessage = this.onmessage;
+      //   this.ws.onclose = this.onclose;
+      //   this.ws.onerror = this.onerror;
+      // },
+      // reconnect() { //重新连接
+      //   var that = this;
+      //   if (that.lockReconnect) {
+      //     return;
+      //   };
+      //   that.lockReconnect = true;
+      //   //没连接上会一直重连，设置延迟避免请求过多
+      //   that.timeoutnum && clearTimeout(that.timeoutnum);
+      //   that.timeoutnum = setTimeout(function () {
+      //     //新连接
+      //     that.initWebpack();
+      //     that.lockReconnect = false;
+      //   }, 5000);
+      // },
+      // reset() { //重置心跳
+      //   var that = this;
+      //   //清除时间
+      //   clearTimeout(that.timeoutObj);
+      //   clearTimeout(that.serverTimeoutObj);
+      //   //重启心跳
+      //   that.start();
+      // },
+      // start() { //开启心跳
+      //   var self = this;
+      //   self.timeoutObj && clearTimeout(self.timeoutObj);
+      //   self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
+      //   self.timeoutObj = setTimeout(function () {
+      //     //这里发送一个心跳，后端收到后，返回一个心跳消息，
+      //     if (self.ws.readyState == 1) { //如果连接正常
+      //       self.ws.send("heartCheck");
+      //     } else { //否则重连
+      //       self.reconnect();
+      //     }
+      //     self.serverTimeoutObj = setTimeout(function () {
+      //       //超时关闭
+      //       self.ws.close();
+      //     }, self.timeout);
 
-        }, self.timeout)
-      },
+      //   }, self.timeout)
+      // },
       onopen() {
         var msg = JSON.stringify({
           token: getToken()
@@ -445,9 +463,50 @@
             query
           });
         }
-
+      },
+      // 系统消息
+      handleInterval() {
+        this.interval = setInterval(() => {
+          this.getMessage()
+        }, this.time);
+      },
+      getMessage() {
+        noticeIndex({
+          to_uid: sessionStorage.getItem("token")
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.roomMessage = res.data
+          } else {
+            this.message("error", res.message)
+            clearInterval(this.interval)
+          }
+        })
+      },
+      handleClickAllMessage() {
+        noticeReadall().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.getMessage()
+          }
+        })
+      },
+      handleClickMessage(v) {
+        noticeReadone({
+          id: v.id
+        }).then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.getMessage()
+          }
+        })
       },
       getRows() {
+        this.getMessage()
+        this.handleInterval()
         this.getTotalState();
         this.getStateLists();
         this.getroomtypeLists()
@@ -602,23 +661,31 @@
 
         // console.log(v)
       },
-      // submitRoomState() {
-      //   // console.log(typeof this.roomID)
-      //   let params = {
-      //     ids: this.roomID + "",
-      //     repair: this.roomStateValue
-      //   }
-      //   roomModify(params).then(res => {
-      //     res = typeof res == "string" ? JSON.parse(res) : res;
-      //     // console.log(res)
-      //     if (res.code == 0) {
-      //       this.getRows()
-      //       this.dialogVisible = false
-      //     } else {
-      //       this.message("error", res.message)
-      //     }
-      //   })
-      // },
+      submitRoomState(v) {
+        // console.log(typeof this.roomID)
+        if (!this.roomID) {
+          return this.message('error', '请选择有效的房间')
+        }
+        let params = {
+          ids: this.roomID + "",
+          repair: v.state
+        }
+        this.confirm("您确定修改此房间的房态吗").then(() => {
+          roomModify(params).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            // console.log(res)
+            if (res.code == 0) {
+              this.message("success", res.message)
+              this.getRows()
+            } else {
+              this.message("error", res.message)
+            }
+          })
+        }).catch(() => {
+          this.roomID = ''
+        })
+
+      },
     },
   };
 </script>
@@ -646,6 +713,18 @@
       background: #fff;
       padding: 5px 10px 10px;
 
+      .nomorl {
+        height: 40px;
+        background: #f2f2f2;
+        font-size: 12px;
+        text-align: center;
+        line-height: 40px;
+        border-radius: 5px;
+        color: #9999;
+        width: 100%;
+        margin-top: 10px;
+      }
+
       .systemMessage {
         padding-top: 10px;
         font-size: 14px;
@@ -657,6 +736,15 @@
           span {
             color: #000;
           }
+        }
+
+        p:hover {
+          color: rgb(235, 54, 54);
+          cursor: pointer;
+        }
+
+        p:hover span {
+          color: #000;
         }
       }
     }
@@ -674,6 +762,23 @@
           line-height: 22px;
           font-size: 20px;
           font-weight: normal;
+        }
+
+        p {
+          font-size: 12px;
+          width: 60px;
+          height: 30px;
+          border-radius: 5px;
+          background: #005ab9;
+          margin-left: 70px;
+          line-height: 30px;
+          color: #fff;
+          text-align: center;
+        }
+
+        p:hover {
+          color: rgb(235, 54, 54);
+          cursor: pointer;
         }
 
         span {
@@ -713,6 +818,14 @@
           font-size: 14px;
           color: #989898;
         }
+      }
+
+      li:hover {
+        cursor: pointer;
+      }
+
+      li:hover span {
+        color: red;
       }
     }
   }
