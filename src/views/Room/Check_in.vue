@@ -259,7 +259,8 @@
   import {
     getAllTime,
     getDayTime,
-    isBefore
+    isBefore,
+    isSame
   } from '@/utils/moment.js'
   import Moment from 'moment'
   export default {
@@ -668,7 +669,10 @@
           this.isActiveArr = []
           return
         }
-        if (!isBefore(new Date(), v)) {
+        let now = Moment(new Date()).format('YYYY-MM-DD HH:mm')
+        let chooseDate = Moment(v).format('YYYY-MM-DD HH:mm')
+        // console.log(isBefore(chooseDate, now))
+        if (isBefore(chooseDate, now)) {
           this.message('warning', '入住时间不能小于当前时间')
           this.roomType = []
           this.louceng = []
@@ -882,10 +886,10 @@
                     if (mm > mm2) {
                       totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
                       chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
-                      console.log('totolMoneny', totolMoneny)
-                      console.log('chargeAmount', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
-                      console.log('tf_money1', Number(settingInfo.tf_money1) * ((hh - hh1) + 1))
-                      console.log('membertf_tf_money1', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
+                      // console.log('totolMoneny', totolMoneny)
+                      // console.log('chargeAmount', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
+                      // console.log('tf_money1', Number(settingInfo.tf_money1) * ((hh - hh1) + 1))
+                      // console.log('membertf_tf_money1', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
                       couponMoney += Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
                         .membertf_tf_money1) * ((hh - hh1) + 1)
                     } else {
@@ -898,7 +902,8 @@
                 } else {
                   totolMoneny += sums[2] * Number(settingInfo.membertf_tf_date)
                   chargeAmount += sums[2] * Number(settingInfo.membertf_tf_date)
-                  couponMoney = sums[2] * Number(settingInfo.tf_date) - sums[2] * Number(settingInfo.membertf_tf_date)
+                  couponMoney = sums[2] * Number(settingInfo.tf_date) - sums[2] * Number(settingInfo
+                    .membertf_tf_date)
                 }
               }
 

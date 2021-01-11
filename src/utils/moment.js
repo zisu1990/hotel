@@ -98,9 +98,13 @@ export function getAllTime(v) {
     return moment(v).format("YYYY-MM-DD HH:mm:ss")
 }
 export function getDayTime(start, end) {
-    let str = moment(end).diff(moment(start), 'days') || '1'
-    return str 
+    let str = Math.ceil(moment(end).diff(moment(start), 'hour') / 24)
+    return str
 }
 export function isBefore(start, end) {
     return moment(start).isBefore(moment(end))
 }
+export function isSame(start, end) {
+    return moment(start).isSame(moment(end))
+}
+

@@ -26,7 +26,6 @@
 
       <el-table :data="BookingTableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="30" align="center"></el-table-column>
-        <el-table-column prop="OddNumber" label="预订单号" width="100" align="center"></el-table-column>
         <el-table-column prop="type" label="客户类型" width="80" align="center"></el-table-column>
         <el-table-column prop="groupname" label="团体名称" show-overflow-tooltip width="80" align="center">
         </el-table-column>
@@ -500,8 +499,8 @@
           v1.id == v ? arr.push(v1) : ''))) : ""
         this.roomTableData = arr
       },
-      roomTableData(val) {
-        let sumPirce = this.getTablePice(val)
+      tableChangeSum() {
+        let sumPirce = this.getTablePice(this.roomTableData)
         let totolMoneny
         let checkInForm = this.checkInForm
         let settingInfo = this.settingInfo
@@ -632,8 +631,8 @@
               } else {
                 // 会员
                 if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
-                  let hh =  Number(Moment(bookingInfo.end_time).format('HH'))
-                  let mm =  Number(Moment(bookingInfo.end_time).format('mm'))
+                  let hh = Number(Moment(bookingInfo.end_time).format('HH'))
+                  let mm = Number(Moment(bookingInfo.end_time).format('mm'))
                   let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
                   let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
                   if (hh - hh1 == 0) {
@@ -730,7 +729,7 @@
               } else if (HHend_time > settingInfo.membertf_end_time2) {
                 totolMoneny += sumPirce * Number(settingInfo.membertf_tf_date)
                 chargeAmount += sumPirce * Number(settingInfo.membertf_tf_date)
-                couponMoney =sumPirce * Number(settingInfo.tf_date)-sumPirce * Number(settingInfo.membertf_tf_date)
+                couponMoney = sumPirce * Number(settingInfo.tf_date) - sumPirce * Number(settingInfo.membertf_tf_date)
               }
             }
           }
