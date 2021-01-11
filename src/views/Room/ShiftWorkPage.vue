@@ -7,7 +7,7 @@
             <p class="title">换班结算</p>
           </el-row>
 
-          <el-form ref="jiaoBanRef" :model="jiaoban" label-width="130px" >
+          <el-form ref="jiaoBanRef" :model="jiaoban" label-width="130px" :rules="rules">
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="交班人：">
@@ -35,7 +35,6 @@
               <el-col>
                 <el-table
                   stripe
-                  
                   :data="banTableData"
                   :header-cell-style="{ textAlign: 'center' }"
                   :cell-style="{ textAlign: 'center' }"
@@ -84,12 +83,12 @@
               </el-col>-->
               <el-col :span="3">
                 <span style="margin-bottom:20px; display:inline-block;">类目</span>
-                <br >
+                <br>
                 <span>合计</span>
               </el-col>
               <el-col :span="3">
                 <span style="margin-bottom:20px; display:inline-block;">收入现金金额</span>
-                <br >
+                <br>
                 <span>{{xianjin_count}}</span>
               </el-col>
               <el-col :span="3">
@@ -131,7 +130,7 @@
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
-                <el-form-item label="接班人：">
+                <el-form-item label="接班人：" prop="jieban_name">
                   <el-select v-model="jiaoban.jieban_name">
                     <el-option
                       v-for="(item,index) in userList"
@@ -149,27 +148,21 @@
               </el-col>
               <el-col :span="7">
                 <el-form-item label="上交现金额：">
-                  <el-input clearable v-model="jiaoban.shangjiao_money"></el-input>
+                  <el-input clearable v-model="jiaoban.shangjiao_money" @input="moneyInput"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-
 
             <el-row type="flex" justify="space-between">
               <el-col :span="7">
                 <el-form-item label="交班现金额：">
-                  <el-input clearable v-model="jiaoban.xianjin"></el-input>
+                  <el-input v-model="jiaoban.jieban_money" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="7"></el-col>
 
-              <el-col :span="7">
-              
-              </el-col>
+              <el-col :span="7"></el-col>
             </el-row>
-
-
-            
 
             <el-row style="margin-top: 30px">
               <el-form-item>
@@ -188,20 +181,35 @@ import { banUserList, banInfo, banAdd } from "@/api/jiaoban";
 export default {
   data() {
     return {
-      jiaoban: {},
+      jiaoban: {
+        jiaoban_name: "",
+        yjieban_money: "",
+        jiaoban_time: "",
+        jieban_name: "",
+        xianjin: "",
+        shangjiao_money: 0,
+        jieban_money: 0
+      },
+
+      // 表单验证规则
+      rules: {
+        jieban_name: [
+          { required: true, message: "请选择接班人", trigger: "blur" }
+        ]
+      },
 
       //   表格
       banTableData: [],
-      // tongJiTable: [],
+
       userList: [],
       xianjin_count: "",
       other_money_count: "",
       fangfei_count: "",
-      other_tui_money:"",
-      sunpei_count:"",
-      yajin_count:"",
-      chongzhi_money:"",
-      xianjin_tui_money:""
+      other_tui_money: "",
+      sunpei_count: "",
+      yajin_count: "",
+      chongzhi_money: "",
+      xianjin_tui_money: ""
     };
   },
   created() {
@@ -213,9 +221,9 @@ export default {
       banUserList().then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res, "jiaoban");
-        
+
         if (res.code == 0) {
-            this.userList = res.data;
+          this.userList = res.data;
         } else {
           this.message("error", res.message);
         }
@@ -242,31 +250,35 @@ export default {
       });
     },
 
-
+    moneyInput(v) {
+      this.jiaoban.jieban_money = this.jiaoban.xianjin - v;
+      console.log(this.jiaoban.jieban_money);
+    },
 
     submit() {
+      this.$refs.jiaoBanRef.validate(vaild => {
+        if (vaild) {
+          let parmas = {
+            jiaoban_name: this.jiaoban.jiaoban_name,
+            shangjiao_money: this.jiaoban.shangjiao_money,
+            jieban_name: this.jiaoban.jieban_name,
+            jieban_money: this.jiaoban.jieban_money,
+            xianjin: this.jiaoban.xianjin,
+            yjieban_money: this.jiaoban.yjieban_money
+          };
 
-      let parmas = {
-        jiaoban_name: this.jiaoban.jiaoban_name,
-        shangjiao_money: this.jiaoban.shangjiao_money,
-        jieban_name: this.jiaoban.jieban_name,
-        jieban_money: (this.jiaoban.xianjin)-(this.jiaoban.shangjiao_money),
-        xianjin:this.jiaoban.xianjin,
-        yjieban_money:this.jiaoban.yjieban_money
-      };
-      if((this.jiaoban.shangjiao_money<0) || (this.jiaoban.shangjiao_money ='') ){
-        banAdd(parmas).then(res => {
-          res = typeof res == "string" ? JSON.parse(res) : res;
-          console.log(res, "提交");
-            this.$router.push('RoomFirstPage')
-          if (res.code == 0) {
-          } else {
-            this.message("error", res.message);
-          }
-        });
-      }else{
-        this.message('error','上交金额不足')
-      }
+          banAdd(parmas).then(res => {
+            res = typeof res == "string" ? JSON.parse(res) : res;
+            // console.log(res, "提交");
+            if (res.code == 0) {
+              this.$router.push("RoomFirstPage");
+              this.message("success", res.message);
+            } else {
+              this.message("error", res.message);
+            }
+          });
+        }
+      });
     }
   }
 };
