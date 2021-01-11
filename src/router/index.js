@@ -50,6 +50,7 @@ import Night from '../views/Night/Night.vue';
 
 import ReportSetting from '../views/ReportSetting/ReportSetting.vue';
 
+import ZhengJian from '../views/ZhengJian/ZhengJian.vue';
 
 Vue.use(VueRouter)
 // {
@@ -277,12 +278,18 @@ const routes = [{
         title: '国籍设置'
       }
     },
-    ,
     {
       path: '/ReportSetting', //数据报表设置
       component: ReportSetting,
       meta: {
         title: '数据报表设置'
+      }
+    },
+    {
+      path: '/ZhengJian', //证件类型设置
+      component: ZhengJian,
+      meta: {
+        title: '证件类型设置'
       }
     },
   ]

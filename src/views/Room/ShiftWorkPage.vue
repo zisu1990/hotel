@@ -154,6 +154,21 @@
               </el-col>
             </el-row>
 
+
+            <el-row type="flex" justify="space-between">
+              <el-col :span="7">
+                <el-form-item label="交班现金额：">
+                  <el-input clearable v-model="jiaoban.xianjin"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="7"></el-col>
+
+              <el-col :span="7">
+              
+              </el-col>
+            </el-row>
+
+
             
 
             <el-row style="margin-top: 30px">
@@ -226,8 +241,11 @@ export default {
         }
       });
     },
+
+
+
     submit() {
-      
+
       let parmas = {
         jiaoban_name: this.jiaoban.jiaoban_name,
         shangjiao_money: this.jiaoban.shangjiao_money,
@@ -236,7 +254,7 @@ export default {
         xianjin:this.jiaoban.xianjin,
         yjieban_money:this.jiaoban.yjieban_money
       };
-      if(this.jiaoban.shangjiao_money<=this.jiaoban.xianjin){
+      if((this.jiaoban.shangjiao_money<0) || (this.jiaoban.shangjiao_money ='') ){
         banAdd(parmas).then(res => {
           res = typeof res == "string" ? JSON.parse(res) : res;
           console.log(res, "提交");

@@ -29,14 +29,14 @@
               v-model="formDevice.tfend_time1"
               placeholder="请选择时间"
               style="width: 180px"
-               value-format="HH:mm:ss"
+              value-format="HH:mm:ss"
             ></el-time-picker>每超过1小时加
             <el-input v-model="formDevice.tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
               v-model="formDevice.tfend_time2"
               placeholder="请选择时间"
               style="width: 180px"
-               value-format="HH:mm:ss"
+              value-format="HH:mm:ss"
             ></el-time-picker>加收
             <el-input v-model="formDevice.tf_date" clearable></el-input>天房费；
           </el-row>
@@ -51,13 +51,13 @@
             <el-time-picker
               v-model="formDevice.membertf_end_time1"
               placeholder="请选择时间"
-               value-format="HH:mm:ss"
+              value-format="HH:mm:ss"
               style="width: 180px"
             ></el-time-picker>，每小时加收
             <el-input v-model="formDevice.membertf_tf_money1" clearable></el-input>元房费；退房超过
             <el-time-picker
               v-model="formDevice.membertf_end_time2"
-               value-format="HH:mm:ss"
+              value-format="HH:mm:ss"
               placeholder="请选择时间"
               style="width: 180px"
             ></el-time-picker>加收
@@ -88,7 +88,12 @@
 
           <el-row align="middle" type="flex" justify="start">
             7、酒店业务系统自动夜审时间设置
-            <el-time-picker v-model="formDevice.ys_time"  value-format="HH:mm:ss" placeholder="请选择时间"></el-time-picker>
+            <el-time-picker
+              v-model="formDevice.ys_time"
+              style="width: 180px"
+              value-format="HH:mm:ss"
+              placeholder="请选择时间"
+            ></el-time-picker>
           </el-row>
 
           <el-row align="middle" type="flex" justify="start">8、酒店业务员班次设置:</el-row>
@@ -109,7 +114,7 @@
                 <el-table-column prop="date" label="班次工作时段">
                   <template v-slot="scope">
                     <el-time-picker
-                     value-format="HH:mm:ss"
+                      value-format="HH:mm:ss"
                       is-range
                       v-model="scope.row.time"
                       range-separator="至"
@@ -142,11 +147,25 @@
 </template>
 <script>
 import { getAllTime, getDayTime } from "@/utils/moment.js";
-import { SetLogo, GetInfo ,SetBill} from "@/api/BillSetting";
+import { SetLogo, GetInfo, SetBill } from "@/api/BillSetting";
 export default {
   data() {
     return {
-      formDevice: {},
+      formDevice: {
+        setTime: "",
+        yz_date: "",
+        tfend_time1: "",
+        tf_money1: "",
+        tfend_time2: "",
+        tf_date: "",
+        datecount: "",
+        membertf_end_time1: "",
+        membertf_tf_money1: "",
+        membertf_end_time2: "",
+        membertf_tf_date: "",
+        tel: "",
+        ys_time: ""
+      },
 
       // 夜间入住时间段
       start_time: "",
@@ -155,12 +174,11 @@ export default {
       tableData: [
         {
           name: "早班",
-          time: ""
+          time: []
         }
       ],
 
-      logo: "",
-
+      logo: ""
     };
   },
   created() {
@@ -173,17 +191,19 @@ export default {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res, "计费详情");
         if (res.code === 0) {
-          this.formDevice = res.data;
-   
-          this.logo=res.data.logo;
+          
+          this.logo = res.data.logo;
+
           this.tableData = res.data.ban_info;
-          // this.formDevice.tfend_time1=res.data.tfend_time1
-            this.tableData = res.data.ban_info;
-            let arrTime = []
-            arrTime.push(res.data.yzstart_time)
-            arrTime.push(res.data.yzend_time)
-            this.formDevice.setTime = arrTime
-            console.log(arrTime)
+          this.formDevice = res.data;
+          let arrTime = [];
+          arrTime.push(res.data.yzstart_time);
+          arrTime.push(res.data.yzend_time);
+          this.formDevice.setTime = arrTime;
+          console.log(arrTime);
+
+
+
         } else {
           this.message("error", res.message);
         }
@@ -198,8 +218,7 @@ export default {
         res = typeof res == "string" ? JSON.parse(res) : res;
         console.log(res);
         if (res.code == 0) {
-          this.logo =
-            "https://api.anhuiqingyou.com/uploads/" + res.data[0][0];
+          this.logo = "https://api.anhuiqingyou.com/uploads/" + res.data[0][0];
         } else {
           this.message("error", res.message);
         }
@@ -245,20 +264,20 @@ export default {
       }
       tableData.splice(v.$index, 1);
     },
-  handlePickerChange(){
-    this.$forceUpdate()
-  },
+    handlePickerChange() {
+      this.$forceUpdate();
+    },
     // 提交表单
     submitForm() {
-        let ban_info="";
-        this.tableData.forEach(item =>{
-          let zaoTime=item.time[0]
-          let wanTime=item.time[1]
-          let time=zaoTime+"-"+wanTime
-          ban_info += `${item.name},${time};`;
-        });
-          ban_info = ban_info.substring(0, ban_info.length - 1);
-          // console.log(ban_info)
+      let ban_info = "";
+      this.tableData.forEach(item => {
+        let zaoTime = item.time[0];
+        let wanTime = item.time[1];
+        let time = zaoTime + "-" + wanTime;
+        ban_info += `${item.name},${time};`;
+      });
+      ban_info = ban_info.substring(0, ban_info.length - 1);
+      // console.log(ban_info)
 
       let parmas = {
         yzstart_time: this.formDevice.setTime[0],
@@ -269,9 +288,7 @@ export default {
         tfend_time2: this.formDevice.tfend_time2,
         tf_date: this.formDevice.tf_date,
         datecount: this.formDevice.datecount,
-        membertf_end_time1: 
-          this.formDevice.membertf_end_time1
-        ,
+        membertf_end_time1: this.formDevice.membertf_end_time1,
         membertf_tf_money1: this.formDevice.membertf_tf_money1,
         membertf_end_time2: this.formDevice.membertf_end_time2,
         membertf_tf_date: this.formDevice.membertf_tf_date,
@@ -289,9 +306,7 @@ export default {
           this.message("error", res.message);
         }
       });
-    },
-
-  
+    }
   }
 };
 </script>
