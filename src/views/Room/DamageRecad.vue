@@ -312,8 +312,9 @@
               res = typeof res == "string" ? JSON.parse(res) : res;
               console.log(res)
               if (res.code == 0) {
-                if(res.data){
-                  this.message('success',res.message)
+                if (res.data) {
+                  this.message('success', res.message)
+                  this.$router.back()
                 }
               } else {
                 this.message("error", res.message)

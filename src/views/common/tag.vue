@@ -37,6 +37,7 @@
   background-color: white;
   border-bottom: 1px solid #e6e6e6;
   justify-content: space-between;
+  padding-left: 16px;
   .left {
     display: flex;
     height: 40px;

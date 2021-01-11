@@ -326,7 +326,7 @@
       Newmember_card(val) {
         if (!val) {
           this.checkOutForm.is_card_pay = '否'
-        } 
+        }
         deep: true
       },
     },
@@ -350,7 +350,7 @@
             let params = {
               id: roomOrderInfo.id,
               room_info: that.setMultipleSelection(that.multipleSelection),
-              sunpei_info: that.setxiaoFeimultipleSelection(that.xiaoFeimultipleSelection), 
+              sunpei_info: that.setxiaoFeimultipleSelection(that.xiaoFeimultipleSelection),
               is_pay_yajin: checkOutForm.payfor,
               use_yajin_money: checkOutForm.yajindikou,
               count_money: roomOrderInfo.count_money,
@@ -438,6 +438,7 @@
             } = res
             this.tuiInfo = data
             let talArr = []
+            console.log(data.sunpei, 'talArr')
             for (let v of data.sunpei) {
               let talCell = {}
               for (let item of v.wupin_info) {

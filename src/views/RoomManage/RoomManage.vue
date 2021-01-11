@@ -106,7 +106,7 @@
 
           <el-row type="flex" prop="isHaveWIFI" justify="space-between">
             <el-col :span="11">
-              <el-form-item prop="roomWIFI" label="房间WIFI：">
+              <el-form-item label="房间WIFI：">
                 <el-input placeholder="请输入房间WIFI" v-model="formRoomManage.roomWIFI"></el-input>
               </el-form-item>
             </el-col>
@@ -219,11 +219,6 @@
             required: true,
             message: "请选择是否钟点房",
             trigger: "change"
-          }, ],
-          roomWIFI: [{
-            required: true,
-            message: "请输入房间WIFI密码",
-            trigger: "blur"
           }, ],
         },
         roomTypeOptions: [],

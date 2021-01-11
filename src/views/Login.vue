@@ -17,8 +17,8 @@
             placeholder="请输入密码" show-password>></el-input>
         </el-form-item>
 
-        <el-form-item class="codewarp">
-          <el-input clearable v-model="loginForm.code" placeholder="输入验证码" class="code" style="font-size:12px;"></el-input>
+        <el-form-item prop="code" class="codewarp">
+          <el-input clearable v-model="loginForm.code" placeholder="请输入验证码" class="code"></el-input>
           <div class="codeImg">
             <img :src="authCodeImg.img" alt srcset />
           </div>
@@ -84,6 +84,11 @@
               trigger: "blur"
             },
           ],
+          code: [{
+            required: true,
+            message: "请输入验证码",
+            trigger: "blur"
+          }, ]
         },
 
         // 验证码
@@ -117,24 +122,31 @@
       },
       //登录
       login() {
-        let params = {
-          app_type: 3,
-          username: this.loginForm.username,
-          password: this.loginForm.password,
-          captcha_code: this.loginForm.code,
-          captcha_id: this.authCodeImg.id,
-        };
-        loginVerify(params).then((res) => {
-          res = JSON.parse(res);
-          if (res.code === 0) {
-            this.message("success", res.message);
-            saveToken(res.data.token);
-            this.$router.replace("/room");
+        this.$refs.loginFormRef.validate(valite => {
+          if (valite) {
+            let params = {
+              app_type: 3,
+              username: this.loginForm.username,
+              password: this.loginForm.password,
+              captcha_code: this.loginForm.code,
+              captcha_id: this.authCodeImg.id,
+            };
+            loginVerify(params).then((res) => {
+              res = JSON.parse(res);
+              if (res.code === 0) {
+                this.message("success", res.message);
+                saveToken(res.data.token);
+                this.$router.replace("/room");
+              } else {
+                this.updateAuthCodeImg();
+                this.message("error", res.message);
+              }
+            });
           } else {
-            this.updateAuthCodeImg();
-            this.message("error", res.message);
+            return false
           }
-        });
+        })
+
       },
       updateAuthCodeImg() {
         loginCaptcha({}).then((res) => {

@@ -109,7 +109,27 @@
             <el-row type="flex" style="margin-top: 20px" justify="center">
               <el-col :span="6">
                 <el-form-item label="房费总金额：" prop="count_money">
-                  <el-input clearable readonly v-model="formLabelAlign.count_money"></el-input>
+                  <el-input disabled v-model="formLabelAlign.RoomSumMoney"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="加收金额（元）：">
+                  <el-input disabled v-model="formLabelAlign.chargeAmount" :style="{ width: '100%' }"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="优惠金额（元）：">
+                  <el-input disabled v-model="formLabelAlign.couponMoney" :style="{ width: '100%' }"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row type="flex" style="margin-top: 20px" justify="center">
+              <el-col :span="6">
+                <el-form-item label="预订支付方式：" prop="paymethod">
+                  <el-select v-model="formLabelAlign.paymethod" style="width: 100%" @change="selectPay($event)">
+                    <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -122,27 +142,28 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="卡扣金额：">
-                  <el-input clearable :disabled="disabledCardKkNum" v-model="formLabelAlign.cardKkNum">
+                  <el-input :style="{ width: '100%' }" clearable :disabled="disabledCardKkNum"
+                    v-model="formLabelAlign.cardKkNum">
                   </el-input>
+                  <span v-show="VIPInfo" style="
+                  font-size: 14px;
+                  color: #005ab9;
+                  padding-top: 10px;
+                  padding-left: 5px;
+                ">余额：{{VIPInfo.balance}}元</span>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row type="flex" justify="center">
               <el-col :span="6">
-                <el-form-item label="预订支付方式：" prop="paymethod">
-                  <el-select v-model="formLabelAlign.paymethod" style="width: 100%" @change="selectPay($event)">
-                    <el-option v-for="(item,index) in payForForhod" :key="index" :label="item.name" :value="item.name">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
                 <el-form-item label="其他支付金额：" prop="bookMoney">
                   <el-input clearable v-model="formLabelAlign.bookMoney"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6"> </el-col>
+              <el-col :span="6">
+              </el-col>
             </el-row>
 
             <el-row type="flex" style="margin-top: 20px" justify="center">
@@ -176,12 +197,15 @@
     customerType,
     orderYdroomtype,
     orderAdd,
-    orderMemberinfo
+    orderMemberinfo,
+    settingInfo
   } from "@/api/RoomBooking.js";
   import {
     getAllTime,
-    getDayTime
+    getDayTime,
+    isBefore,
   } from '@/utils/moment.js'
+  import Moment from 'moment'
   export default {
     data() {
       var checkPhone = (rule, value, callback) => {
@@ -231,15 +255,11 @@
         // 表单值
         tuanti: true,
         formLabelAlign: {
-          nationality: "",
-          remark: "",
-          bookMoney: "",
-          cardKkNum: "",
-          remark: "",
-          is_card_pay: "",
-          member_card: "",
-          count_money: ""
+          RoomSumMoney: 0,
+          chargeAmount: 0,
+          couponMoney: 0
         },
+        VIPInfo: "",
         // 会员卡支付disabled
         disabledMember_card: true,
         // 卡扣金额disabled
@@ -317,9 +337,12 @@
         nativeList: [],
         // 支付方式
         payForForhod: [],
-
+        // 计费详情
+        settingInfo: "",
         //客户类型
-        keHuType: []
+        keHuType: [],
+        // 监听table变化
+        tableChangeSum: 0,
       };
     },
     mounted() {},
@@ -328,6 +351,7 @@
       this.getPaymethodList();
       this.getRoomType();
       this.getCustomerType()
+      this.getMoneyWay()
     },
     computed: {
       Newis_card_pay() {
@@ -352,9 +376,10 @@
         } else
           this.disabledMember_card = false
         deep: true
-
-      }
-
+      },
+      tableChangeSum() {
+        this.getTablePice(this.roomTableData)
+      },
     },
     methods: {
       // 提交表单
@@ -379,11 +404,13 @@
               datecount: formLabelAlign.datecount,
               roomtype_info: that.setTableRoomPrice(this.roomTableData),
               beizhu: formLabelAlign.beizhu,
-              count_money: formLabelAlign.count_money,
+              count_money: formLabelAlign.RoomSumMoney,
               is_card_pay: formLabelAlign.is_card_pay,
               card_money: formLabelAlign.cardKkNum,
               paymethod: formLabelAlign.paymethod,
               other_pay_money: formLabelAlign.bookMoney,
+              jia_money: ormLabelAlign.chargeAmount,
+              discount_money: ormLabelAlign.couponMoney,
             }
             orderAdd(params).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
@@ -400,6 +427,18 @@
             })
           }
         });
+      },
+      // 计费设置
+      getMoneyWay() {
+        settingInfo().then(res => {
+          res = typeof res == "string" ? JSON.parse(res) : res;
+          console.log(res)
+          if (res.code == 0) {
+            this.settingInfo = res.data
+          } else {
+            this.message("error", res.message)
+          }
+        })
       },
       // 获取房间名房间数
       setTableRoomPrice(v) {
@@ -430,6 +469,8 @@
               let {
                 data
               } = res
+              this.VIPInfo = data
+              console.log(this.VIPInfo)
               // console.log(data)
               if (!data) {
                 return this.message("error", '会员账号与手机号不匹配')
@@ -513,6 +554,7 @@
             this.formLabelAlign.start_time = ""
             return
           }
+          this.tableChangeSum += 1
           this.formLabelAlign.datecount = getDayTime(v, this.formLabelAlign.end_time)
           orderYdroomtype({
             start_time: getAllTime(v),
@@ -538,6 +580,7 @@
             this.formLabelAlign.end_time = ""
             return
           }
+          this.tableChangeSum += 1
           this.formLabelAlign.datecount = getDayTime(this.formLabelAlign.start_time, v)
           orderYdroomtype({
             start_time: getAllTime(this.formLabelAlign.start_time),
@@ -566,6 +609,7 @@
         if (roomTableData.sum >= t.count) {
           return this.message('warning', '预订房间数不能大于剩余房间数')
         }
+        this.tableChangeSum += 1
         roomTableData.sum = Number(roomTableData.sum) + 1;
         roomTableData.suMoney = roomTableData.sum * roomTableData.price
         // roomTableData.sum = Number(roomTableData.sum) + 1;
@@ -580,6 +624,7 @@
           });
           return;
         } else {
+          this.tableChangeSum += 1
           roomTableData.sum -= 1;
           roomTableData.suMoney = roomTableData.sum * roomTableData.price
         }
@@ -591,7 +636,7 @@
       }) {
         const sums = [];
         columns.forEach((column, index) => {
-          if (index === 1) {
+          if (index === 1 || index === 2) {
             return;
           }
           const values = data.map((item) => Number(item[column.property]));
@@ -609,10 +654,8 @@
             sums[index] = "结算";
           }
         });
-        if (sums[4] != '结算') {
-          this.formLabelAlign.count_money = sums[4]
-        }
         return sums;
+
       },
 
       //获取input值
@@ -643,10 +686,267 @@
           });
           return;
         }
+        this.tableChangeSum += 1
         roomTableData.suMoney = roomTableData.price * roomTableData.sum;
       },
+      // 获取table总价格并调用计算费用
+      getTablePice(v) {
+        let sum = 0
+        v.forEach(v => {
+          sum += v.suMoney ? Number(v.suMoney) : 0
+        });
+        this.getTableMoeny(sum)
+      },
+      // 计算费用
+      getTableMoeny(v) {
+        let checkInForm = this.formLabelAlign
+        let settingInfo = this.settingInfo
+        let HHstart_time = Moment(checkInForm.start_time).format('HH:mm:ss')
+        let HHend_time = Moment(checkInForm.end_time).format('HH:mm:ss')
+        let YYstart_time = Moment(checkInForm.start_time).format('YYYY-MM-DD')
+        let YYend_time = Moment(checkInForm.end_time).format('YYYY-MM-DD')
+        let chargeAmount = 0
+        let couponMoney = 0
+        let diffDay = Moment(YYend_time).diff(Moment(YYstart_time), 'days')
+        // 需要支付的房费
+        let totolMoneny = 0
+        // 凌晨订房
+        if (HHstart_time >= settingInfo.yzstart_time && HHstart_time < settingInfo.yzend_time) {
+          //根据时间当天的房费
+          totolMoneny = v * Number(settingInfo.yz_date) + v
+          chargeAmount += v * Number(settingInfo.yz_date)
+          // console.log(v * Number(settingInfo.yz_date))
+          // console.log(v)
+          // 当天
+          if (diffDay == 0) {
+            // console.log('凌晨订房-结束时间当天')
+            // 非会员
+            console.log('disabledMember_card', this.disabledMember_card)
+            if (this.disabledMember_card) {
+              // console.log('凌晨订房-结束时间当天-非会员')
+              // 下午退房时间之内按小时收费
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费')
+                let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
 
 
+                if (hh1 - hh == 0) {
+                  // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-超过十几分钟')
+                  totolMoneny += Number(settingInfo.tf_money1)
+                  chargeAmount += Number(settingInfo.tf_money1)
+                } else {
+                  // console.log(mm , mm2)
+                  // console.log(mm > mm2)
+                  if (mm > mm2) {
+                    // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-几个小时')
+                    totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    // console.log(hh1 - hh)
+                    // console.log(Number(settingInfo.tf_money1))
+                  } else {
+                    // console.log('凌晨订房-结束时间当天-非会员-下午退房时间之内按小时收费-小时')
+                    totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
+                  }
+                }
+              } else if (HHend_time > settingInfo.tfend_time2) {
+                // 下午退房时间之内按天收费
+                totolMoneny += v * Number(settingInfo.tf_date)
+                chargeAmount += v * Number(settingInfo.tf_date)
+              }
+            } else {
+              // 会员
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+                if (hh - hh1 == 0) {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1)
+                    couponMoney += Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                    console.log('totolMoneny', totolMoneny)
+                  } else {}
+                } else {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    // console.log('totolMoneny', totolMoneny)
+                    // console.log('chargeAmount', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
+                    // console.log('tf_money1', Number(settingInfo.tf_money1) * ((hh - hh1) + 1))
+                    // console.log('membertf_tf_money1', Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1))
+                    couponMoney += Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                      .membertf_tf_money1) * ((hh - hh1) + 1)
+                  } else {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    couponMoney += Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                      .membertf_tf_money1) * (hh - hh1)
+                  }
+                }
+              } else {
+                totolMoneny += v * Number(settingInfo.membertf_tf_date)
+                chargeAmount += v * Number(settingInfo.membertf_tf_date)
+                couponMoney = v * Number(settingInfo.tf_date) - v * Number(settingInfo
+                  .membertf_tf_date)
+              }
+            }
+
+          } else {
+            // console.log(HHend_time > settingInfo.tfend_time1)
+            // console.log(HHend_time <= settingInfo.tfend_time2)
+            totolMoneny += v * (Number(diffDay))
+            if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+              // console.log(123)
+              // 非会员
+              if (this.disabledMember_card) {
+                // 下午退房时间之内按小时收费
+                if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                  let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                  let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                  if (hh - hh1 == 0) {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.tf_money1)
+                      chargeAmount += Number(settingInfo.tf_money1)
+                    } else {}
+                  } else {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    } else {
+                      totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
+                    }
+                  }
+                } else if (HHend_time > settingInfo.membertf_end_time2) {
+                  // 下午退房时间之内按天收费
+                  totolMoneny += v * Number(settingInfo.tf_date)
+                  chargeAmount += v * Number(settingInfo.tf_date)
+                }
+              } else {
+                // 会员
+                if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                  let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                  let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                  let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                  let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+                  if (hh - hh1 == 0) {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1)
+                      couponMoney += Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                    } else {}
+                  } else {
+                    if (mm > mm2) {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                      couponMoney += Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                        .membertf_tf_money1) * ((hh - hh1) + 1)
+                    } else {
+                      totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                      chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                      couponMoney += Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                        .membertf_tf_money1) * (hh - hh1)
+                    }
+                  }
+                } else {
+                  totolMoneny += v * Number(settingInfo.membertf_tf_date)
+                  chargeAmount += v * Number(settingInfo.membertf_tf_date)
+                }
+              }
+            }
+          }
+        } else {
+          // 正常时间订房
+          if (diffDay == 0) {
+            totolMoneny = v * (diffDay + 1)
+          } else {
+            totolMoneny = v * (diffDay)
+            // 非会员
+            if (this.disabledMember_card) {
+              // 下午退房时间之内按小时收费
+              if (HHend_time > settingInfo.tfend_time1 && HHend_time <= settingInfo.tfend_time2) {
+                // console.log('正常时间订房-下午退房时间之内按小时收费')
+                let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                let hh1 = Number(settingInfo.tfend_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.tfend_time1.substring(3, 5))
+                if (hh - hh1 == 0) {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.tf_money1)
+                    chargeAmount += Number(settingInfo.tf_money1)
+
+                  } else {}
+                } else {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.tf_money1) * ((hh - hh1) + 1)
+                  } else {
+                    totolMoneny += Number(settingInfo.tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.tf_money1) * (hh - hh1)
+                  }
+                }
+              } else if (HHend_time > settingInfo.tfend_time2) {
+                // 下午退房时间之内按天收费
+                totolMoneny += v * Number(settingInfo.tf_date)
+                chargeAmount += v * Number(settingInfo.tf_date)
+              } else {}
+            } else {
+              // 会员
+              if (HHend_time > settingInfo.membertf_end_time1 && HHend_time <= settingInfo.membertf_end_time2) {
+                let hh = Number(Moment(checkInForm.end_time).format('HH'))
+                let mm = Number(Moment(checkInForm.end_time).format('mm'))
+                let hh1 = Number(settingInfo.membertf_end_time1.substring(0, 2))
+                let mm2 = Number(settingInfo.membertf_end_time1.substring(3, 5))
+                if (hh - hh1 == 0) {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1)
+                    couponMoney += Number(settingInfo.tf_money1) - Number(settingInfo.membertf_tf_money1)
+                  } else {}
+                } else {
+                  if (mm > mm2) {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * ((hh - hh1) + 1)
+                    couponMoney = Number(settingInfo.tf_money1) * ((hh - hh1) + 1) - Number(settingInfo
+                      .membertf_tf_money1) * ((hh - hh1) + 1)
+                    console.log(couponMoney)
+                  } else {
+                    totolMoneny += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    chargeAmount += Number(settingInfo.membertf_tf_money1) * (hh - hh1)
+                    couponMoney = Number(settingInfo.tf_money1) * (hh - hh1) - Number(settingInfo
+                      .membertf_tf_money1) * (hh - hh1)
+                  }
+                }
+              } else if (HHend_time > settingInfo.membertf_end_time2) {
+                totolMoneny += v * Number(settingInfo.membertf_tf_date)
+                chargeAmount += v * Number(settingInfo.membertf_tf_date)
+                couponMoney = v * Number(settingInfo.tf_date) * Number(settingInfo.membertf_tf_date)
+              }
+            }
+          }
+        }
+        if (!totolMoneny) {
+          this.formLabelAlign.RoomSumMoney = 0
+        } else {
+          this.formLabelAlign.RoomSumMoney = Number(totolMoneny).toFixed(2)
+          this.formLabelAlign.chargeAmount = Number(chargeAmount.toFixed(2))
+          this.formLabelAlign.couponMoney = Number(couponMoney.toFixed(2))
+          console.log('RoomSumMoney', Number(totolMoneny).toFixed(2))
+          console.log('chargeAmount', chargeAmount.toFixed(2))
+          console.log('RoomSumMoney', couponMoney.toFixed(2))
+          console.log('formLabelAlign', this.formLabelAlign.RoomSumMoney)
+          if (!this.disabledMember_card) {
+            this.formLabelAlign.RoomSumMoney = Number(totolMoneny).toFixed(2) * (Number(this.VIPInfo.discount) / 100)
+          }
+        }
+      },
       //获取国籍列表
       getNativeList() {
         native().then(res => {
