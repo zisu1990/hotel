@@ -777,8 +777,9 @@
         }
 
         p:hover {
-          color: rgb(235, 54, 54);
+          color: #fff;
           cursor: pointer;
+          background: rgb(254, 119, 94);
         }
 
         span {
@@ -825,7 +826,7 @@
       }
 
       li:hover span {
-        color: red;
+        color: #005ab9;
       }
     }
   }

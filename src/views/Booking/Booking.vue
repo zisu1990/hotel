@@ -26,6 +26,10 @@
 
       <el-table :data="BookingTableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="30" align="center"></el-table-column>
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 955ed261aa2fb78d3101c774158d684e14e6f303
         <el-table-column prop="type" label="客户类型" width="80" align="center"></el-table-column>
         <el-table-column prop="groupname" label="团体名称" show-overflow-tooltip width="80" align="center">
         </el-table-column>

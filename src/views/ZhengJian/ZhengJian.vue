@@ -1,22 +1,22 @@
 <template>
   <el-container>
     <el-main>
-      <el-row style="margin-bottom: 20px">
-                <el-col :span="6">
-                    <el-input v-model="name" @change="handleInput" clearable  placeholder="请输入报表名称"></el-input>
-                </el-col>
-                <el-col :span="2">
-                    <el-button type="primary" @click="handleSearch" >查询</el-button>
-                </el-col>
-      </el-row>
+      <!-- <el-row style="margin-bottom: 20px"> 
+        <el-col :span="6">
+          <el-input v-model="name" @change="handleInput" clearable placeholder="请输入报表名称"></el-input>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+        </el-col>
+      </el-row>-->
 
       <el-row type="flex" justify="start">
         <el-button @click="handleClientType" type="primary">新增</el-button>
-      </el-row>
+      </el-row> 
 
       <el-table :data="tableClienType" stripe style="width: 100%" border>
         <el-table-column type="index" width="50" align="center"></el-table-column>
-        <el-table-column prop="name" label="报表名称" align="center"></el-table-column>
+        <el-table-column prop="name" label="证件名称" align="center"></el-table-column>
         <el-table-column prop="create_time" label="操作时间" align="center"></el-table-column>
         <el-table-column prop="username" label="操作人" align="center"></el-table-column>
         <el-table-column align="center" v-slot="scope" label="操作">
@@ -25,8 +25,7 @@
         </el-table-column>
       </el-table>
 
-
-    <el-pagination
+      <!-- <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pagination.currentPage"
@@ -34,11 +33,9 @@
         :page-size="pagination.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pagination.total"
-      ></el-pagination>
+      ></el-pagination> -->
 
-
-
-    <!-- 增加编辑报表 -->
+      <!-- 增加编辑证件 -->
       <el-dialog
         :title="dialogTittle"
         :visible.sync="dialogVisible"
@@ -48,8 +45,8 @@
         <el-row type="flex" justify="center">
           <el-col :span="18">
             <el-form :rules="rules" :model="formClienType" ref="formClienType" label-width="100px">
-              <el-form-item prop="name" label="报表名称">
-                <el-input clearable v-model="formClienType.name" placeholder="请输入报表名称"></el-input>
+              <el-form-item prop="name" label="证件名称">
+                <el-input clearable v-model="formClienType.name" placeholder="请输入证件名称"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -64,13 +61,18 @@
   </el-container>
 </template>
 <script>
-import {tongjiList,tongjiAdd,tongjiEdit,tongjiDel} from "@/api/ReportSet.js";
+import {
+  zhengJianList,
+  zhengJianAdd,
+  zhengJianEdit,
+  zhengJianjiDel
+} from "@/api/ZhengJian.js";
 export default {
   data() {
     return {
-        name:"",
+      name: "",
       dialogVisible: false,
-      dialogTittle: "新增报表名称",
+      dialogTittle: "新增证件名称",
       tableClienType: [],
       formClienType: {
         name: ""
@@ -79,16 +81,12 @@ export default {
         name: [
           {
             required: true,
-            message: "请输入报表名称",
+            message: "请输入证件名称",
             trigger: "blur"
           }
         ]
       },
-    pagination: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 0
-      },
+
     };
   },
   created() {
@@ -96,12 +94,11 @@ export default {
   },
   methods: {
     getLists() {
-      tongjiList().then(res => {
+      zhengJianList().then(res => {
         res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res)
+        console.log(res);
         if (res.code == 0) {
-          this.tableClienType = res.data.list;
-          this.pagination.total = res.data.count;
+          this.tableClienType = res.data;
         } else {
           this.message("error", res.message);
         }
@@ -113,7 +110,7 @@ export default {
       this.$refs.formClienType.validate(valite => {
         if (valite) {
           if (formClienType.id) {
-            tongjiEdit({
+            zhengJianEdit({
               name: formClienType.name,
               id: formClienType.id
             }).then(res => {
@@ -127,7 +124,7 @@ export default {
               }
             });
           } else {
-            tongjiAdd({
+            zhengJianAdd({
               name: formClienType.name
             }).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
@@ -168,7 +165,7 @@ export default {
     handleDelete(id) {
       this.confirm()
         .then(() => {
-          tongjiDel({
+          zhengJianjiDel({
             id
           }).then(res => {
             res = typeof res == "string" ? JSON.parse(res) : res;
@@ -185,41 +182,41 @@ export default {
     },
 
     // inputchange事件
-    handleInput() {
-      if (!this.name) {
-        this.getLists();
-      }
-    },
+    // handleInput() {
+    //   if (!this.name) {
+    //     this.getLists();
+    //   }
+    // },
 
     // 查询
-    handleSearch() {
-        let parmas={
-        page: this.pagination.currentPage,
-        page_size: this.pagination.pageSize,
-        name: this.name
-        }
-      tongjiList(parmas).then(res => {
-        res = typeof res == "string" ? JSON.parse(res) : res;
-        console.log(res)
-        if (res.code == 0) {
-          this.tableClienType = res.data.list;
-          this.pagination.total = res.data.count;
-        } else {
-          this.message("error", res.message);
-        }
-      });
-    },
+    // handleSearch() {
+    //   let parmas = {
+    //     page: this.pagination.currentPage,
+    //     page_size: this.pagination.pageSize,
+    //     name: this.name
+    //   };
+    //   tongjiList(parmas).then(res => {
+    //     res = typeof res == "string" ? JSON.parse(res) : res;
+    //     console.log(res);
+    //     if (res.code == 0) {
+    //       this.tableClienType = res.data.list;
+    //       this.pagination.total = res.data.count;
+    //     } else {
+    //       this.message("error", res.message);
+    //     }
+    //   });
+    // },
     // 分页器
-    handleSizeChange(val) {
-      this.pagination.pageSize = val;
-      // console.log(`每页 ${val} 条`);
-      this.getLists();
-    },
-    handleCurrentChange(val) {
-      this.pagination.currentPage = val;
-      // console.log(`当前页: ${val}`);
-      this.getLists();
-    }
+    // handleSizeChange(val) {
+    //   this.pagination.pageSize = val;
+    //   // console.log(`每页 ${val} 条`);
+    //   this.getLists();
+    // },
+    // handleCurrentChange(val) {
+    //   this.pagination.currentPage = val;
+    //   // console.log(`当前页: ${val}`);
+    //   this.getLists();
+    // }
   }
 };
 </script>

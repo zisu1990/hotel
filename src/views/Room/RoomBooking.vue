@@ -254,7 +254,11 @@
       return {
         // 表单值
         tuanti: true,
-        formLabelAlign: {},
+        formLabelAlign: {
+          RoomSumMoney: 0,
+          chargeAmount: 0,
+          couponMoney: 0
+        },
         VIPInfo: "",
         // 会员卡支付disabled
         disabledMember_card: true,
@@ -405,8 +409,8 @@
               card_money: formLabelAlign.cardKkNum,
               paymethod: formLabelAlign.paymethod,
               other_pay_money: formLabelAlign.bookMoney,
-              jia_money:ormLabelAlign.chargeAmount,
-              discount_money:ormLabelAlign.couponMoney,
+              jia_money: ormLabelAlign.chargeAmount,
+              discount_money: ormLabelAlign.couponMoney,
             }
             orderAdd(params).then(res => {
               res = typeof res == "string" ? JSON.parse(res) : res;
@@ -937,7 +941,7 @@
           console.log('RoomSumMoney', Number(totolMoneny).toFixed(2))
           console.log('chargeAmount', chargeAmount.toFixed(2))
           console.log('RoomSumMoney', couponMoney.toFixed(2))
-          console.log('formLabelAlign', this.formLabelAlign.RoomSumMoney)     
+          console.log('formLabelAlign', this.formLabelAlign.RoomSumMoney)
           if (!this.disabledMember_card) {
             this.formLabelAlign.RoomSumMoney = Number(totolMoneny).toFixed(2) * (Number(this.VIPInfo.discount) / 100)
           }
