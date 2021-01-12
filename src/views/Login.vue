@@ -18,7 +18,7 @@
         </el-form-item>
 
         <el-form-item prop="code" class="codewarp">
-          <el-input clearable v-model="loginForm.code" placeholder="请输入验证码" class="code"></el-input>
+          <el-input clearable v-model="loginForm.code" placeholder="输入验证码" class="code"></el-input>
           <div class="codeImg">
             <img :src="authCodeImg.img" alt srcset />
           </div>
